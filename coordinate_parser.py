@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
+from os.path import expanduser
+home = expanduser("~")
+enum_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\enum34-1.1.6-py2.7.egg'
+
+import sys
+sys.path.insert(0,enum_path)
 import enum
 import points
 import exceptions
+from decimal import Decimal
 
 
 class CoordinateSystemString(enum.Enum):
@@ -48,7 +55,7 @@ class Guess:
 class Parser:
     def __init__(self):
         self.directions = ['N', 'S', 'E', 'W']
-        self.white_list = ['-', ' ', '.', ',', u'\xb0', '"', '\'']
+        self.white_list = ['-', ' ', '.', u'\xb0', '"', '\'']
         self.guessed_system = None
         self.format = None
 
@@ -344,7 +351,7 @@ class Parser:
             lat_deg = latitude[:deg_index]
             lat_min = latitude[deg_index + 1:min_index]
             lat_sec = latitude[min_index + 1:sec_index]
-            point = points.WGSPoint(float(long_deg), float(long_min), float(long_sec), float(lat_deg), float(lat_min), float(lat_sec))
+            point = points.WGSPoint(int(long_deg), int(long_min), Decimal(long_sec), int(lat_deg), int(lat_min), Decimal(lat_sec))
             self.__check_values_of_WGSPoint(point)
             return point
 
@@ -459,22 +466,22 @@ class Parser:
                 return i
         return -1
 
-    def __check_values_of_WGSPoint(self, point):
+    def check_values_of_WGSPoint(self, point):
         if point.long_deg < -180 or point.long_deg > 180:
             raise exceptions.ParseException('Degree value of longitude ' + str(point.long_deg) +
                                             ' out of range (-180...+180)', 0, ParserStatus.INVALID)
         if point.lat_deg < -90 or point.lat_deg > 90:
             raise exceptions.ParseException('Degree value of latitude ' + str(point.lat_deg) +
                                             ' out of range (-90...+90)', 0, ParserStatus.INVALID)
-        if point.long_min < 0 or point.long_min > 60:
+        if point.long_min < 0 or point.long_min >= 60:
             raise exceptions.ParseException('Minutes value of longitude ' + str(point.long_min) +
-                                            ' out of range (0...60)', 0, ParserStatus.INVALID)
-        if point.lat_min < 0 or point.lat_min > 60:
+                                            ' out of range (0...59)', 0, ParserStatus.INVALID)
+        if point.lat_min < 0 or point.lat_min >= 60:
             raise exceptions.ParseException('Minutes value of latitude ' + str(point.lat_min) +
-                                            ' out of range (0...60)', 0, ParserStatus.INVALID)
-        if point.long_sec < 0 or point.long_sec > 60:
+                                            ' out of range (0...59)', 0, ParserStatus.INVALID)
+        if point.long_sec < 0 or point.long_sec >= 60:
             raise exceptions.ParseException('Seconds value of longitude ' + str(point.long_sec) +
-                                            ' out of range (0...60)', 0, ParserStatus.INVALID)
-        if point.lat_sec < 0 or point.lat_sec > 60:
+                                            ' out of range (0...59)', 0, ParserStatus.INVALID)
+        if point.lat_sec < 0 or point.lat_sec >= 60:
             raise exceptions.ParseException('Seconds value of latitude ' + str(point.lat_sec) +
-                                            ' out of range (0...60)', 0, ParserStatus.INVALID)
+                                            ' out of range (0...59)', 0, ParserStatus.INVALID)

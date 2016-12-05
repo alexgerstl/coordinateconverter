@@ -17,99 +17,13 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Convert Coordinates</string>
+   <string>Koordinaten konvertieren</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="groupBox_epsg">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title">
-      <string>anhand EPSG-Code konvertieren</string>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QGroupBox" name="groupBox_from">
-        <property name="title">
-         <string>von</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_epsg_from">
-           <property name="text">
-            <string>EPSG-Code</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="label_input_from">
-           <property name="text">
-            <string>Eingabe</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QComboBox" name="comboBox_from"/>
-         </item>
-         <item row="2" column="2">
-          <widget class="QLineEdit" name="lineEdit_input_epsg"/>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBox_to">
-        <property name="title">
-         <string>nach</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_epsg_to">
-           <property name="text">
-            <string>EPSG-Code</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="label_result_to">
-           <property name="text">
-            <string>Ergebnis</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QComboBox" name="comboBox_to"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QLineEdit" name="lineEdit_epsg_result">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-           <property name="placeholderText">
-            <string>--null--</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0">
+   <item row="1" column="1">
     <widget class="QGroupBox" name="groupBox_coord">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -265,15 +179,98 @@
      <zorder>lineEdit_input</zorder>
     </widget>
    </item>
-   <item row="2" column="0">
-    <layout class="QVBoxLayout" name="statusbarlayout">
-     <property name="spacing">
-      <number>0</number>
+   <item row="2" column="1">
+    <widget class="QGroupBox" name="groupBox_epsg">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
      </property>
+     <property name="title">
+      <string>anhand EPSG-Code konvertieren</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QGroupBox" name="groupBox_from">
+        <property name="title">
+         <string>von</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_epsg_from">
+           <property name="text">
+            <string>EPSG-Code</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="label_input_from">
+           <property name="text">
+            <string>Eingabe</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QComboBox" name="comboBox_from"/>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLineEdit" name="lineEdit_input_epsg"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_to">
+        <property name="title">
+         <string>nach</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_epsg_to">
+           <property name="text">
+            <string>EPSG-Code</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="label_result_to">
+           <property name="text">
+            <string>Ergebnis</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QComboBox" name="comboBox_to"/>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLineEdit" name="lineEdit_epsg_result">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>--null--</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <layout class="QGridLayout" name="gridLayout_5">
      <property name="bottomMargin">
       <number>7</number>
      </property>
-     <item>
+     <item row="0" column="1">
       <widget class="QStatusBar" name="statusBar">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -285,6 +282,13 @@
         <font>
          <pointsize>8</pointsize>
         </font>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="changeLanguageButton">
+       <property name="text">
+        <string>DE/EN</string>
        </property>
       </widget>
      </item>

@@ -23,15 +23,30 @@
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon
 # Initialize Qt resources from file resources.py
+from os.path import expanduser
+
+from decimal import Decimal
+
+home = expanduser("~")
+enum_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\utm.egg'
+
+import sys
+sys.path.insert(0,enum_path)
+from utm import OutOfRangeError
+
+import coordinate_parser
 import resources
 # Import the code for the dialog
 from coordinates_converter_dialog import CoordinatesConverterDialog
 from coordinate_parser import Parser, CoordinateSystemString
-from converter import Converter
+from converter import UtmConverter, DegreeConverter
+from converter1 import Converter
 import os.path
 import points
 import exceptions
 import collections
+
+from ensurer import Ensurer
 
 
 class CoordinatesConverter:
@@ -46,6 +61,7 @@ class CoordinatesConverter:
         :type iface: QgsInterface
         """
         # Save reference to the QGIS interface
+
         self.iface = iface
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
@@ -68,16 +84,43 @@ class CoordinatesConverter:
 
         # Declare instance attributes
         self.actions = []
-        self.menu = self.tr(u'&Koordinatenkonvertierer')
+        self.menu = self.tr(u'&Koordinaten konvertieren')
         self.toolbar = self.iface.addToolBar(u'CoordinatesConverter')
         self.toolbar.setObjectName(u'CoordinatesConverter')
 
         self.coordinates = {}
+        self.selected_format = 0
+        self.selected_hemisphere = 0
+        self.long_deg = 0
+        self.long_min = 0
+        self.long_sec = 0
+        self.lat_deg = 0
+        self.lat_min = 0
+        self.lat_sec = 0
+        self.utm_zone_number = 0
+        self.utm_zone_letter = coordinate_parser.Hemisphere.NORTH
+        self.utm_easting = 0
+        self.utm_northing = 0
+        self.hemisphere = ''
         self.epsg_code_description = {}
         self.converter = Converter()
+        self.parser = Parser()
+        self.ensurer = Ensurer()
         self.__load_epsg_codes()
         self.__load_epsg_codes_to_boxes()
-        self.dlg.lineEdit_input.textChanged.connect(self.parse)
+        self.dlg.long_deg_input.textChanged.connect(self.__validate_WGS)
+        self.dlg.long_min_input.textChanged.connect(self.__validate_WGS)
+        self.dlg.long_sec_input.textChanged.connect(self.__validate_WGS)
+        self.dlg.lat_deg_input.textChanged.connect(self.__validate_WGS)
+        self.dlg.lat_min_input.textChanged.connect(self.__validate_WGS)
+        self.dlg.lat_sec_input.textChanged.connect(self.__validate_WGS)
+        self.dlg.zone_input.textChanged.connect(self.__validate_UTM)
+        #self.dlg.square_input.textChanged.connect(self.__validate_input_value)
+        self.dlg.easting_input.textChanged.connect(self.__validate_UTM)
+        self.dlg.northing_input.textChanged.connect(self.__validate_UTM)
+        #self.dlg.lineEdit_input.textChanged.connect(self.parse)
+        self.dlg.comboBox_format.currentIndexChanged.connect(self.__change_format)
+        self.dlg.hemisphere.currentIndexChanged.connect(self.__change_hemisphere)
         self.dlg.comboBox_from.currentIndexChanged.connect(self.__show_description_from)
         self.dlg.comboBox_to.currentIndexChanged.connect(self.__show_description_to)
         self.dlg.lineEdit_input_epsg.textChanged.connect(self.parse_epsg)
@@ -176,7 +219,7 @@ class CoordinatesConverter:
         icon_path = ':/plugins/CoordinatesConverter/icon.png'
         self.add_action(
             icon_path,
-            text=self.tr(u'Koordinatenkonvertierer'),
+            text=self.tr(u'Koordinaten konvertieren'),
             callback=self.run,
             parent=self.iface.mainWindow())
 
@@ -184,7 +227,7 @@ class CoordinatesConverter:
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
             self.iface.removePluginMenu(
-                self.tr(u'&Koordinatenkonvertierer'),
+                self.tr(u'&Koordinaten konvertieren'),
                 action)
             self.iface.removeToolBarIcon(action)
         # remove the toolbar
@@ -193,8 +236,9 @@ class CoordinatesConverter:
     def run(self):
         """Run method that performs all the real work"""
         # show the dialog
-        self.dlg.show()
         self.dlg.reset()
+        self.__change_format(0)
+        self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed
@@ -227,28 +271,37 @@ class CoordinatesConverter:
                 self.coordinates[CoordinateSystemString.WGS84_DMS.value] = dms_point
                 comma_point = self.__degree_to_Commaminutes(point)
                 self.coordinates[CoordinateSystemString.WGS84_CommaMinutes.value] = comma_point
-                utm_point = self.converter.convert_degree_to_UTM(point)
-                self.coordinates[CoordinateSystemString.UTM.value] = utm_point
-                mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
-                self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
+                try:
+                    utm_point = UtmConverter.degree_to_utm(point)
+                    self.coordinates[CoordinateSystemString.UTM.value] = utm_point
+                except Exception, e:
+                    self.dlg.label_input_convert.setText(e.message)
+                #mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
+                #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
             if guessed_system == CoordinateSystemString.WGS84_DMS:
                 degree_point = self.__DMS_to_degree(point)
                 self.coordinates[CoordinateSystemString.WGS84_Degrees.value] = degree_point
                 comma_point = self.__degree_to_Commaminutes(degree_point)
                 self.coordinates[CoordinateSystemString.WGS84_CommaMinutes.value] = comma_point
-                utm_point = self.converter.convert_degree_to_UTM(degree_point)
-                self.coordinates[CoordinateSystemString.UTM.value] = utm_point
-                mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
-                self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
+                try:
+                    utm_point = UtmConverter.degree_to_utm(degree_point)
+                    self.coordinates[CoordinateSystemString.UTM.value] = utm_point
+                except Exception, e:
+                    self.dlg.label_input_convert.setText(e.message)
+                #mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
+                #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
             if guessed_system == CoordinateSystemString.WGS84_CommaMinutes:
                 degree_point = self.__commaminutes_to_degree(point)
                 self.coordinates[CoordinateSystemString.WGS84_Degrees.value] = degree_point
                 dms_point = self.__degree_to_DMS(degree_point)
                 self.coordinates[CoordinateSystemString.WGS84_DMS.value] = dms_point
-                utm_point = self.converter.convert_degree_to_UTM(degree_point)
-                self.coordinates[CoordinateSystemString.UTM.value] = utm_point
-                mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
-                self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
+                try:
+                    utm_point = UtmConverter.degree_to_utm(degree_point)
+                    self.coordinates[CoordinateSystemString.UTM.value] = utm_point
+                except Exception, e:
+                    self.dlg.label_input_convert.setText(e.message)
+                #mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
+                #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
         elif isinstance(point, points.MGRSPoint):
             utm_point = self.converter.convert_MGRS_to_UTM(point)
             self.coordinates[CoordinateSystemString.UTM.value] = utm_point
@@ -259,14 +312,17 @@ class CoordinatesConverter:
             comma_point = self.__degree_to_Commaminutes(degree_point)
             self.coordinates[CoordinateSystemString.WGS84_CommaMinutes.value] = comma_point
         elif isinstance(point, points.UTMPoint):
-            degree_point = self.converter.convert_UTM_to_degree(point)
-            self.coordinates[CoordinateSystemString.WGS84_Degrees.value] = degree_point
-            dms_point = self.__degree_to_DMS(degree_point)
-            self.coordinates[CoordinateSystemString.WGS84_DMS.value] = dms_point
-            comma_point = self.__degree_to_Commaminutes(degree_point)
-            self.coordinates[CoordinateSystemString.WGS84_CommaMinutes.value] = comma_point
-            mgrs_point = self.converter.convert_UTM_to_MGRS(point)
-            self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
+            try:
+                degree_point = UtmConverter.utm_to_degree(point)
+                self.coordinates[CoordinateSystemString.WGS84_Degrees.value] = degree_point
+                dms_point = self.__degree_to_DMS(degree_point)
+                self.coordinates[CoordinateSystemString.WGS84_DMS.value] = dms_point
+                comma_point = self.__degree_to_Commaminutes(degree_point)
+                self.coordinates[CoordinateSystemString.WGS84_CommaMinutes.value] = comma_point
+            except OutOfRangeError, e:
+                self.dlg.label_input_convert.setText(e.message)
+            #mgrs_point = self.converter.convert_UTM_to_MGRS(point)
+            #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
 
     def parse_epsg(self):
         try:
@@ -297,24 +353,29 @@ class CoordinatesConverter:
                         field.setText(self.coordinates[key].to_string(key))
 
     def __degree_to_DMS(self, point):
-        long_deg, long_min, long_sec = self.converter.convert_degree_to_DMS(point.long_deg)
-        lat_deg, lat_min, lat_sec = self.converter.convert_degree_to_DMS(point.lat_deg)
+        long_deg, long_min, long_sec = DegreeConverter.convert_degree_to_DMS(point.long_deg)
+        lat_deg, lat_min, lat_sec = DegreeConverter.convert_degree_to_DMS(point.lat_deg)
         return points.WGSPoint(long_deg, long_min, long_sec, lat_deg, lat_min, lat_sec)
 
     def __degree_to_Commaminutes(self, point):
-        long_deg, long_min = self.converter.convert_degree_to_decimal_minutes(point.long_deg)
-        lat_deg, lat_min = self.converter.convert_degree_to_decimal_minutes(point.lat_deg)
+        long_deg, long_min = DegreeConverter.convert_degree_to_decimal_minutes(point.long_deg)
+        lat_deg, lat_min = DegreeConverter.convert_degree_to_decimal_minutes(point.lat_deg)
         return points.WGSPoint(long_deg, long_min, 0, lat_deg, lat_min, 0)
 
     def __DMS_to_degree(self, point):
-        long_temp = self.converter.convert_DMS_to_degree(point.long_deg, point.long_min, point.long_sec)
-        lat_temp = self.converter.convert_DMS_to_degree(point.lat_deg, point.lat_min, point.lat_sec)
+        long_temp = DegreeConverter.convert_DMS_to_degree(point.long_deg, point.long_min, point.long_sec)
+        lat_temp = DegreeConverter.convert_DMS_to_degree(point.lat_deg, point.lat_min, point.lat_sec)
         return points.WGSPoint(long_temp, 0, 0, lat_temp, 0, 0)
 
     def __commaminutes_to_degree(self, point):
-        long_deg = self.converter.convert_decimal_minutes_to_degree(point.long_deg, point.long_min)
-        lat_deg = self.converter.convert_decimal_minutes_to_degree(point.lat_deg, point.lat_min)
+        long_deg = DegreeConverter.convert_decimal_minutes_to_degree(point.long_deg, point.long_min)
+        lat_deg = DegreeConverter.convert_decimal_minutes_to_degree(point.lat_deg, point.lat_min)
         return points.WGSPoint(long_deg, 0, 0, lat_deg, 0, 0)
+
+    def __dms_to_commaminutes(self, point):
+        long_deg, long_min = DegreeConverter.convert_dms_to_decimal_minutes(point.long_deg, point.long_min, point.long_sec)
+        lat_deg, lat_min = DegreeConverter.convert_dms_to_decimal_minutes(point.lat_deg, point.lat_min, point.lat_sec)
+        return points.WGSPoint(long_deg, long_min, 0, lat_deg, lat_min, 0)
 
     def __load_epsg_codes(self):
         file_path = self.plugin_dir + '/data/epsg_codes.txt'
@@ -336,3 +397,260 @@ class CoordinatesConverter:
 
     def __show_description_to(self, i):
         self.dlg.comboBox_to.setToolTip(self.epsg_code_description.get(self.dlg.comboBox_to.itemText(i)))
+
+    def __change_format(self, i):
+        self.selected_format = i
+        self.dlg.label_input_convert.setText('')
+        self.dlg.clear_coordinate_fields()
+        if i == 0:
+            self.dlg.clear_format_layout()
+            self.dlg.create_degrees_input()
+        if i == 1:
+            self.dlg.clear_format_layout()
+            self.dlg.create_commaminutes_input()
+        if i == 2:
+            self.dlg.clear_format_layout()
+            self.dlg.create_dms_input()
+        if i == 3:
+            self.dlg.clear_format_layout()
+            self.dlg.create_utm_input()
+        if i == 4:
+            self.dlg.clear_format_layout()
+            self.dlg.create_mgrs_input()
+
+    def __change_hemisphere(self, i):
+
+        self.selected_hemisphere = i
+        if i == 0:
+            self.hemisphere = coordinate_parser.Hemisphere.NORTH
+        if i == 1:
+            self.hemisphere = coordinate_parser.Hemisphere.SOUTH
+        self.__validate_utm_hemisphere()
+
+    def __validate_WGS(self):
+        self.dlg.label_input_convert.setText('')
+        if self.selected_format == 0:
+            self.__validate_long_deg_value()
+            self.__validate_lat_deg_value()
+        if self.selected_format == 1:
+            self.__validate_long_deg_comma_value()
+            self.__validate_long_min_comma_value()
+            self.__validate_lat_deg_comma_value()
+            self.__validate_lat_min_comma_value()
+        if self.selected_format == 2:
+            self.__validate_long_deg_dms_value()
+            self.__validate_long_min_dms_value()
+            self.__validate_long_sec_dms_value()
+            self.__validate_lat_deg_dms_value()
+            self.__validate_lat_min_dms_value()
+            self.__validate_lat_sec_dms_value()
+
+    def __validate_UTM(self):
+        self.dlg.label_input_convert.setText('')
+        if self.selected_format == 3:
+            self.__validate_utm_zone()
+            self.__validate_utm_hemisphere()
+            self.__validate_utm_easting()
+            self.__validate_utm_northing()
+
+    def __validate_lat_deg_value(self):
+            try:
+                lat_deg_corrected = self.ensurer.ensure_it_is_a_number(self.dlg.lat_deg_input.text())
+                self.ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
+                self.lat_deg = lat_deg_corrected
+                point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                        self.lat_sec)
+                self.coordinates = {CoordinateSystemString.WGS84_Degrees.value: point}
+                self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_Degrees)
+                self.__update_coordinate_fields()
+            except exceptions.ParseException, e:
+                self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_long_deg_value(self):
+            try:
+                long_deg_corrected = self.ensurer.ensure_it_is_a_number(self.dlg.long_deg_input.text())
+                self.ensurer.ensure_longitude_in_range(float(long_deg_corrected))
+                self.long_deg = float(long_deg_corrected)
+                point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                        self.lat_sec)
+                self.coordinates = {CoordinateSystemString.WGS84_Degrees.value: point}
+                self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_Degrees)
+                self.__update_coordinate_fields()
+            except exceptions.ParseException, e:
+                self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_long_deg_comma_value(self):
+        try:
+            long_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.long_deg_input.text())
+            self.ensurer.ensure_longitude_in_range(float(long_deg_corrected))
+            self.long_deg = long_deg_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_CommaMinutes.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_CommaMinutes)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_long_min_comma_value(self):
+        try:
+            long_min_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.long_min_input.text())
+            self.ensurer.ensure_minutes_in_range(float(long_min_corrected))
+            self.long_min = long_min_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_CommaMinutes.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_CommaMinutes)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_lat_deg_comma_value(self):
+        try:
+            lat_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.lat_deg_input.text())
+            self.ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
+            self.lat_deg = lat_deg_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_CommaMinutes.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_CommaMinutes)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_lat_min_comma_value(self):
+        try:
+            lat_min_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.lat_min_input.text())
+            self.ensurer.ensure_minutes_in_range(float(lat_min_corrected))
+            self.lat_min = lat_min_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_CommaMinutes.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_CommaMinutes)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_long_deg_dms_value(self):
+        try:
+            long_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.long_deg_input.text())
+            self.ensurer.ensure_longitude_in_range(float(long_deg_corrected))
+            self.long_deg = long_deg_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_DMS.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_DMS)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_long_min_dms_value(self):
+        try:
+            long_min_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.long_min_input.text())
+            self.ensurer.ensure_minutes_in_range(float(long_min_corrected))
+            self.long_min = long_min_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_DMS.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_DMS)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_long_sec_dms_value(self):
+        try:
+            long_sec_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.long_sec_input.text())
+            self.ensurer.ensure_seconds_in_range(float(long_sec_corrected))
+            self.long_sec = long_sec_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_DMS.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_DMS)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_lat_deg_dms_value(self):
+        try:
+            lat_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.lat_deg_input.text())
+            self.ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
+            self.lat_deg = lat_deg_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_DMS.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_DMS)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_lat_min_dms_value(self):
+        try:
+            lat_min_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.lat_min_input.text())
+            self.ensurer.ensure_minutes_in_range(float(lat_min_corrected))
+            self.lat_min = lat_min_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_DMS.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_DMS)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_lat_sec_dms_value(self):
+        try:
+            lat_sec_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.lat_sec_input.text())
+            self.ensurer.ensure_seconds_in_range(float(lat_sec_corrected))
+            self.lat_sec = lat_sec_corrected
+            point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
+                                    self.lat_sec)
+            self.coordinates = {CoordinateSystemString.WGS84_DMS.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.WGS84_DMS)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_utm_zone(self):
+        try:
+            zone_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.zone_input.text())
+            self.ensurer.ensure_utm_zone_in_range(int(zone_corrected))
+            self.utm_zone_number = zone_corrected
+            point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
+                                    self.utm_zone_letter, self.hemisphere)
+            self.coordinates = {CoordinateSystemString.UTM.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.UTM)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_utm_hemisphere(self):
+        point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
+                                self.utm_zone_letter, self.hemisphere)
+        self.coordinates = {CoordinateSystemString.UTM.value: point}
+        self.convert_entered_coordinates(point, CoordinateSystemString.UTM)
+        self.__update_coordinate_fields()
+
+    def __validate_utm_easting(self):
+        try:
+            easting_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.easting_input.text())
+            self.ensurer.ensure_utm_easting_in_range(int(easting_corrected))
+            self.utm_easting = easting_corrected
+            point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
+                                    self.utm_zone_letter, self.hemisphere)
+            self.coordinates = {CoordinateSystemString.UTM.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.UTM)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)
+
+    def __validate_utm_northing(self):
+        try:
+            northing_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.northing_input.text())
+            self.ensurer.ensure_utm_northing_in_range(int(northing_corrected))
+            self.utm_northing = northing_corrected
+            point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
+                                    self.utm_zone_letter, self.hemisphere)
+            self.coordinates = {CoordinateSystemString.UTM.value: point}
+            self.convert_entered_coordinates(point, CoordinateSystemString.UTM)
+            self.__update_coordinate_fields()
+        except exceptions.ParseException, e:
+            self.dlg.label_input_convert.setText(e.message)

@@ -2,6 +2,8 @@
 import unittest
 import imp
 from coordinate_parser import Parser, Hemisphere, ParserStatus, CoordinateSystemString
+from ensurer import Ensurer
+
 exceptions = imp.load_source('exceptions','../exceptions.py')
 
 
@@ -112,6 +114,7 @@ class CoordinateParserTest(unittest.TestCase):
         self.assertEqual(point.long_min, 23.45)
         self.assertEqual(point.lat_deg, 23)
         self.assertEqual(point.lat_min, 15.32)
+
 
 if __name__ == '__main__':
     unittest.main()
