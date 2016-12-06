@@ -1,77 +1,244 @@
-from os.path import expanduser
-
-home = expanduser("~")
-enum_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\utm.egg'
-
-import sys
-sys.path.insert(0,enum_path)
-import utm
 import points
+import math
 from coordinate_parser import Hemisphere
+import exceptions
 from decimal import Decimal
 
+K0 = 0.9996
 
-class UtmConverter:
+E = 0.00669438
+E2 = E * E
+E3 = E2 * E
+E_P2 = E / (1.0 - E)
 
-    @staticmethod
-    def degree_to_utm(point):
-        long_deg = point.long_deg
-        lat_deg = point.lat_deg
-        easting, northing, zone_number, zone_letter = utm.from_latlon(lat_deg, long_deg)
-        if lat_deg > 0:
-            hemisphere = Hemisphere.NORTH
-        else:
-            hemisphere = Hemisphere.SOUTH
-        point = points.UTMPoint(easting, northing, zone_number, zone_letter, hemisphere)
-        return point
+SQRT_E = math.sqrt(1 - E)
+_E = (1 - SQRT_E) / (1 + SQRT_E)
+_E2 = _E * _E
+_E3 = _E2 * _E
+_E4 = _E3 * _E
+_E5 = _E4 * _E
 
-    @staticmethod
-    def utm_to_degree(point):
-        easting = int(point.easting)
-        northing = int(point.northing)
-        zone = int(point.zone_number)
-        if point.hemisphere == Hemisphere.NORTH:
-            northern = True
-        else:
-            northern = False
+M1 = (1 - E / 4 - 3 * E2 / 64 - 5 * E3 / 256)
+M2 = (3 * E / 8 + 3 * E2 / 32 + 45 * E3 / 1024)
+M3 = (15 * E2 / 256 + 45 * E3 / 1024)
+M4 = (35 * E3 / 3072)
 
-        lat_deg, long_deg = utm.to_latlon(easting, northing, zone, northern=northern)
-        point = points.WGSPoint(Decimal(long_deg), 0, 0, Decimal(lat_deg), 0, 0)
-        return point
+P2 = (3. / 2 * _E - 27. / 32 * _E3 + 269. / 512 * _E5)
+P3 = (21. / 16 * _E2 - 55. / 32 * _E4)
+P4 = (151. / 96 * _E3 - 417. / 128 * _E5)
+P5 = (1097. / 512 * _E4)
 
-class DegreeConverter:
+R = 6378137
 
-    @staticmethod
-    def convert_degree_to_DMS(degrees):
-        _deg = int(degrees)
-        _min = (Decimal(degrees) - Decimal(_deg)) * Decimal(60)
-        _sec = (Decimal(_min) - int(_min)) * Decimal(60)
-        return Decimal(_deg), abs(int(_min)), abs(Decimal(_sec))
+ZONE_LETTERS = "CDEFGHJKLMNPQRSTUVWXX"
 
-    @staticmethod
-    def convert_DMS_to_degree(degrees, minutes, seconds):
-        if degrees > 0:
-            _deg = Decimal(degrees) + Decimal(minutes) / Decimal(60.0) + Decimal(seconds) / Decimal(3600.0)
-        else:
-            _deg = Decimal(degrees) - Decimal(minutes) / Decimal(60.0) - Decimal(seconds) / Decimal(3600.0)
-        return _deg
 
-    @staticmethod
-    def convert_degree_to_decimal_minutes(degrees):
-        _deg = int(degrees)
-        _min = (abs(degrees) - abs(_deg)) * 60
-        return _deg, _min
+def degree_to_utm(point):
+    longitude = point.long_deg
+    latitude = point.lat_deg
+    force_zone_number = None
 
-    @staticmethod
-    def convert_decimal_minutes_to_degree(degrees, minutes):
-        _d = Decimal(minutes) / Decimal(60.0)
-        if degrees > 0:
-            _deg = Decimal(degrees) + Decimal(_d)
-        else:
-            _deg = Decimal(degrees) - Decimal(_d)
-        return Decimal(_deg)
+    if not -80.0 <= latitude <= 84.0:
+        raise exceptions.ParseException('latitude out of range (must be between 80 deg S and 84 deg N)')
+    if not -180.0 <= longitude <= 180.0:
+        raise exceptions.ParseException('longitude out of range (must be between 180 deg W and 180 deg E)')
 
-    @staticmethod
-    def convert_dms_to_decimal_minutes(degrees, minutes, seconds):
-        _min = Decimal(minutes) + Decimal(seconds) / Decimal(60.0)
-        return Decimal(degrees), Decimal(_min)
+    lat_rad = math.radians(latitude)
+    lat_sin = math.sin(lat_rad)
+    lat_cos = math.cos(lat_rad)
+
+    lat_tan = lat_sin / lat_cos
+    lat_tan2 = lat_tan * lat_tan
+    lat_tan4 = lat_tan2 * lat_tan2
+
+    if force_zone_number is None:
+        zone_number = latlon_to_zone_number(latitude, longitude)
+    else:
+        zone_number = force_zone_number
+
+    zone_letter = latitude_to_zone_letter(latitude)
+
+    lon_rad = math.radians(longitude)
+    central_lon = zone_number_to_central_longitude(zone_number)
+    central_lon_rad = math.radians(central_lon)
+
+    n = R / math.sqrt(1 - E * lat_sin**2)
+    c = E_P2 * lat_cos**2
+
+    a = lat_cos * (lon_rad - central_lon_rad)
+    a2 = a * a
+    a3 = a2 * a
+    a4 = a3 * a
+    a5 = a4 * a
+    a6 = a5 * a
+
+    m = R * (M1 * lat_rad -
+             M2 * math.sin(2 * lat_rad) +
+             M3 * math.sin(4 * lat_rad) -
+             M4 * math.sin(6 * lat_rad))
+
+    easting = K0 * n * (a +
+                        a3 / 6 * (1 - lat_tan2 + c) +
+                        a5 / 120 * (5 - 18 * lat_tan2 + lat_tan4 + 72 * c - 58 * E_P2)) + 500000
+
+    northing = K0 * (m + n * lat_tan * (a2 / 2 +
+                                        a4 / 24 * (5 - lat_tan2 + 9 * c + 4 * c**2) +
+                                        a6 / 720 * (61 - 58 * lat_tan2 + lat_tan4 + 600 * c - 330 * E_P2)))
+
+    if latitude < 0:
+        northing += 10000000
+
+
+    if latitude > 0:
+        hemisphere = Hemisphere.NORTH
+    else:
+        hemisphere = Hemisphere.SOUTH
+    point = points.UTMPoint(easting, northing, zone_number, zone_letter, hemisphere)
+    return point
+
+def utm_to_degree(point):
+    easting = int(point.easting)
+    northing = int(point.northing)
+    zone_number = int(point.zone_number)
+    zone_letter = None
+
+    if point.hemisphere == Hemisphere.NORTH:
+        northern = True
+    else:
+        northern = False
+
+    if not zone_letter and northern is None:
+        raise exceptions.ConversionException('either zone_letter or northern needs to be set')
+
+    elif zone_letter and northern is not None:
+        raise exceptions.ConversionException('set either zone_letter or northern, but not both')
+
+    if not 100000 <= easting < 1000000:
+        raise exceptions.ParseException('easting out of range (must be between 100.000 m and 999.999 m)')
+    if not 0 <= northing <= 10000000:
+        raise exceptions.ParseException('northing out of range (must be between 0 m and 10.000.000 m)')
+    if not 1 <= zone_number <= 60:
+        raise exceptions.ParseException('zone number out of range (must be between 1 and 60)')
+
+    if zone_letter:
+        zone_letter = zone_letter.upper()
+
+        if not 'C' <= zone_letter <= 'X' or zone_letter in ['I', 'O']:
+            raise exceptions.ParseException('zone letter out of range (must be between C and X)')
+
+        northern = (zone_letter >= 'N')
+
+    x = easting - 500000
+    y = northing
+
+    if not northern:
+        y -= 10000000
+
+    m = y / K0
+    mu = m / (R * M1)
+
+    p_rad = (mu +
+             P2 * math.sin(2 * mu) +
+             P3 * math.sin(4 * mu) +
+             P4 * math.sin(6 * mu) +
+             P5 * math.sin(8 * mu))
+
+    p_sin = math.sin(p_rad)
+    p_sin2 = p_sin * p_sin
+
+    p_cos = math.cos(p_rad)
+
+    p_tan = p_sin / p_cos
+    p_tan2 = p_tan * p_tan
+    p_tan4 = p_tan2 * p_tan2
+
+    ep_sin = 1 - E * p_sin2
+    ep_sin_sqrt = math.sqrt(1 - E * p_sin2)
+
+    n = R / ep_sin_sqrt
+    r = (1 - E) / ep_sin
+
+    c = _E * p_cos**2
+    c2 = c * c
+
+    d = x / (n * K0)
+    d2 = d * d
+    d3 = d2 * d
+    d4 = d3 * d
+    d5 = d4 * d
+    d6 = d5 * d
+
+    latitude = (p_rad - (p_tan / r) *
+                (d2 / 2 -
+                 d4 / 24 * (5 + 3 * p_tan2 + 10 * c - 4 * c2 - 9 * E_P2)) +
+                 d6 / 720 * (61 + 90 * p_tan2 + 298 * c + 45 * p_tan4 - 252 * E_P2 - 3 * c2))
+
+    longitude = (d -
+                 d3 / 6 * (1 + 2 * p_tan2 + c) +
+                 d5 / 120 * (5 - 2 * c + 28 * p_tan2 - 3 * c2 + 8 * E_P2 + 24 * p_tan4)) / p_cos
+
+    point = points.WGSPoint(Decimal(math.degrees(longitude) + zone_number_to_central_longitude(zone_number)), 0, 0, Decimal(math.degrees(latitude)), 0, 0)
+    return point
+
+
+def convert_degree_to_DMS(degrees):
+    _deg = int(degrees)
+    _min = (Decimal(degrees) - Decimal(_deg)) * Decimal(60)
+    _sec = (Decimal(_min) - int(_min)) * Decimal(60)
+    return Decimal(_deg), abs(int(_min)), abs(Decimal(_sec))
+
+
+def convert_DMS_to_degree(degrees, minutes, seconds):
+    if degrees > 0:
+        _deg = Decimal(degrees) + Decimal(minutes) / Decimal(60.0) + Decimal(seconds) / Decimal(3600.0)
+    else:
+        _deg = Decimal(degrees) - Decimal(minutes) / Decimal(60.0) - Decimal(seconds) / Decimal(3600.0)
+    return _deg
+
+
+def convert_degree_to_decimal_minutes(degrees):
+    _deg = int(degrees)
+    _min = (abs(degrees) - abs(_deg)) * 60
+    return _deg, _min
+
+
+def convert_decimal_minutes_to_degree(degrees, minutes):
+    _d = Decimal(minutes) / Decimal(60.0)
+    if degrees > 0:
+        _deg = Decimal(degrees) + Decimal(_d)
+    else:
+        _deg = Decimal(degrees) - Decimal(_d)
+    return Decimal(_deg)
+
+
+def convert_dms_to_decimal_minutes(degrees, minutes, seconds):
+    _min = Decimal(minutes) + Decimal(seconds) / Decimal(60.0)
+    return Decimal(degrees), Decimal(_min)
+
+
+def latitude_to_zone_letter(latitude):
+    if -80 <= latitude <= 84:
+        return ZONE_LETTERS[int(latitude + 80) >> 3]
+    else:
+        return None
+
+
+def latlon_to_zone_number(latitude, longitude):
+    if 56 <= latitude < 64 and 3 <= longitude < 12:
+        return 32
+
+    if 72 <= latitude <= 84 and longitude >= 0:
+        if longitude <= 9:
+            return 31
+        elif longitude <= 21:
+            return 33
+        elif longitude <= 33:
+            return 35
+        elif longitude <= 42:
+            return 37
+
+    return int((longitude + 180) / 6) + 1
+
+
+def zone_number_to_central_longitude(zone_number):
+    return (zone_number - 1) * 6 - 180 + 3

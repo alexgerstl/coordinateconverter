@@ -7,14 +7,15 @@ import coordinate_parser
 
 home = expanduser("~")
 python_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\pyproj-1.9.5.1-py2.7-win-amd64.egg'
+
 import mgrs
 import sys
 sys.path.insert(0,python_path)
 import pyproj
 
 import points
+import converter
 from converter1 import Converter
-from converter import UtmConverter, DegreeConverter
 from coordinate_parser import Hemisphere
 
 
@@ -23,16 +24,16 @@ class ConverterTest(unittest.TestCase):
     #test for comma minutes to degree and dms
     def test_comma_minutes_to_other(self):
         point = points.WGSPoint(-3, 4.5, 0, 10, 59.9999999999999, 0)
-        long_deg = DegreeConverter.convert_decimal_minutes_to_degree(float(point.long_deg), float(point.long_min))
-        lat_deg = DegreeConverter.convert_decimal_minutes_to_degree(float(point.lat_deg), Decimal(point.lat_min))
+        long_deg = converter.convert_decimal_minutes_to_degree(float(point.long_deg), float(point.long_min))
+        lat_deg = converter.convert_decimal_minutes_to_degree(float(point.lat_deg), Decimal(point.lat_min))
         p = points.WGSPoint(long_deg, 0, 0, lat_deg, 0, 0)
         #self.assertEqual(format(p.long_deg, '.4f'), '-3.0750')
         #self.assertEqual(format(p.lat_deg, '.4f'), '10.9833')
         print('WGS_Degree_long: ' + str(p.long_deg))
         print('WGS_Degree_lat: ' + str(p.lat_deg))
         print('WGS_Degree: ' + p.to_string(coordinate_parser.CoordinateSystemString.WGS84_Degrees.value))
-        long_deg, long_min, long_sec = DegreeConverter.convert_degree_to_DMS(p.long_deg)
-        lat_deg, lat_min, lat_sec = DegreeConverter.convert_degree_to_DMS(p.lat_deg)
+        long_deg, long_min, long_sec = converter.convert_degree_to_DMS(p.long_deg)
+        lat_deg, lat_min, lat_sec = converter.convert_degree_to_DMS(p.lat_deg)
         p_1 = points.WGSPoint(long_deg, long_min, long_sec, lat_deg, lat_min, lat_sec)
         self.assertEqual(p_1.long_deg, -3)
         self.assertEqual(p_1.long_min, 4)
@@ -88,9 +89,8 @@ class ConverterTest(unittest.TestCase):
 
     #test for degree -> utm
     def test_degree_to_UTM(self):
-        f = Converter()
         point = points.WGSPoint(3, 0, 0, -10, 0, 0)
-        p_1 = f.convert_degree_to_UTM(point)
+        p_1 = converter.degree_to_utm(point)
         print(p_1.to_string())
         self.assertEqual(p_1.zone, 31)
         self.assertEqual(p_1.hemisphere, Hemisphere.SOUTH)
@@ -99,11 +99,10 @@ class ConverterTest(unittest.TestCase):
 
     #test for utm -> degree
     def test_utm_to_degree(self):
-        f = Converter()
-        point = points.UTMPoint(123456, 1234567, 12, Hemisphere.NORTH)
-        p_1 = f.convert_UTM_to_degree(point)
-        self.assertEqual(format(p_1.long_deg, '.4f'), '-114.4466')
-        self.assertEqual(format(p_1.lat_deg, '.4f'), '11.1483')
+        point = points.UTMPoint(456331, 1562000, 33, None,  Hemisphere.NORTH)
+        p_1 = converter.utm_to_degree(point)
+        self.assertEqual(format(p_1.lat_deg, '.4f'), '14.1287')
+        self.assertEqual(format(p_1.long_deg, '.4f'), '14.5954')
 
     #test for mgrs -> utm
     def test_MGRS_to_UTM(self):
@@ -143,15 +142,15 @@ class ConverterTest(unittest.TestCase):
 
     def test_def(self):
         point = points.WGSPoint(3, 0, 0, -10, 0, 0)
-        point = UtmConverter.degree_to_utm(point)
+        point = converter.degree_to_utm(point)
         print(point.to_string())
 
     def test_ghi(self):
         point = points.UTMPoint(123456, 1, 33, 'L', coordinate_parser.Hemisphere.NORTH)
-        point = UtmConverter.utm_to_degree(point)
+        point = converter.utm_to_degree(point)
         print(point.to_string(coordinate_parser.CoordinateSystemString.WGS84_Degrees.value))
-        long_deg, long_min, long_sec = DegreeConverter.convert_degree_to_DMS(point.long_deg)
-        lat_deg, lat_min, lat_sec = DegreeConverter.convert_degree_to_DMS(point.lat_deg)
+        long_deg, long_min, long_sec = converter.convert_degree_to_DMS(point.long_deg)
+        lat_deg, lat_min, lat_sec = converter.convert_degree_to_DMS(point.lat_deg)
         print(str(long_deg))
         print(str(lat_deg))
 

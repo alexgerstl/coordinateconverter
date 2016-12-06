@@ -88,7 +88,7 @@ class Ensurer:
 
     def ensure_utm_zone_in_range(self, zone):
         if not 1 <= zone <= 60:
-            raise exceptions.ParseException('UTM zone value out of range (0...60)')
+            raise exceptions.ParseException('UTM zone value out of range (1...60)')
 
     def ensure_utm_easting_in_range(self, easting):
         if not 100000 <= easting < 1000000:

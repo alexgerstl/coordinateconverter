@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'coordinates_converter_dialog_de.ui'
+# Form implementation generated from reading ui file 'coordinates_converter_dialog_de_2.ui'
 #
 # Created: Tue Aug 23 09:45:05 2016
 #      by: PyQt4 UI code generator 4.10.2
