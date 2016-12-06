@@ -8,7 +8,7 @@ sys.path.insert(0,python_path)
 import pyproj
 import math
 import points
-from coordinate_parser import Hemisphere
+from ensurer import Hemisphere
 
 
 class Converter:

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from decimal import Decimal
-
-import coordinate_parser
+import ensurer
 
 
 class MGRSPoint:
@@ -25,7 +24,7 @@ class UTMPoint:
         self.hemisphere = hemisphere
 
     def to_string(self):
-        if self.hemisphere == coordinate_parser.Hemisphere.NORTH:
+        if self.hemisphere == ensurer.Hemisphere.NORTH:
             hemisphere = 'N'
         else:
             hemisphere = 'S'

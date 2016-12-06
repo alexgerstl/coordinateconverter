@@ -1,4 +1,24 @@
+import sys
 import exceptions
+from os.path import expanduser
+home = expanduser("~")
+enum_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\enum34-1.1.6-py2.7.egg'
+
+sys.path.insert(0,enum_path)
+import enum
+
+
+class CoordinateSystemString(enum.Enum):
+    MGRS = 'MGRS'
+    UTM = 'UTM'
+    WGS84_Degrees = 'WGS_DEGREES'
+    WGS84_DMS = 'WGS_DMS'
+    WGS84_CommaMinutes = 'WGS_COMMA'
+
+
+class Hemisphere(enum.Enum):
+    NORTH = 'N'
+    SOUTH = 'S'
 
 
 class Ensurer:

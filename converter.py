@@ -1,6 +1,6 @@
 import points
 import math
-from coordinate_parser import Hemisphere
+from ensurer import Hemisphere
 import exceptions
 from decimal import Decimal
 

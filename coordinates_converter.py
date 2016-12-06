@@ -25,11 +25,10 @@ from PyQt4.QtGui import QAction, QIcon
 # Initialize Qt resources from file resources.py
 
 
-import coordinate_parser
 import resources
 # Import the code for the dialog
 from coordinates_converter_dialog import CoordinatesConverterDialog
-from coordinate_parser import Parser, CoordinateSystemString
+from ensurer import CoordinateSystemString, Hemisphere
 import converter
 from converter1 import Converter
 import os.path
@@ -89,13 +88,12 @@ class CoordinatesConverter:
         self.lat_min = 0
         self.lat_sec = 0
         self.utm_zone_number = 0
-        self.utm_zone_letter = coordinate_parser.Hemisphere.NORTH
+        self.utm_zone_letter = Hemisphere.NORTH
         self.utm_easting = 0
         self.utm_northing = 0
         self.hemisphere = ''
         self.epsg_code_description = {}
         self.converter = Converter()
-        self.parser = Parser()
         self.ensurer = Ensurer()
         self.__load_epsg_codes()
         self.__load_epsg_codes_to_boxes()
@@ -114,7 +112,7 @@ class CoordinatesConverter:
         self.dlg.hemisphere.currentIndexChanged.connect(self.__change_hemisphere)
         self.dlg.comboBox_from.currentIndexChanged.connect(self.__show_description_from)
         self.dlg.comboBox_to.currentIndexChanged.connect(self.__show_description_to)
-        self.dlg.lineEdit_input_epsg.textEdited.connect(self.parse_epsg)
+        #self.dlg.lineEdit_input_epsg.textEdited.connect(self.parse_epsg)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -238,23 +236,6 @@ class CoordinatesConverter:
             # substitute with your code.
             pass
 
-    def parse(self):
-        try:
-            parser = Parser()
-            point = parser.parse(self.dlg.lineEdit_input.text())
-            self.dlg.statusBar.showMessage('Valid ' + str(parser.guessed_system.value))
-            self.coordinates = {parser.guessed_system.value: point}
-            self.convert_entered_coordinates(point, parser.guessed_system)
-            self.__update_coordinate_fields()
-        except exceptions.ParseException, e:
-            self.dlg.statusBar.showMessage(e.message)
-            self.coordinates.clear()
-            self.dlg.clear_coordinate_fields()
-        except exceptions.ConversionException, c:
-            self.dlg.statusBar.showMessage(c.message)
-            self.coordinates.clear()
-            self.dlg.clear_coordinate_fields()
-
     def convert_entered_coordinates(self, point, guessed_system):
         if isinstance(point, points.WGSPoint):
             if guessed_system == CoordinateSystemString.WGS84_Degrees:
@@ -315,23 +296,23 @@ class CoordinatesConverter:
             #mgrs_point = self.converter.convert_UTM_to_MGRS(point)
             #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
 
-    def parse_epsg(self):
-        try:
-            parser = Parser()
-            point = parser.parse(self.dlg.lineEdit_input_epsg.text())
-            self.dlg.statusBar.showMessage('Valid ' + str(parser.guessed_system.value))
-            if not isinstance(point, points.WGSPoint) and not parser.guessed_system == CoordinateSystemString.WGS84_Degrees:
-                self.dlg.statusBar.showMessage('Degree format necessary')
-            else:
-                x, y = Converter.convert_based_on_epsg(point, str(self.dlg.comboBox_from.currentText()),
-                                                       str(self.dlg.comboBox_to.currentText()))
-                self.dlg.lineEdit_epsg_result.setText(str(x) + ' ' + str(y))
-        except exceptions.ParseException, e:
-            self.dlg.statusBar.showMessage(e.message)
-        except exceptions.ConversionException, c:
-            self.dlg.statusBar.showMessage(c.message)
-        except RuntimeError:
-            self.dlg.statusBar.showMessage('Conversion not possible')
+    # def parse_epsg(self):
+    #     try:
+    #         parser = Parser()
+    #         point = parser.parse(self.dlg.lineEdit_input_epsg.text())
+    #         self.dlg.statusBar.showMessage('Valid ' + str(parser.guessed_system.value))
+    #         if not isinstance(point, points.WGSPoint) and not parser.guessed_system == CoordinateSystemString.WGS84_Degrees:
+    #             self.dlg.statusBar.showMessage('Degree format necessary')
+    #         else:
+    #             x, y = Converter.convert_based_on_epsg(point, str(self.dlg.comboBox_from.currentText()),
+    #                                                    str(self.dlg.comboBox_to.currentText()))
+    #             self.dlg.lineEdit_epsg_result.setText(str(x) + ' ' + str(y))
+    #     except exceptions.ParseException, e:
+    #         self.dlg.statusBar.showMessage(e.message)
+    #     except exceptions.ConversionException, c:
+    #         self.dlg.statusBar.showMessage(c.message)
+    #     except RuntimeError:
+    #         self.dlg.statusBar.showMessage('Conversion not possible')
 
     def __update_coordinate_fields(self):
         for field in self.dlg.coordinate_fields:
@@ -408,9 +389,9 @@ class CoordinatesConverter:
     def __change_hemisphere(self, i):
         self.selected_hemisphere = i
         if i == 0:
-            self.hemisphere = coordinate_parser.Hemisphere.NORTH
+            self.hemisphere = Hemisphere.NORTH
         if i == 1:
-            self.hemisphere = coordinate_parser.Hemisphere.SOUTH
+            self.hemisphere = Hemisphere.SOUTH
         self.__validate_utm_hemisphere()
 
     def __validate_WGS(self):

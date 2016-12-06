@@ -11,23 +11,7 @@ import exceptions
 from decimal import Decimal
 
 
-class CoordinateSystemString(enum.Enum):
-    MGRS = 'MGRS'
-    UTM = 'UTM'
-    WGS84_Degrees = 'WGS_DEGREES'
-    WGS84_DMS = 'WGS_DMS'
-    WGS84_CommaMinutes = 'WGS_COMMA'
 
-
-class ParserStatus(enum.Enum):
-    VALID = 'Valid'
-    INVALID = 'Invalid'
-    INCOMPLETE = 'Incomplete'
-
-
-class Hemisphere(enum.Enum):
-    NORTH = 'N'
-    SOUTH = 'S'
 
 
 class Guess:
