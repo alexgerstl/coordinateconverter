@@ -237,6 +237,16 @@ class CoordinatesConverter:
             pass
 
     def convert_entered_coordinates(self, point, guessed_system):
+        """Converts given point based on the coordinate system to all other supported coordinate systems.
+
+        :param point: An instance of a point
+        :type point: MGRSPoint | UTMPoint | WGSPoint
+
+        :param guessed_system: A instance of the enum CoordinateSystemString.
+        :type guessed_system: CoordinateSystemString.UTM | CoordinateSystemString.MGRS | CoordinateSystemString.WGS_DEGREES
+                              | CoordinateSystemString.WGS_COMMA | CoordinateSystemString.WGS_DEMS
+
+        """
         if isinstance(point, points.WGSPoint):
             if guessed_system == CoordinateSystemString.WGS84_Degrees:
                 dms_point = self.__degree_to_dms(point)
@@ -315,6 +325,7 @@ class CoordinatesConverter:
     #         self.dlg.statusBar.showMessage('Conversion not possible')
 
     def __update_coordinate_fields(self):
+        """Updates text in text fields based on existing point in dictionary self.coordinates."""
         for field in self.dlg.coordinate_fields:
             name = field.objectName()
             for key in self.coordinates:
@@ -325,31 +336,52 @@ class CoordinatesConverter:
                         field.setText(self.coordinates[key].to_string(key))
 
     def __degree_to_dms(self, point):
+        """Handles the conversion between the degrees and degree, minutes, seconds format.
+
+        Returns new WGSPoint.
+        """
         long_deg, long_min, long_sec = converter.convert_degree_to_DMS(point.long_deg)
         lat_deg, lat_min, lat_sec = converter.convert_degree_to_DMS(point.lat_deg)
         return points.WGSPoint(long_deg, long_min, long_sec, lat_deg, lat_min, lat_sec)
 
     def __degree_to_commaminutes(self, point):
+        """Handles the conversion between the degrees and degree, decimal minutes format.
+
+        Returns new WGSPoint.
+        """
         long_deg, long_min = converter.convert_degree_to_decimal_minutes(point.long_deg)
         lat_deg, lat_min = converter.convert_degree_to_decimal_minutes(point.lat_deg)
         return points.WGSPoint(long_deg, long_min, 0, lat_deg, lat_min, 0)
 
     def __dms_to_degree(self, point):
+        """Handles the conversion between the degree, minutes, seconds and degrees format.
+
+        Returns new WGSPoint.
+        """
         long_temp = converter.convert_DMS_to_degree(point.long_deg, point.long_min, point.long_sec)
         lat_temp = converter.convert_DMS_to_degree(point.lat_deg, point.lat_min, point.lat_sec)
         return points.WGSPoint(long_temp, 0, 0, lat_temp, 0, 0)
 
     def __commaminutes_to_degree(self, point):
+        """Handles the conversion between the degree, decimal minutes and degrees format.
+
+        Returns new WGSPoint.
+        """
         long_deg = converter.convert_decimal_minutes_to_degree(point.long_deg, point.long_min)
         lat_deg = converter.convert_decimal_minutes_to_degree(point.lat_deg, point.lat_min)
         return points.WGSPoint(long_deg, 0, 0, lat_deg, 0, 0)
 
     def __dms_to_commaminutes(self, point):
+        """Handles the conversion between the degree, minutes, seconds and degrees, decimal minutes format.
+
+        Returns new WGSPoint.
+        """
         long_deg, long_min = converter.convert_dms_to_decimal_minutes(point.long_deg, point.long_min, point.long_sec)
         lat_deg, lat_min = converter.convert_dms_to_decimal_minutes(point.lat_deg, point.lat_min, point.lat_sec)
         return points.WGSPoint(long_deg, long_min, 0, lat_deg, lat_min, 0)
 
     def __load_epsg_codes(self):
+        """Loads EPSG code from file in data directory to a dictionary."""
         file_path = self.plugin_dir + '/data/epsg_codes.txt'
         f = open(file_path)
         _dict = {}
@@ -359,18 +391,22 @@ class CoordinatesConverter:
         self.epsg_code_description = collections.OrderedDict(sorted(_dict.items()))
 
     def __load_epsg_codes_to_boxes(self):
+        """Loads EPSG code from the dictionary to the comboboxes."""
         keys = self.epsg_code_description.keys()
         for key in keys:
             self.dlg.comboBox_from.addItem(key)
             self.dlg.comboBox_to.addItem(key)
 
     def __show_description_from(self, i):
+        """Shows description of the selected EPSG code as tooltip."""
         self.dlg.comboBox_from.setToolTip(self.epsg_code_description.get(self.dlg.comboBox_from.itemText(i)))
 
     def __show_description_to(self, i):
+        """Shows description of the selected EPSG code as tooltip."""
         self.dlg.comboBox_to.setToolTip(self.epsg_code_description.get(self.dlg.comboBox_to.itemText(i)))
 
     def __change_format(self, i):
+        """Event triggered method which creates the selected coordinate system template in the GUI."""
         self.selected_format = i
         self.dlg.label_input_convert.setText('')
         self.dlg.clear_coordinate_fields()
@@ -387,6 +423,7 @@ class CoordinatesConverter:
             self.dlg.create_mgrs_input()
 
     def __change_hemisphere(self, i):
+        """Event triggered method which changes the hemisphere according to user selection."""
         self.selected_hemisphere = i
         if i == 0:
             self.hemisphere = Hemisphere.NORTH
@@ -395,6 +432,7 @@ class CoordinatesConverter:
         self.__validate_utm_hemisphere()
 
     def __validate_WGS(self):
+        """Event triggered method which delegates to validation methods based on the selected geographic coordinate system."""
         self.dlg.label_input_convert.setText('')
         if self.selected_format == 0:
             self.__validate_long_deg_value()
@@ -413,6 +451,7 @@ class CoordinatesConverter:
             self.__validate_lat_sec_dms_value()
 
     def __validate_UTM(self):
+        """Event triggered method which delegates to validation methods based on the selected UTM system."""
         self.dlg.label_input_convert.setText('')
         if self.selected_format == 3:
             self.__validate_utm_zone()
@@ -420,6 +459,10 @@ class CoordinatesConverter:
             self.__validate_utm_easting()
             self.__validate_utm_northing()
 
+    """Validates entered value for the degree value of the latitude in the degrees format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_lat_deg_value(self):
             try:
                 lat_deg_corrected = self.ensurer.ensure_it_is_a_number(self.dlg.lat_deg_input.text())
@@ -431,6 +474,10 @@ class CoordinatesConverter:
             except exceptions.ParseException, e:
                 self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the degree value of the longitude in the degrees format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_long_deg_value(self):
             try:
                 long_deg_corrected = self.ensurer.ensure_it_is_a_number(self.dlg.long_deg_input.text())
@@ -442,6 +489,10 @@ class CoordinatesConverter:
             except exceptions.ParseException, e:
                 self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the degree value of the longitude in the degrees, decimal minutes format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_long_deg_comma_value(self):
         try:
             long_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.long_deg_input.text())
@@ -453,6 +504,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the minutes value of the longitude in the degrees, decimal minutes format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_long_min_comma_value(self):
         try:
             long_min_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.long_min_input.text())
@@ -464,6 +519,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the degree value of the latitude in the degrees, decimal minutes format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_lat_deg_comma_value(self):
         try:
             lat_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.lat_deg_input.text())
@@ -475,6 +534,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the minutes value of the latitude in the degrees, decimal minutes format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_lat_min_comma_value(self):
         try:
             lat_min_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.lat_min_input.text())
@@ -486,6 +549,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the degree value of the longitude in the DMS format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_long_deg_dms_value(self):
         try:
             long_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.long_deg_input.text())
@@ -497,6 +564,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates minutes value for the degree value of the longitude in the DMS format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_long_min_dms_value(self):
         try:
             long_min_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.long_min_input.text())
@@ -508,6 +579,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the seconds value of the longitude in the DMS format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_long_sec_dms_value(self):
         try:
             long_sec_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.long_sec_input.text())
@@ -519,6 +594,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the degrees value of the latitude in the DMS format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_lat_deg_dms_value(self):
         try:
             lat_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.lat_deg_input.text())
@@ -530,6 +609,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the minutes value of the latitude in the DMS format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_lat_min_dms_value(self):
         try:
             lat_min_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.lat_min_input.text())
@@ -541,6 +624,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the seconds value of the latitude in the DMS format.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_lat_sec_dms_value(self):
         try:
             lat_sec_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.lat_sec_input.text())
@@ -552,6 +639,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the UTM zone.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_utm_zone(self):
         try:
             zone_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.zone_input.text())
@@ -563,11 +654,19 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the UTM hemisphere.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_utm_hemisphere(self):
         point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
                                 self.utm_zone_letter, self.hemisphere)
         self.__calculate_based_on_new_values(point, CoordinateSystemString.UTM)
 
+    """Validates entered value for the UTM easting.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_utm_easting(self):
         try:
             easting_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.easting_input.text())
@@ -579,6 +678,10 @@ class CoordinatesConverter:
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
+    """Validates entered value for the UTM northing.
+
+    As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
+    """
     def __validate_utm_northing(self):
         try:
             northing_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.northing_input.text())
@@ -591,6 +694,7 @@ class CoordinatesConverter:
             self.dlg.label_input_convert.setText(e.message)
 
     def __calculate_based_on_new_values(self, point, coordinate_system):
+        """For reducing of duplicate code."""
         self.coordinates = {coordinate_system.value: point}
         self.convert_entered_coordinates(point, coordinate_system)
         self.__update_coordinate_fields()

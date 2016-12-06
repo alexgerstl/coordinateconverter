@@ -40,8 +40,8 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.input_fields = [self.lat_deg_input, self.lat_min_input, self.lat_sec_input, self.long_deg_input, self.long_min_input,
                              self.long_sec_input, self.zone_input, self.square_input, self.easting_input, self.northing_input]
 
-
     def reset(self):
+        """Resets the graphical user interface."""
         self.clear_coordinate_fields()
         self.clear_epsg_fields()
         self.statusBar.clearMessage()
@@ -51,18 +51,22 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.label_input_convert.setText('')
 
     def clear_coordinate_fields(self):
+        """Resets the text fields show the converted coordinates."""
         for field in self.coordinate_fields:
             field.clear()
 
     def clear_input_fields(self):
+        """Resets the value input fields for the different coordinate systems."""
         for field in self.input_fields:
             field.clear()
 
     def clear_epsg_fields(self):
+        """Resets the input field and the text field showing the result for transforming values based on EPSG codes."""
         self.lineEdit_input_epsg.clear()
         self.lineEdit_epsg_result.clear()
 
     def create_degrees_input(self):
+        """Creates the template for entering coordinates in the geographic coordinate system - DEGREES."""
         self.gridLayout_input.addWidget(self.long_deg_input, 0, 0)
         self.gridLayout_input.addWidget(QLabel('\xb0'), 0, 1)
         self.gridLayout_input.addWidget(QLabel('E'), 0, 2)
@@ -71,6 +75,7 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.gridLayout_input.addWidget(QLabel('N'), 0, 5)
 
     def create_dms_input(self):
+        """Creates the template for entering coordinates in the geographic coordinate system - DEGREES, MINUTES, SECONDS."""
         self.gridLayout_input.addWidget(self.long_deg_input, 0, 0)
         self.gridLayout_input.addWidget(QLabel('\xb0'), 0, 1)
         self.gridLayout_input.addWidget(self.long_min_input, 0, 2)
@@ -87,6 +92,7 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.gridLayout_input.addWidget(QLabel('N'), 0, 13)
 
     def create_commaminutes_input(self):
+        """Creates the template for entering coordinates in the geographic coordinate system - DEGREES, DECIMAL MINUTES."""
         self.gridLayout_input.addWidget(self.long_deg_input, 0, 0)
         self.gridLayout_input.addWidget(QLabel('\xb0'), 0, 1)
         self.gridLayout_input.addWidget(self.long_min_input, 0, 2)
@@ -99,6 +105,7 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.gridLayout_input.addWidget(QLabel('N'), 0, 11)
 
     def create_utm_input(self):
+        """Creates the template for entering coordinates in the unversial mercator transverse coordinate system - UTM."""
         self.zone_input.setFixedWidth(30)
         self.gridLayout_input.addWidget(self.zone_input, 0, 0)
         self.gridLayout_input.addWidget(QLabel('Zone'), 0, 1)
@@ -109,6 +116,7 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.gridLayout_input.addWidget(QLabel('N'), 0, 6)
 
     def create_mgrs_input(self):
+        """Creates the template for entering coordinates in the military grid reference coordinate system - MGRS."""
         self.zone_input.setFixedWidth(40)
         self.square_input.setFixedWidth(30)
 
@@ -128,6 +136,7 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         #self.input_fields = [zone_input, square_input, easting, northing]
 
     def clear_format_layout(self):
+        """Removes all template elements from the gridlayout."""
         for i in reversed(range(self.gridLayout_input.count())):
             self.gridLayout_input.itemAt(i).widget().setParent(None)
         self.clear_input_fields()

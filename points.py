@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from decimal import Decimal
 import ensurer
 
 
@@ -80,21 +79,21 @@ class WGSPoint:
                                                                   int(lat_deg), format(int(lat_min), '02d'),
                                                                   _lat_s, lat_identifier)
 
-            # TODO
-            # format degrees in a private method
-            # check if < 0 or > 0 because if < 0 values are stores in e- style
-            # also consider handling formating min and sec this way
-
     def __format_degrees_for_wgs_degrees(self, deg):
+        """Formats degree value from point for presenting to user"""
         if '.' in str(deg):
+            # it's a decimal
             if 'E' in str(deg):
+                # it's stored in exponential map
                 index = str(deg).index('E')
                 zeros = int(str(deg)[index + 1: index + 3]) * -1
+                # now we now the exponent
                 _list = str(deg).split('.')
                 before = _list[0]
                 after = _list[1]
                 add_zeros = '0'
                 while zeros - 2 > 0:
+                    # creating zeros based on exponent
                     add_zeros += '0'
                     zeros -= 1
 
@@ -105,6 +104,7 @@ class WGSPoint:
                     _d = _d = '0.' + add_zeros
                 return _d
             else:
+                # it's a simple decimal
                 _list = str(deg).split('.')
                 before = _list[0]
                 after = _list[1]
@@ -116,6 +116,7 @@ class WGSPoint:
                 _d = before + '.' + after
                 return _d
         else:
+            # it's an integer
             _d = str(deg) + '.000000'
             return _d
 

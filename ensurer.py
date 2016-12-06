@@ -27,6 +27,7 @@ class Ensurer:
         self.white_list_2 = [' ', '.', ',']
 
     def ensure_it_is_a_number(self, string):
+        """Ensures string can be parsed to a positive or negative number."""
         trimmed = string.strip()
         if len(trimmed) == 0:
             trimmed = '0'
@@ -47,6 +48,7 @@ class Ensurer:
         return float(replaced)
 
     def ensure_it_is_a_positive_number(self, string):
+        """Ensures string can be parsed to a positive number."""
         trimmed = string.strip()
         if len(trimmed) == 0:
             trimmed = '0'
@@ -63,6 +65,7 @@ class Ensurer:
         return float(replaced)
 
     def ensure_it_is_an_integer(self, string):
+        """Ensures string can be parsed to a positive or negative integer."""
         trimmed = string.strip()
         if len(trimmed) == 0:
             trimmed = '0'
@@ -79,6 +82,7 @@ class Ensurer:
         return int(no_space)
 
     def ensure_it_is_a_positive_integer(self, string):
+        """Ensures string can be parsed to a positive integer."""
         trimmed = string.strip()
         if len(trimmed) == 0:
             trimmed = '0'

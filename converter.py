@@ -34,6 +34,14 @@ ZONE_LETTERS = "CDEFGHJKLMNPQRSTUVWXX"
 
 
 def degree_to_utm(point):
+    """Algorithm for the conversion of coordinate from the geographic coordinate system to UTM.
+
+    Authors
+    -------
+    * Bart van Andel <bavanandel@gmail.com>
+    * Tobias Bieniek <Tobias.Bieniek@gmx.de>
+    * Torstein I. Bo
+    """
     longitude = point.long_deg
     latitude = point.lat_deg
     force_zone_number = None
@@ -96,7 +104,16 @@ def degree_to_utm(point):
     point = points.UTMPoint(easting, northing, zone_number, zone_letter, hemisphere)
     return point
 
+
 def utm_to_degree(point):
+    """Algorithm for the conversion of coordinate from UTM to the geographic coordinate system.
+
+    Authors
+    -------
+    * Bart van Andel <bavanandel@gmail.com>
+    * Tobias Bieniek <Tobias.Bieniek@gmx.de>
+    * Torstein I. Bo
+    """
     easting = int(point.easting)
     northing = int(point.northing)
     zone_number = int(point.zone_number)
@@ -182,6 +199,7 @@ def utm_to_degree(point):
 
 
 def convert_degree_to_DMS(degrees):
+    """Algorithm for the conversion of degrees to degrees, minutes and seconds in the geographic coordinate system."""
     _deg = int(degrees)
     _min = (Decimal(degrees) - Decimal(_deg)) * Decimal(60)
     _sec = (Decimal(_min) - int(_min)) * Decimal(60)
@@ -189,6 +207,7 @@ def convert_degree_to_DMS(degrees):
 
 
 def convert_DMS_to_degree(degrees, minutes, seconds):
+    """Algorithm for the conversion of degrees, minutes and seconds to degrees in the geographic coordinate system."""
     if degrees > 0:
         _deg = Decimal(degrees) + Decimal(minutes) / Decimal(60.0) + Decimal(seconds) / Decimal(3600.0)
     else:
@@ -197,12 +216,14 @@ def convert_DMS_to_degree(degrees, minutes, seconds):
 
 
 def convert_degree_to_decimal_minutes(degrees):
+    """Algorithm for the conversion of degrees to degrees, decimal minutes in the geographic coordinate system."""
     _deg = int(degrees)
     _min = (abs(degrees) - abs(_deg)) * 60
     return _deg, _min
 
 
 def convert_decimal_minutes_to_degree(degrees, minutes):
+    """Algorithm for the conversion of degrees, decimal minutes to degrees in the geographic coordinate system."""
     _d = Decimal(minutes) / Decimal(60.0)
     if degrees > 0:
         _deg = Decimal(degrees) + Decimal(_d)
@@ -212,6 +233,8 @@ def convert_decimal_minutes_to_degree(degrees, minutes):
 
 
 def convert_dms_to_decimal_minutes(degrees, minutes, seconds):
+    """Algorithm for the conversion of degrees, minutes and seconds to
+    degrees, decimal minutes in the geographic coordinate system."""
     _min = Decimal(minutes) + Decimal(seconds) / Decimal(60.0)
     return Decimal(degrees), Decimal(_min)
 

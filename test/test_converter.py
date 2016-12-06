@@ -16,7 +16,7 @@ import pyproj
 import points
 import converter
 from converter1 import Converter
-from coordinate_parser import Hemisphere
+from ensurer import Hemisphere
 
 
 class ConverterTest(unittest.TestCase):
