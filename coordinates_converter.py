@@ -78,9 +78,15 @@ class CoordinatesConverter:
         self.toolbar = self.iface.addToolBar(u'CoordinatesConverter')
         self.toolbar.setObjectName(u'CoordinatesConverter')
 
+        self.ensurer = Ensurer()
         self.coordinates = {}
+        self.epsg_code_description = {}
+
+        # For combobox signals
         self.selected_format = 0
         self.selected_hemisphere = 0
+
+        # Init of coordinate values
         self.long_deg = 0
         self.long_min = 0
         self.long_sec = 0
@@ -92,11 +98,12 @@ class CoordinatesConverter:
         self.utm_easting = 0
         self.utm_northing = 0
         self.hemisphere = ''
-        self.epsg_code_description = {}
-        self.converter = Converter()
-        self.ensurer = Ensurer()
+
+        # TODO: might become different
         self.__load_epsg_codes()
         self.__load_epsg_codes_to_boxes()
+
+        # Event connectors
         self.dlg.long_deg_input.textEdited.connect(self.__validate_WGS)
         self.dlg.long_min_input.textEdited.connect(self.__validate_WGS)
         self.dlg.long_sec_input.textEdited.connect(self.__validate_WGS)
@@ -112,6 +119,7 @@ class CoordinatesConverter:
         self.dlg.hemisphere.currentIndexChanged.connect(self.__change_hemisphere)
         self.dlg.comboBox_from.currentIndexChanged.connect(self.__show_description_from)
         self.dlg.comboBox_to.currentIndexChanged.connect(self.__show_description_to)
+
         #self.dlg.lineEdit_input_epsg.textEdited.connect(self.parse_epsg)
 
     # noinspection PyMethodMayBeStatic

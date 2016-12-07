@@ -20,21 +20,30 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         super(CoordinatesConverterDialog, self).__init__(parent)
         self.setupUi(self)
+
+        # Output fields for converted coordinates
         self.coordinate_fields = [self.lineEdit_mgrs, self.lineEdit_utm, self.lineEdit_wgs_dms,
                                   self.lineEdit_wgs_degrees, self.lineEdit_wgs_comma]
+
+        # Input fields for geographic coordinate format
         self.lat_deg_input = QLineEdit()
         self.lat_min_input = QLineEdit()
         self.lat_sec_input = QLineEdit()
         self.long_deg_input = QLineEdit()
         self.long_min_input = QLineEdit()
         self.long_sec_input = QLineEdit()
+
+        # Input fields for utm coordinate format
         self.zone_input = QLineEdit()
         self.hemisphere = QComboBox()
         self.hemisphere.addItem('N')
         self.hemisphere.addItem('S')
-        self.square_input = QLineEdit()
         self.easting_input = QLineEdit()
         self.northing_input = QLineEdit()
+
+        # Input fields for mgrs coordinate format
+        self.square_input = QLineEdit()
+
         self.comboBox_format.setCurrentIndex(0)
         self.hemisphere.setCurrentIndex(1)
         self.input_fields = [self.lat_deg_input, self.lat_min_input, self.lat_sec_input, self.long_deg_input, self.long_min_input,
@@ -128,12 +137,6 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.gridLayout_input.addWidget(QLabel('E'), 0, 5)
         self.gridLayout_input.addWidget(self.northing_input, 0, 6)
         self.gridLayout_input.addWidget(QLabel('N'), 0, 7)
-
-        #self.zone = zone_input
-        #self.square = square_input
-        #self.easting = easting
-        #self.northing = northing
-        #self.input_fields = [zone_input, square_input, easting, northing]
 
     def clear_format_layout(self):
         """Removes all template elements from the gridlayout."""
