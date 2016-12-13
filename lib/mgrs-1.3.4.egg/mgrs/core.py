@@ -1,5 +1,6 @@
 import atexit, os, re, sys
 import ctypes
+from os.path import expanduser
 from ctypes.util import find_library
 import sysconfig
 import math
@@ -9,21 +10,29 @@ class RTreeError(Exception):
     pass
 
 if os.name == 'nt':
+    lib_name = 'libmgrs.pyd'
+    home = expanduser('~')
     try:
-        local_dlls = sys.path
-        original_path = os.environ['PATH']
-        os.environ['PATH'] = "%s;%s" % (';'.join(local_dlls), original_path)
+        path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\mgrs-1.3.4.egg'
+        path = path + '\\' + lib_name
+        # local_dlls = sys.path
+        # original_path = os.environ['PATH']
+        # os.environ['PATH'] = "%s;%s" % (';'.join(local_dlls), original_path)
         try:
-            # Python 2
-            rt = ctypes.PyDLL('libmgrs.pyd')
-        except OSError:
-            # Python 3
-            rt = ctypes.PyDLL('libmgrs.cp35-win32.pyd')
-        def free(m):
-            try:
-                free = ctypes.cdll.msvcrt.free(m)
-            except WindowsError:
-                pass
+            rt = ctypes.PyDLL(path)
+        except Exception, e:
+            raise 
+        # try:
+        #     pass
+        #     # Python 2
+        # except OSError:
+        #     # Python 3
+        #     rt = ctypes.PyDLL('libmgrs.cp35-win32.pyd')
+        # def free(m):
+        #     try:
+        #         free = ctypes.cdll.msvcrt.free(m)
+        #     except WindowsError:
+        #         pass
     except (ImportError, WindowsError):
         raise
 elif os.name == 'posix':

@@ -3,10 +3,10 @@ import unittest
 from decimal import Decimal
 from os.path import expanduser
 home = expanduser("~")
-python_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\pyproj-1.9.5.1-py2.7-win-amd64.egg'
+python_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\pyproj-1.9.5.1.egg'
 import sys
 sys.path.insert(0,python_path)
-python_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\mgrs-1.3.4-py2.7-win-amd64.egg'
+python_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\mgrs-1.3.4.egg'
 sys.path.insert(0,python_path)
 import pyproj
 import mgrs

@@ -2,12 +2,61 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96c61666-61f9-4421-9e45-a397fe89da13" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/mgrs-1.3.4-py2.7-win-amd64.egg/libmgrs.pyd" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/mgrs-1.3.4-py2.7-win-amd64.egg/mgrs/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/mgrs-1.3.4-py2.7-win-amd64.egg/mgrs/core.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/EGG-INFO/PKG-INFO" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/EGG-INFO/SOURCES.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/EGG-INFO/dependency_links.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/EGG-INFO/native_libs.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/EGG-INFO/not-zip-safe" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/EGG-INFO/top_level.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/__init__.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/_proj.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/_proj.pyd" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/FL" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/GL27" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/IGNF" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/MD" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/README" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/TN" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/WI" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/WO" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/alaska" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/conus" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/epsg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/esri" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/esri.extra" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/hawaii" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/nad.lst" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/nad27" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/nad83" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/ntf_r93.gsb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/ntv1_can.dat" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/ntv2_out.dist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/null" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/nzgd2kgrid0005.gsb" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/other.extra" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/pj_out27.dist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/pj_out83.dist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/proj_def.dat" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/proj_outIGNF.dist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/prvi" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/stgeorge" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/stlrnc" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/stpaul" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/td_out.dist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/test27" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/test83" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/testIGNF" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/testdatumfile" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/testntv2" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/testvarious" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/tv_out.dist" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/data/world" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/lib/pyproj-1.9.5.1-py2.7-win-amd64.egg/pyproj/datadir.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/converter.py" afterPath="$PROJECT_DIR$/converter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coordinates_converter.py" afterPath="$PROJECT_DIR$/coordinates_converter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coordinates_converter_dialog.py" afterPath="$PROJECT_DIR$/coordinates_converter_dialog.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ensurer.py" afterPath="$PROJECT_DIR$/ensurer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/points.py" afterPath="$PROJECT_DIR$/points.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test_converter.py" afterPath="$PROJECT_DIR$/test/test_converter.py" />
     </list>
     <ignored path="CoordinatesConverter.iws" />
@@ -28,20 +77,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="coordinate_parser.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coordinate_parser.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ensurer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ensurer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-552">
+            <state relative-caret-position="2860">
               <caret line="132" column="62" lean-forward="false" selection-start-line="132" selection-start-column="44" selection-end-line="132" selection-end-column="62" />
               <folding>
                 <element signature="e#24#34#0" expanded="true" />
@@ -53,7 +92,7 @@
       <file leaf-file-name="points.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/points.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-66">
+            <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="23" />
               <folding />
             </state>
@@ -63,20 +102,32 @@
       <file leaf-file-name="converter1.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/converter1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2002">
+            <state relative-caret-position="2244">
               <caret line="102" column="91" lean-forward="false" selection-start-line="102" selection-start-column="81" selection-end-line="102" selection-end-column="91" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_converter.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test_converter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/test_converter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="438">
-              <caret line="151" column="20" lean-forward="true" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
+            <state relative-caret-position="3278">
+              <caret line="151" column="19" lean-forward="false" selection-start-line="151" selection-start-column="19" selection-end-line="151" selection-end-column="19" />
               <folding>
                 <element signature="e#24#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="core.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/mgrs-1.3.4.egg/mgrs/core.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="23" column="18" lean-forward="false" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -85,8 +136,8 @@
       <file leaf-file-name="coordinates_converter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10008">
-              <caret line="690" column="0" lean-forward="true" selection-start-line="690" selection-start-column="0" selection-end-line="690" selection-end-column="0" />
+            <state relative-caret-position="14828">
+              <caret line="690" column="0" lean-forward="false" selection-start-line="690" selection-start-column="0" selection-end-line="690" selection-end-column="0" />
               <folding>
                 <element signature="e#1144#1219#0" expanded="true" />
               </folding>
@@ -97,9 +148,11 @@
       <file leaf-file-name="converter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/converter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="273" column="0" lean-forward="true" selection-start-line="273" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="44">
+              <caret line="3" column="80" lean-forward="false" selection-start-line="3" selection-start-column="80" selection-end-line="3" selection-end-column="80" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -157,8 +210,10 @@
         <option value="$PROJECT_DIR$/coordinates_converter.py" />
         <option value="$PROJECT_DIR$/ensurer.py" />
         <option value="$PROJECT_DIR$/test/test_ensurer.py" />
+        <option value="$PROJECT_DIR$/lib/mgrs-1.3.4-py2.7-win-amd64.egg/mgrs/core.py" />
         <option value="$PROJECT_DIR$/test/test_converter.py" />
         <option value="$PROJECT_DIR$/converter.py" />
+        <option value="$PROJECT_DIR$/lib/mgrs-1.3.4.egg/mgrs/core.py" />
       </list>
     </option>
   </component>
@@ -202,7 +257,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -215,8 +269,63 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoordinatesConverter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoordinatesConverter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoordinatesConverter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoordinatesConverter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mgrs-1.3.4.egg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoordinatesConverter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CoordinatesConverter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lib" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mgrs-1.3.4.egg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mgrs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -233,28 +342,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python tests.Unittest ConverterTest.test_deg_to_mgrs">
-    <configuration default="false" name="Unittest EnsurerTest.test_ensure_mgrs_square_invalid2" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="CoordinatesConverter" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_ensurer.py" />
-      <option name="CLASS_NAME" value="EnsurerTest" />
-      <option name="METHOD_NAME" value="test_ensure_mgrs_square_invalid2" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_METHOD" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
     <configuration default="false" name="Unittest EnsurerTest.test_ensure_mgrs_square_invalid3" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -336,6 +423,28 @@
       <option name="METHOD_NAME" value="test_deg_to_mgrs" />
       <option name="FOLDER_NAME" value="" />
       <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Unittests in test_converter" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="CoordinatesConverter" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test/test_converter.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <option name="PUREUNITTEST" value="true" />
@@ -478,19 +587,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid2" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid3" />
-      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid4" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_valid" />
-      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest ConverterTest.test_deg_to_mgrs" />
+      <item index="0" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid3" />
+      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid4" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_valid" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest ConverterTest.test_deg_to_mgrs" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Unittests in test_converter" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python tests.Unittest ConverterTest.test_deg_to_mgrs" />
-        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_valid" />
-        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid4" />
-        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid3" />
-        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid2" />
+        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in test_converter" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_valid" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid4" />
+        <item index="4" class="java.lang.String" itemvalue="Python tests.Unittest EnsurerTest.test_ensure_mgrs_square_invalid3" />
       </list>
     </recent_temporary>
   </component>
@@ -523,23 +632,23 @@
     <history-entry file="Unittest_ConverterTest_test_deg_to_mgrs - 2016.12.13 at 14h 43m 40s.xml">
       <configuration name="Unittest ConverterTest.test_deg_to_mgrs" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_EnsurerTest_test_ensure_mgrs_square_invalid2 - 2016.12.13 at 14h 26m 33s.xml">
-      <configuration name="Unittest EnsurerTest.test_ensure_mgrs_square_invalid2" configurationId="tests" />
+    <history-entry file="Unittest_ConverterTest_test_deg_to_mgrs - 2016.12.13 at 14h 49m 07s.xml">
+      <configuration name="Unittest ConverterTest.test_deg_to_mgrs" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_EnsurerTest_test_ensure_mgrs_square_invalid3 - 2016.12.13 at 14h 27m 25s.xml">
-      <configuration name="Unittest EnsurerTest.test_ensure_mgrs_square_invalid3" configurationId="tests" />
+    <history-entry file="Unittest_ConverterTest_test_deg_to_mgrs - 2016.12.13 at 16h 10m 32s.xml">
+      <configuration name="Unittest ConverterTest.test_deg_to_mgrs" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_EnsurerTest_test_ensure_mgrs_square_invalid4 - 2016.12.13 at 14h 28m 01s.xml">
-      <configuration name="Unittest EnsurerTest.test_ensure_mgrs_square_invalid4" configurationId="tests" />
+    <history-entry file="Unittest_ConverterTest_test_deg_to_mgrs - 2016.12.13 at 16h 27m 02s.xml">
+      <configuration name="Unittest ConverterTest.test_deg_to_mgrs" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_EnsurerTest_test_ensure_mgrs_square_invalid4 - 2016.12.13 at 14h 28m 08s.xml">
-      <configuration name="Unittest EnsurerTest.test_ensure_mgrs_square_invalid4" configurationId="tests" />
+    <history-entry file="Unittest_ConverterTest_test_deg_to_mgrs - 2016.12.13 at 16h 31m 41s.xml">
+      <configuration name="Unittest ConverterTest.test_deg_to_mgrs" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_EnsurerTest_test_ensure_mgrs_square_invalid4 - 2016.12.13 at 14h 28m 30s.xml">
-      <configuration name="Unittest EnsurerTest.test_ensure_mgrs_square_invalid4" configurationId="tests" />
+    <history-entry file="Unittests_in_test_converter - 2016.12.13 at 16h 11m 43s.xml">
+      <configuration name="Unittests in test_converter" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittest_EnsurerTest_test_ensure_mgrs_square_valid - 2016.12.13 at 14h 29m 30s.xml">
-      <configuration name="Unittest EnsurerTest.test_ensure_mgrs_square_valid" configurationId="tests" />
+    <history-entry file="Unittests_in_test_converter - 2016.12.13 at 16h 13m 04s.xml">
+      <configuration name="Unittests in test_converter" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
@@ -551,18 +660,19 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25027442" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30954996" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33260155" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30954996" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33260155" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -604,62 +714,11 @@
           <option name="timeStamp" value="53" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="56" />
+      <option name="time" value="57" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/test_coordinate_parser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2200">
-          <caret line="101" column="65" lean-forward="false" selection-start-line="101" selection-start-column="65" selection-end-line="101" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/points.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1474">
-          <caret line="67" column="43" lean-forward="false" selection-start-line="67" selection-start-column="43" selection-end-line="67" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coordinates_converter_dialog.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="20" column="38" lean-forward="false" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
-          <folding>
-            <element signature="e#255#264#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5170">
-          <caret line="236" column="77" lean-forward="false" selection-start-line="236" selection-start-column="77" selection-end-line="236" selection-end-column="77" />
-          <folding>
-            <element signature="e#1144#1219#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coordinate_parser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="858">
-          <caret line="39" column="19" lean-forward="false" selection-start-line="39" selection-start-column="13" selection-end-line="39" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/converter1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7062">
-          <caret line="321" column="43" lean-forward="false" selection-start-line="321" selection-start-column="43" selection-end-line="321" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test_converter.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
@@ -696,7 +755,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
           <caret line="1" column="8" lean-forward="false" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -737,7 +795,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -778,7 +835,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -850,13 +906,6 @@
     <entry file="file://$PROJECT_DIR$/parser.py" />
     <entry file="file://$PROJECT_DIR$/utm_converter.py" />
     <entry file="file://$PROJECT_DIR$/degree_converter.py" />
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_monkey_qt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="70" column="0" lean-forward="false" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/lib/enum34-1.1.6-py2.7.egg!/enum/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
@@ -884,7 +933,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
           <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -902,15 +950,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="66">
           <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="61" />
-          <folding>
-            <element signature="e#24#39#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/points.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-66">
+        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="23" />
           <folding />
         </state>
@@ -920,15 +965,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="464">
           <caret line="94" column="24" lean-forward="false" selection-start-line="94" selection-start-column="24" selection-end-line="94" selection-end-column="24" />
-          <folding>
-            <element signature="e#24#39#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ensurer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-552">
+        <state relative-caret-position="2860">
           <caret line="132" column="62" lean-forward="false" selection-start-line="132" selection-start-column="44" selection-end-line="132" selection-end-column="62" />
           <folding>
             <element signature="e#24#34#0" expanded="true" />
@@ -938,8 +980,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10008">
-          <caret line="690" column="0" lean-forward="true" selection-start-line="690" selection-start-column="0" selection-end-line="690" selection-end-column="0" />
+        <state relative-caret-position="14828">
+          <caret line="690" column="0" lean-forward="false" selection-start-line="690" selection-start-column="0" selection-end-line="690" selection-end-column="0" />
           <folding>
             <element signature="e#1144#1219#0" expanded="true" />
           </folding>
@@ -948,26 +990,64 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/converter1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2002">
+        <state relative-caret-position="2244">
           <caret line="102" column="91" lean-forward="false" selection-start-line="102" selection-start-column="81" selection-end-line="102" selection-end-column="91" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lib/mgrs-1.3.4-py2.7-win-amd64.egg/mgrs/__init__.py" />
+    <entry file="file://C:/Python27/Lib/ctypes/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-858">
+          <caret line="331" column="6" lean-forward="false" selection-start-line="331" selection-start-column="6" selection-end-line="331" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/mgrs-1.3.4-py2.7-win-amd64.egg/libmgrs.py" />
+    <entry file="file://$USER_HOME$/.PyCharmCE2016.3/system/python_stubs/-762174762/exceptions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="758" column="6" lean-forward="false" selection-start-line="758" selection-start-column="6" selection-end-line="758" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/mgrs-1.3.4-py2.7-win-amd64.egg/mgrs/core.py" />
     <entry file="file://$PROJECT_DIR$/converter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="273" column="0" lean-forward="true" selection-start-line="273" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="44">
+          <caret line="3" column="80" lean-forward="false" selection-start-line="3" selection-start-column="80" selection-end-line="3" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_bundle/pydev_monkey_qt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1606">
+          <caret line="73" column="17" lean-forward="true" selection-start-line="73" selection-start-column="17" selection-end-line="73" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test_converter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="151" column="20" lean-forward="true" selection-start-line="151" selection-start-column="20" selection-end-line="151" selection-end-column="20" />
+        <state relative-caret-position="3278">
+          <caret line="151" column="19" lean-forward="false" selection-start-line="151" selection-start-column="19" selection-end-line="151" selection-end-column="19" />
           <folding>
             <element signature="e#24#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/mgrs-1.3.4.egg/mgrs/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="23" column="18" lean-forward="false" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
           </folding>
         </state>
       </provider>
