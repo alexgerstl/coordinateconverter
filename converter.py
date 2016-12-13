@@ -1,3 +1,7 @@
+from os.path import expanduser
+home = expanduser("~")
+python_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\mgrs-1.3.4-py2.7-win-amd64.egg'
+import mgrs
 import points
 import math
 from ensurer import Hemisphere
@@ -203,7 +207,9 @@ def convert_degree_to_DMS(degrees):
     _deg = int(degrees)
     _min = (Decimal(degrees) - Decimal(_deg)) * Decimal(60)
     _sec = (Decimal(_min) - int(_min)) * Decimal(60)
-    return Decimal(_deg), abs(int(_min)), abs(Decimal(_sec))
+    if abs(float(_sec)) == 60:
+        _sec = 0
+    return Decimal(_deg), abs(int(float(_min))), abs(float(_sec))
 
 
 def convert_DMS_to_degree(degrees, minutes, seconds):
@@ -265,3 +271,19 @@ def latlon_to_zone_number(latitude, longitude):
 
 def zone_number_to_central_longitude(zone_number):
     return (zone_number - 1) * 6 - 180 + 3
+
+def degree_to_mgrs(point):
+    m = mgrs.MGRS()
+    c = m.toMGRS(point.lat_deg, point.long_deg)
+    print(c)
+    zone = c[:3]
+    square = c[3:5]
+    easting = c[5:10]
+    northing = c[10:]
+    if point.lat_deg > 0:
+        hemisphere = Hemisphere.NORTH
+    else:
+        hemisphere = Hemisphere.SOUTH
+
+    point = points.MGRSPoint(easting, northing, zone, square, hemisphere)
+    return point

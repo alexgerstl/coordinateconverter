@@ -8,6 +8,8 @@
 # WARNING! All changes made in this file will be lost!
 
 import os
+from PyQt4 import QtCore
+
 from PyQt4 import QtGui, uic
 from PyQt4.QtGui import QComboBox
 from PyQt4.QtGui import QLabel
@@ -143,3 +145,4 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         for i in reversed(range(self.gridLayout_input.count())):
             self.gridLayout_input.itemAt(i).widget().setParent(None)
         self.clear_input_fields()
+

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import exceptions
 from os.path import expanduser
@@ -36,7 +37,7 @@ class Ensurer:
             replaced = no_space.replace(',', '.')
         else:
             replaced = no_space
-        illegal_char_index = self.__index_of_first_illegal_char(replaced, 1)
+        illegal_char_index = self.__index_of_first_illegal_char_number_only(replaced, 1)
         if illegal_char_index != -1:
             raise exceptions.ParseException('Invalid Symbol \'' + replaced[illegal_char_index] + '\'')
 
@@ -57,7 +58,7 @@ class Ensurer:
             replaced = no_space.replace(',', '.')
         else:
             replaced = no_space
-        illegal_char_index = self.__index_of_first_illegal_char(replaced, 2)
+        illegal_char_index = self.__index_of_first_illegal_char_number_only(replaced, 2)
         if illegal_char_index != -1:
             raise exceptions.ParseException('Invalid Symbol \'' + replaced[illegal_char_index] + '\'')
         if len(replaced) > 10:
@@ -72,7 +73,7 @@ class Ensurer:
         no_space = trimmed.replace(' ', '')
         if ',' in no_space or '.' in no_space:
             raise exceptions.ParseException('Wert muss ganzzahlig sein')
-        illegal_char_index = self.__index_of_first_illegal_char(no_space, 1)
+        illegal_char_index = self.__index_of_first_illegal_char_number_only(no_space, 1)
         if illegal_char_index != -1:
             raise exceptions.ParseException('Invalid Symbol \'' + no_space[illegal_char_index] + '\'')
 
@@ -89,10 +90,68 @@ class Ensurer:
         no_space = trimmed.replace(' ', '')
         if ',' in no_space or '.' in no_space:
             raise exceptions.ParseException('Wert muss ganzzahlig sein')
-        illegal_char_index = self.__index_of_first_illegal_char(no_space, 2)
+        illegal_char_index = self.__index_of_first_illegal_char_number_only(no_space, 2)
         if illegal_char_index != -1:
             raise exceptions.ParseException('Invalid Symbol \'' + no_space[illegal_char_index] + '\'')
         return int(no_space)
+
+    def ensure_it_is_a_valid_mgrs_zone(self, string):
+        """Ensures string consists of 2 digits and a letter"""
+        trimmed = string.strip()
+        no_space = trimmed.replace(' ', '')
+        if len(no_space) > 3:
+            raise exceptions.ParseException('Eingabe zu lange')
+        for i in range(0, len(no_space)):
+            if i == 0:
+                if no_space[i].isdigit():
+                    continue
+                else:
+                    raise exceptions.ParseException('Zone muss mit Zahl beginnen.')
+            elif i == 1:
+                if no_space[i].isdigit():
+                    continue
+                else:
+                    raise exceptions.ParseException('Zone muss aus zwei Ziffern bestehen.')
+            else:
+                if no_space[i].isalpha():
+                    char_int = ord(no_space[i].lower())
+                    if char_int < ord('a') or char_int > ord('z'):
+                        raise exceptions.ParseException('Ungültiges Zeichen: ' + no_space[i])
+                else:
+                    raise exceptions.ParseException('Zone muss aus zwei Ziffern und einem Buchstaben bestehen.')
+        if len(no_space) != 3:
+            raise exceptions.ParseException('Eingabe noch nicht vollzählig')
+        return no_space
+
+
+
+    def ensure_it_is_a_valid_mgrs_square(self, string):
+        """Ensures string consists of 2 letters"""
+        trimmed = string.strip()
+        no_space = trimmed.replace(' ', '')
+        if len(no_space) > 2:
+            raise exceptions.ParseException('Eingabe zu lange')
+        for i in range(0, len(no_space)):
+            if i == 0:
+                if no_space[i].isalpha():
+                    continue
+                else:
+                    raise exceptions.ParseException('Gitterquadrat muss mit Buchstaben beginnen.')
+            elif i == 1:
+                if no_space[i].isalpha():
+                    continue
+                else:
+                    raise exceptions.ParseException('Gitterquadrat muss aus zwei Buchstaben bestehen.')
+            else:
+                if no_space[i].isalpha() or no_space[i].isdigit():
+                    char_int = ord(no_space[i].lower())
+                    if char_int < ord('a') or char_int > ord('z'):
+                        raise exceptions.ParseException('Ungültiges Zeichen: ' + no_space[i])
+
+        if len(no_space) != 2:
+            raise exceptions.ParseException('Eingabe noch nicht vollzählig')
+        return no_space
+
 
     def ensure_longitude_in_range(self, longitude):
         if longitude < -180 or longitude > 180:
@@ -127,7 +186,7 @@ class Ensurer:
             return False
         return True
 
-    def __index_of_first_illegal_char(self, string, list_number):
+    def __index_of_first_illegal_char_number_only(self, string, list_number):
         is_ok = True
         if list_number == 1:
             list = self.white_list_1

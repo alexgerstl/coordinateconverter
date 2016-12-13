@@ -28,7 +28,7 @@ class UTMPoint:
         else:
             hemisphere = 'S'
 
-        return '{}{} {}E {}N'.format(self.zone_number, hemisphere, int(self.easting), format(int(self.northing), '08d'))
+        return '{}{} {}E {}N'.format(self.zone_number, hemisphere, int(self.easting), int(self.northing))
 
 
 class WGSPoint:
@@ -83,10 +83,10 @@ class WGSPoint:
         """Formats degree value from point for presenting to user"""
         if '.' in str(deg):
             # it's a decimal
-            if 'E' in str(deg):
+            if 'e' in str(deg).lower():
                 # it's stored in exponential map
-                index = str(deg).index('E')
-                zeros = int(str(deg)[index + 1: index + 3]) * -1
+                index = str(deg).lower().index('e')
+                zeros = int(str(deg)[index + 1:]) * -1
                 # now we now the exponent
                 _list = str(deg).split('.')
                 before = _list[0]
@@ -101,7 +101,7 @@ class WGSPoint:
                 if first_number < 7:
                     _d = '0.' + add_zeros + before + '' + after[:7-first_number]
                 else:
-                    _d = _d = '0.' + add_zeros
+                    _d = _d = '0.' + add_zeros[:6]
                 return _d
             else:
                 # it's a simple decimal
@@ -122,17 +122,38 @@ class WGSPoint:
 
     def __format_min_for_wgs_dms(self, _min):
         if '.' in str(_min):
-            _list = str(_min).split('.')
-            before = _list[0]
-            after = _list[1]
-            if len(before) < 2:
-                before = '0' + before
-            if len(after) < 2:
-                after += '0'
-            else:
-                after = after[:2]
+            if 'e' in str(_min).lower():
+                # it's stored in exponential map
+                index = str(_min).lower().index('e')
+                zeros = int(str(_min)[index + 1:]) * -1
+                # now we now the exponent
+                _list = str(_min).split('.')
+                before = _list[0]
+                after = _list[1]
+                add_zeros = '0'
+                while zeros - 2 > 0:
+                    # creating zeros based on exponent
+                    add_zeros += '0'
+                    zeros -= 1
 
-            return before + '.' + after
+                first_number = len(add_zeros) + len(before)
+                if first_number < 7:
+                    _m = '00.' + add_zeros + before + '' + after[:7-first_number]
+                else:
+                    _m = _m = '00.' + add_zeros[:2]
+                return _m
+            else:
+                _list = str(_min).split('.')
+                before = _list[0]
+                after = _list[1]
+                if len(before) < 2:
+                    before = '0' + before
+                if len(after) < 2:
+                    after += '0'
+                else:
+                    after = after[:2]
+
+                return before + '.' + after
         else:
             _s = format(_min, '06.3f')
             _s = _s[:5]
@@ -140,6 +161,26 @@ class WGSPoint:
 
     def __format_sec(self, sec):
         if '.' in str(sec):
+            if 'e' in str(sec).lower():
+                # it's stored in exponential map
+                index = str(sec).lower().index('e')
+                zeros = int(str(sec)[index + 1:]) * -1
+                # now we now the exponent
+                _list = str(sec).split('.')
+                before = _list[0]
+                after = _list[1]
+                add_zeros = '0'
+                while zeros - 2 > 0:
+                    # creating zeros based on exponent
+                    add_zeros += '0'
+                    zeros -= 1
+
+                first_number = len(add_zeros) + len(before)
+                if first_number < 7:
+                    _s = '00.' + add_zeros + before + '' + after[:7-first_number]
+                else:
+                    _s = _s = '00.' + add_zeros[:2]
+                return _s
             _list = str(sec).split('.')
             before = _list[0]
             after = _list[1]
