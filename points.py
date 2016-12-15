@@ -85,18 +85,12 @@ class WGSPoint:
             # it's a decimal
             if 'e' in str(deg).lower():
                 # it's stored in exponential map
-                index = str(deg).lower().index('e')
-                zeros = int(str(deg)[index + 1:]) * -1
+                zeros = self.__number_of_zeros(str(deg))
                 # now we now the exponent
                 _list = str(deg).split('.')
                 before = _list[0]
                 after = _list[1]
-                add_zeros = '0'
-                while zeros - 2 > 0:
-                    # creating zeros based on exponent
-                    add_zeros += '0'
-                    zeros -= 1
-
+                add_zeros = self.__create_zeros(zeros)
                 first_number = len(add_zeros) + len(before)
                 if first_number < 7:
                     _d = '0.' + add_zeros + before + '' + after[:7-first_number]
@@ -124,18 +118,12 @@ class WGSPoint:
         if '.' in str(_min):
             if 'e' in str(_min).lower():
                 # it's stored in exponential map
-                index = str(_min).lower().index('e')
-                zeros = int(str(_min)[index + 1:]) * -1
+                zeros = self.__number_of_zeros(str(_min))
                 # now we now the exponent
                 _list = str(_min).split('.')
                 before = _list[0]
                 after = _list[1]
-                add_zeros = '0'
-                while zeros - 2 > 0:
-                    # creating zeros based on exponent
-                    add_zeros += '0'
-                    zeros -= 1
-
+                add_zeros = self.__create_zeros(zeros)
                 first_number = len(add_zeros) + len(before)
                 if first_number < 7:
                     _m = '00.' + add_zeros + before + '' + after[:7-first_number]
@@ -163,18 +151,12 @@ class WGSPoint:
         if '.' in str(sec):
             if 'e' in str(sec).lower():
                 # it's stored in exponential map
-                index = str(sec).lower().index('e')
-                zeros = int(str(sec)[index + 1:]) * -1
+                zeros = self.__number_of_zeros(str(sec))
                 # now we now the exponent
                 _list = str(sec).split('.')
                 before = _list[0]
                 after = _list[1]
-                add_zeros = '0'
-                while zeros - 2 > 0:
-                    # creating zeros based on exponent
-                    add_zeros += '0'
-                    zeros -= 1
-
+                add_zeros = self.__create_zeros(zeros)
                 first_number = len(add_zeros) + len(before)
                 if first_number < 7:
                     _s = '00.' + add_zeros + before + '' + after[:7-first_number]
@@ -196,3 +178,16 @@ class WGSPoint:
             _s = format(sec, '06.3f')
             _s = _s[:5]
             return _s
+
+    def __number_of_zeros(self, value):
+        index = str(value).lower().index('e')
+        zeros = int(str(value)[index + 1:]) * -1
+        return zeros
+
+    def __create_zeros(self, value):
+        add_zeros = '0'
+        while value - 2 > 0:
+            # creating zeros based on exponent
+            add_zeros += '0'
+            value -= 1
+        return add_zeros

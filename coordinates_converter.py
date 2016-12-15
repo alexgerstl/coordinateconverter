@@ -30,7 +30,6 @@ import resources
 from coordinates_converter_dialog import CoordinatesConverterDialog
 from ensurer import CoordinateSystemString, Hemisphere
 import converter
-from converter1 import Converter
 import os.path
 import points
 import exceptions
@@ -98,6 +97,10 @@ class CoordinatesConverter:
         self.utm_easting = 0
         self.utm_northing = 0
         self.hemisphere = ''
+        self.mgrs_zone_number = 0
+        self.mgrs_square = ''
+        self.mgrs_easting = 0
+        self.mgrs_northing = 0
 
         # TODO: might become different
         self.__load_epsg_codes()
@@ -110,10 +113,10 @@ class CoordinatesConverter:
         self.dlg.lat_deg_input.textEdited.connect(self.__validate_WGS)
         self.dlg.lat_min_input.textEdited.connect(self.__validate_WGS)
         self.dlg.lat_sec_input.textEdited.connect(self.__validate_WGS)
-        self.dlg.zone_input.textEdited.connect(self.__validate_UTM)
+        self.dlg.utm_zone_input.textEdited.connect(self.__validate_UTM)
         #self.dlg.square_input.textEdited.connect(self.__validate_input_value)
-        self.dlg.easting_input.textEdited.connect(self.__validate_UTM)
-        self.dlg.northing_input.textEdited.connect(self.__validate_UTM)
+        self.dlg.utm_easting_input.textEdited.connect(self.__validate_UTM)
+        self.dlg.utm_northing_input.textEdited.connect(self.__validate_UTM)
         #self.dlg.lineEdit_input.textEdited.connect(self.parse)
         self.dlg.comboBox_format.currentIndexChanged.connect(self.__change_format)
         self.dlg.hemisphere.currentIndexChanged.connect(self.__change_hemisphere)
@@ -468,6 +471,15 @@ class CoordinatesConverter:
             self.__parse_utm_easting()
             self.__parse_utm_northing()
 
+    def __validate_MGRS(self):
+        """Event triggered method which delegates to validation methods based on the selected UTM system."""
+        self.dlg.label_input_convert.setText('')
+        if self.selected_format == 4:
+            self.__parse_mgrs_zone()
+            self.__parse_mgrs_square()
+            self.__parse_mgrs_easting()
+            self.__parse_mgrs_northing()
+
     """Validates entered value for the degree value of the latitude in the degrees format.
 
     As long as the value is valid, the created point is simultaneously converted to other coordinate systems.
@@ -654,7 +666,7 @@ class CoordinatesConverter:
     """
     def __parse_utm_zone(self):
         try:
-            zone_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.zone_input.text())
+            zone_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_zone_input.text())
             self.ensurer.ensure_utm_zone_in_range(int(zone_corrected))
             self.utm_zone_number = zone_corrected
             point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
@@ -678,7 +690,7 @@ class CoordinatesConverter:
     """
     def __parse_utm_easting(self):
         try:
-            easting_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.easting_input.text())
+            easting_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_easting_input.text())
             self.ensurer.ensure_utm_easting_in_range(int(easting_corrected))
             self.utm_easting = easting_corrected
             point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
@@ -693,7 +705,7 @@ class CoordinatesConverter:
     """
     def __parse_utm_northing(self):
         try:
-            northing_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.northing_input.text())
+            northing_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_northing_input.text())
             self.ensurer.ensure_utm_northing_in_range(int(northing_corrected))
             self.utm_northing = northing_corrected
             point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
@@ -701,6 +713,12 @@ class CoordinatesConverter:
             self.__calculate_based_on_new_values(point, CoordinateSystemString.UTM)
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
+
+    def __parse_mgrs_zone(self):
+        try:
+            zone_corrected = self.ensurer.ensure_it_is_a_valid_mgrs_zone(self.dlg.mgrs_zone_input.text())
+            self.ensurer.ensure_utm_zone_in_range(int(zone_corrected[:2]))
+            point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone_number, self.mgrs_square)
 
     def __calculate_based_on_new_values(self, point, coordinate_system):
         """For reducing of duplicate code."""

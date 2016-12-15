@@ -1,9 +1,4 @@
-from os.path import expanduser
-import sys
-home = expanduser("~")
-python_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\mgrs-1.3.4.egg'
-sys.path.insert(0,python_path)
-import mgrs
+# -*- coding: utf-8 -*-
 import points
 import math
 from ensurer import Hemisphere
@@ -37,6 +32,10 @@ P5 = (1097. / 512 * _E4)
 R = 6378137
 
 ZONE_LETTERS = "CDEFGHJKLMNPQRSTUVWXX"
+lettertable = 'CDEFGHJKLMNPQRSTUVWX'
+LETTER_VALUES = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9,
+                 'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18,
+                 'T': 19, 'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25}
 
 
 def degree_to_utm(point):
@@ -101,7 +100,6 @@ def degree_to_utm(point):
 
     if latitude < 0:
         northing += 10000000
-
 
     if latitude > 0:
         hemisphere = Hemisphere.NORTH
@@ -192,15 +190,14 @@ def utm_to_degree(point):
     d6 = d5 * d
 
     latitude = (p_rad - (p_tan / r) *
-                (d2 / 2 -
-                 d4 / 24 * (5 + 3 * p_tan2 + 10 * c - 4 * c2 - 9 * E_P2)) +
-                 d6 / 720 * (61 + 90 * p_tan2 + 298 * c + 45 * p_tan4 - 252 * E_P2 - 3 * c2))
+                (d2 / 2 - d4 / 24 * (5 + 3 * p_tan2 + 10 * c - 4 * c2 - 9 * E_P2)) +
+                d6 / 720 * (61 + 90 * p_tan2 + 298 * c + 45 * p_tan4 - 252 * E_P2 - 3 * c2))
 
-    longitude = (d -
-                 d3 / 6 * (1 + 2 * p_tan2 + c) +
+    longitude = (d - d3 / 6 * (1 + 2 * p_tan2 + c) +
                  d5 / 120 * (5 - 2 * c + 28 * p_tan2 - 3 * c2 + 8 * E_P2 + 24 * p_tan4)) / p_cos
 
-    point = points.WGSPoint(Decimal(math.degrees(longitude) + zone_number_to_central_longitude(zone_number)), 0, 0, Decimal(math.degrees(latitude)), 0, 0)
+    point = points.WGSPoint(Decimal(math.degrees(longitude) + zone_number_to_central_longitude(zone_number)), 0, 0,
+                            Decimal(math.degrees(latitude)), 0, 0)
     return point
 
 
@@ -216,7 +213,7 @@ def convert_degree_to_DMS(degrees):
 
 def convert_DMS_to_degree(degrees, minutes, seconds):
     """Algorithm for the conversion of degrees, minutes and seconds to degrees in the geographic coordinate system."""
-    if degrees > 0:
+    if degrees >= 0:
         _deg = Decimal(degrees) + Decimal(minutes) / Decimal(60.0) + Decimal(seconds) / Decimal(3600.0)
     else:
         _deg = Decimal(degrees) - Decimal(minutes) / Decimal(60.0) - Decimal(seconds) / Decimal(3600.0)
@@ -233,7 +230,7 @@ def convert_degree_to_decimal_minutes(degrees):
 def convert_decimal_minutes_to_degree(degrees, minutes):
     """Algorithm for the conversion of degrees, decimal minutes to degrees in the geographic coordinate system."""
     _d = Decimal(minutes) / Decimal(60.0)
-    if degrees > 0:
+    if degrees >= 0:
         _deg = Decimal(degrees) + Decimal(_d)
     else:
         _deg = Decimal(degrees) - Decimal(_d)
@@ -274,18 +271,221 @@ def latlon_to_zone_number(latitude, longitude):
 def zone_number_to_central_longitude(zone_number):
     return (zone_number - 1) * 6 - 180 + 3
 
-def degree_to_mgrs(point):
-    m = mgrs.MGRS()
-    c = m.toMGRS(point.lat_deg, point.long_deg)
-    print(c)
-    zone = c[:3]
-    square = c[3:5]
-    easting = c[5:10]
-    northing = c[10:]
-    if point.lat_deg > 0:
+def convert_MGRS_to_UTM(point):
+    lat_zone = ord(point.zone[2].upper())
+    if lat_zone >= ord('N'):
         hemisphere = Hemisphere.NORTH
     else:
         hemisphere = Hemisphere.SOUTH
 
-    point = points.MGRSPoint(easting, northing, zone, square, hemisphere)
-    return point
+    zone_fields = ['STUVWXYZ', 'ABCDEFGH', 'JKLMNPQR']
+    zone_fields_lat = 'ABCDEFGHJKLMNPQRSTUV'
+    zone_temp = int(point.zone[0:2])
+    square = point.square.upper()
+    square_x = zone_fields[zone_temp % 3].index(square[0])
+    square_y = zone_fields_lat.index(square[1])
+
+    square_x += 1
+    easting_temp = square_x * 100000
+
+    if zone_temp % 2 == 0:
+        square_y = (square_y - 5) % 20
+
+    min_lat = __get_min_northing(chr(lat_zone))
+    while square_y < min_lat:
+        square_y += 20
+
+    if square_y > min_lat + 15:
+        square_y -= 20
+
+    northing_temp = square_y * 100000
+
+    result_easting = easting_temp + int(point.easting)
+    result_northing = northing_temp + int(point.northing)
+
+    return points.UTMPoint(result_easting, result_northing, zone_temp, '', hemisphere)
+
+
+def convert_UTM_to_MGRS(point):
+    degree_point = utm_to_degree(point)
+    ltr2_low_value, ltr2_high_value, false_northing = __get_grid_values(point.zone_number)
+    letter = __get_latitude_letter(float(degree_point.lat_deg))
+
+    grid_northing = int(point.northing)
+    if grid_northing == 1.E7:
+        grid_northing -= 1.0
+
+    while grid_northing >= 2000000.0:
+        grid_northing -= 2000000.0
+
+    grid_northing -= false_northing
+
+    if grid_northing < 0.0:
+        grid_northing += 2000000
+
+    square_y = grid_northing / 100000.0
+
+    if square_y > LETTER_VALUES['H']:
+        square_y += 1
+
+    if square_y > LETTER_VALUES['N']:
+        square_y += 1
+
+    grid_easting = int(point.easting)
+
+    if letter == 'V' and point.zone == 31 and grid_easting == 500000.0:
+        grid_easting -= 1.0
+
+    square_x = ltr2_low_value + (grid_easting / 100000) - 1
+    if ltr2_low_value == LETTER_VALUES['J'] and square_x > LETTER_VALUES['N']:
+        square_x += 1
+
+    zone = str(point.zone_number) + letter
+    square = str(LETTER_VALUES.keys()[LETTER_VALUES.values().index(int(square_x))]) + \
+             str(LETTER_VALUES.keys()[LETTER_VALUES.values().index(int(square_y))])
+    easting = math.fmod(float(point.easting), 100000.0)
+    northing = math.fmod(float(point.northing), 100000.0)
+    return points.MGRSPoint(int(easting), int(northing), zone, square, point.hemisphere)
+
+
+def __define_UTM_zone(point):
+    long_deg = float(point.long_deg)
+    lat_deg = float(point.lat_deg)
+
+    #long_temp = (long_deg + 180) - (long_deg + 180)/360 *360 - 180
+    #zone = (long_temp + 180)/6 + 1
+    long_temp = (long_deg + 180) - math.floor((long_deg + 180)/360)*360-180
+    zone = math.floor((long_temp + 180)/6) + 1
+
+    if 56.0 <= lat_deg < 64.0 and 3.0 <= long_temp < 12.0:
+        zone = 32
+
+    #specila zone for Svalbard
+    if 72.0 <= lat_deg < 84.0:
+        if 0.0 <= long_temp < 9.0:
+            zone = 31
+        elif 9.0 <= long_temp < 21.0:
+            zone = 33
+        elif 21.0 <= long_temp < 33.0:
+            zone = 35
+        elif 33.0 <= long_temp < 42.0:
+            zone = 37
+
+    if 84 >= lat_deg >= 72:
+        letter = 'X'
+    elif 72 > lat_deg >= 64:
+        letter = 'W'
+    elif 64 > lat_deg >= 56:
+        letter = 'V'
+    elif 56 > lat_deg >= 48:
+        letter = 'U'
+    elif 48 > lat_deg >= 40:
+        letter = 'T'
+    elif 40 > lat_deg >= 32:
+        letter = 'S'
+    elif 32 > lat_deg >= 24:
+        letter = 'R'
+    elif 24 > lat_deg >= 16:
+        letter = 'Q'
+    elif 16 > lat_deg >= 8:
+        letter = 'P'
+    elif 8 > lat_deg >= 0:
+        letter = 'N'
+    elif 0 > lat_deg >= -8:
+        letter = 'M'
+    elif -8 > lat_deg >= -16:
+        letter = 'L'
+    elif -16 > lat_deg >= -24:
+        letter = 'K'
+    elif -24 > lat_deg >= -32:
+        letter = 'J'
+    elif -32 > lat_deg >= -40:
+        letter = 'H'
+    elif -40 > lat_deg >= -48:
+        letter = 'G'
+    elif -48 > lat_deg >= -56:
+        letter = 'F'
+    elif -56 > lat_deg >= -64:
+        letter = 'E'
+    elif -64 > lat_deg >= -72:
+        letter = 'D'
+    elif -72 > lat_deg >= -80:
+        letter = 'C'
+    else:
+        letter = 'Z'
+
+    return zone, letter
+
+
+def __get_grid_values(zone):
+    set_number = float(zone) % 6
+    if set_number == 0:
+        set_number = 6
+    if set_number == 1 or set_number == 4:
+        ltr2_low_value = LETTER_VALUES['A']
+        ltr2_high_value = LETTER_VALUES['H']
+    elif set_number == 2 or set_number == 5:
+        ltr2_low_value = LETTER_VALUES['J']
+        ltr2_high_value = LETTER_VALUES['R']
+    elif set_number == 3 or set_number == 6:
+        ltr2_low_value = LETTER_VALUES['S']
+        ltr2_high_value = LETTER_VALUES['Z']
+
+    if set_number % 2 == 0:
+        false_northing = 1500000.0
+    else:
+        false_northing = 0.0
+
+    return ltr2_low_value, ltr2_high_value, false_northing
+
+def __get_latitude_letter(latitude):
+    if 72.0 <= latitude < 84.5:
+        letter = 'X'
+    elif -80.5 < latitude < 72.0:
+        temp = (latitude + 80.0) / 8.0 + 1.0E-12
+        letter = lettertable[int(temp)]
+    else:
+        letter = 'Z'
+    return letter
+
+def __get_min_northing(letter):
+    if letter == 'C':
+        return 11.0
+    elif letter == 'D':
+        return 20.0
+    elif letter == 'E':
+        return 28.0
+    elif letter == 'F':
+        return 37.0
+    elif letter == 'G':
+        return 46.0
+    elif letter == 'H':
+        return 55.0
+    elif letter == 'J':
+        return 64.0
+    elif letter == 'K':
+        return 73.0
+    elif letter == 'L':
+        return 82.0
+    elif letter == 'M':
+        return 91.0
+    elif letter == 'N':
+        return 0.0
+    elif letter == 'P':
+        return 8.0
+    elif letter == 'Q':
+        return 17.0
+    elif letter == 'R':
+        return 26.0
+    elif letter == 'S':
+        return 35.0
+    elif letter == 'T':
+        return 44.0
+    elif letter == 'U':
+        return 53.0
+    elif letter == 'V':
+        return 62.0
+    elif letter == 'W':
+        return 70.0
+    elif letter == 'X':
+        return 79.0

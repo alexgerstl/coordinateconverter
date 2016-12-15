@@ -36,20 +36,23 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.long_sec_input = QLineEdit()
 
         # Input fields for utm coordinate format
-        self.zone_input = QLineEdit()
+        self.utm_zone_input = QLineEdit()
         self.hemisphere = QComboBox()
         self.hemisphere.addItem('N')
         self.hemisphere.addItem('S')
-        self.easting_input = QLineEdit()
-        self.northing_input = QLineEdit()
+        self.utm_easting_input = QLineEdit()
+        self.utm_northing_input = QLineEdit()
 
         # Input fields for mgrs coordinate format
-        self.square_input = QLineEdit()
+        self.mgrs_zone_input = QLineEdit()
+        self.mgrs_square_input = QLineEdit()
+        self.mgrs_easting_input = QLineEdit()
+        self.mgrs_northing_input = QLineEdit()
 
         self.comboBox_format.setCurrentIndex(0)
         self.hemisphere.setCurrentIndex(1)
         self.input_fields = [self.lat_deg_input, self.lat_min_input, self.lat_sec_input, self.long_deg_input, self.long_min_input,
-                             self.long_sec_input, self.zone_input, self.square_input, self.easting_input, self.northing_input]
+                             self.long_sec_input, self.utm_zone_input, self.mgrs_square_input, self.utm_easting_input, self.utm_northing_input]
 
     def reset(self):
         """Resets the graphical user interface."""
@@ -117,27 +120,27 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
 
     def create_utm_input(self):
         """Creates the template for entering coordinates in the unversial mercator transverse coordinate system - UTM."""
-        self.zone_input.setFixedWidth(30)
-        self.gridLayout_input.addWidget(self.zone_input, 0, 0)
+        self.utm_zone_input.setFixedWidth(30)
+        self.gridLayout_input.addWidget(self.utm_zone_input, 0, 0)
         self.gridLayout_input.addWidget(QLabel('Zone'), 0, 1)
         self.gridLayout_input.addWidget(self.hemisphere, 0, 2)
-        self.gridLayout_input.addWidget(self.easting_input, 0, 3)
+        self.gridLayout_input.addWidget(self.utm_easting_input, 0, 3)
         self.gridLayout_input.addWidget(QLabel('E'), 0, 4)
-        self.gridLayout_input.addWidget(self.northing_input, 0, 5)
+        self.gridLayout_input.addWidget(self.utm_northing_input, 0, 5)
         self.gridLayout_input.addWidget(QLabel('N'), 0, 6)
 
     def create_mgrs_input(self):
         """Creates the template for entering coordinates in the military grid reference coordinate system - MGRS."""
-        self.zone_input.setFixedWidth(40)
-        self.square_input.setFixedWidth(30)
+        self.mgrs_zone_input.setFixedWidth(40)
+        self.mgrs_square_input.setFixedWidth(30)
 
-        self.gridLayout_input.addWidget(self.zone_input, 0, 0)
+        self.gridLayout_input.addWidget(self.mgrs_zone_input, 0, 0)
         self.gridLayout_input.addWidget(QLabel('Zone'), 0, 1)
-        self.gridLayout_input.addWidget(self.square_input, 0, 2)
+        self.gridLayout_input.addWidget(self.mgrs_square_input, 0, 2)
         self.gridLayout_input.addWidget(QLabel('Gitterquadrat'), 0, 3)
-        self.gridLayout_input.addWidget(self.easting_input, 0, 4)
+        self.gridLayout_input.addWidget(self.mgrs_easting_input, 0, 4)
         self.gridLayout_input.addWidget(QLabel('E'), 0, 5)
-        self.gridLayout_input.addWidget(self.northing_input, 0, 6)
+        self.gridLayout_input.addWidget(self.mgrs_northing_input, 0, 6)
         self.gridLayout_input.addWidget(QLabel('N'), 0, 7)
 
     def clear_format_layout(self):
