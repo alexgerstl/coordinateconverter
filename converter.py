@@ -345,7 +345,7 @@ def convert_UTM_to_MGRS(point):
              str(LETTER_VALUES.keys()[LETTER_VALUES.values().index(int(square_y))])
     easting = math.fmod(float(point.easting), 100000.0)
     northing = math.fmod(float(point.northing), 100000.0)
-    return points.MGRSPoint(int(easting), int(northing), zone, square, point.hemisphere)
+    return points.MGRSPoint(int(easting), int(northing), zone, square)
 
 
 def __define_UTM_zone(point):

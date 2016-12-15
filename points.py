@@ -3,12 +3,11 @@ import ensurer
 
 
 class MGRSPoint:
-    def __init__(self, easting, northing, zone, square, hemisphere):
+    def __init__(self, easting, northing, zone, square):
         self.easting = easting
         self.northing = northing
         self.zone = zone
         self.square = square
-        self.hemisphere = hemisphere
 
     def to_string(self):
         return '{} {} {} {}'.format(self.zone, self.square, self.easting, self.northing)

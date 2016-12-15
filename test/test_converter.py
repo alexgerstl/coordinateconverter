@@ -37,7 +37,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'BA')
         self.assertEqual(mgrs_point.easting, 25447)
         self.assertEqual(mgrs_point.northing, 57160)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_degrees_2(self):
         point = points.WGSPoint(12, 32, 0, 2, 31, 0)
@@ -69,7 +68,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'TC')
         self.assertEqual(mgrs_point.easting, 25699)
         self.assertEqual(mgrs_point.northing, 78428)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_degrees_3(self):
         degree_point = points.WGSPoint(16.123456, 0, 0, 25.654321, 0, 0)
@@ -95,7 +93,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'XJ')
         self.assertEqual(mgrs_point.easting, 12764)
         self.assertEqual(mgrs_point.northing, 37881)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_degrees_4(self):
         degree_point = points.WGSPoint(16.123456, 0, 0, 25.654321, 0, 0)
@@ -121,7 +118,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'XJ')
         self.assertEqual(mgrs_point.easting, 12764)
         self.assertEqual(mgrs_point.northing, 37881)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_degrees_5(self):
         degree_point = points.WGSPoint(-16.123456, 0, 0, 25.654321, 0, 0)
@@ -147,7 +143,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'CP')
         self.assertEqual(mgrs_point.easting, 87235)
         self.assertEqual(mgrs_point.northing, 37881)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_degrees_6(self):
         degree_point = points.WGSPoint(16.123456, 0, 0, -25.654321, 0, 0)
@@ -173,7 +168,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'XM')
         self.assertEqual(mgrs_point.easting, 12764)
         self.assertEqual(mgrs_point.northing, 62118)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.SOUTH)
 
     def test_conversion_of_degrees_7(self):
         point = points.WGSPoint(25, 59, 59.99, 67, 12, 58.99)
@@ -205,7 +199,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'MQ')
         self.assertEqual(mgrs_point.easting, 56786)
         self.assertEqual(mgrs_point.northing, 55850)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_utm_1(self):
         utm_point = points.UTMPoint(123456, 1234567, 5, '', Hemisphere.NORTH)
@@ -226,7 +219,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'JO') #TODO: check
         self.assertEqual(mgrs_point.easting, 23456)
         self.assertEqual(mgrs_point.northing, 34567)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_utm_2(self):
         utm_point = points.UTMPoint(123456, 1234567, 5, '', Hemisphere.SOUTH)
@@ -247,7 +239,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'JO') #TODO: check
         self.assertEqual(mgrs_point.easting, 23456)
         self.assertEqual(mgrs_point.northing, 34567)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.SOUTH)
 
     def test_conversion_of_utm_3(self):
         utm_point = points.UTMPoint(654321, 7654321, 45, '', Hemisphere.NORTH)
@@ -268,7 +259,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'XS')
         self.assertEqual(mgrs_point.easting, 54321)
         self.assertEqual(mgrs_point.northing, 54321)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_utm_4(self):
         utm_point = points.UTMPoint(654321, 7654321, 45, '', Hemisphere.SOUTH)
@@ -289,7 +279,6 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'XS')
         self.assertEqual(mgrs_point.easting, 54321)
         self.assertEqual(mgrs_point.northing, 54321)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.SOUTH)
 
     def test_conversion_of_utm_5(self):
         utm_point = points.UTMPoint(500000, 2000000, 31, '', Hemisphere.NORTH)
@@ -310,10 +299,9 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(mgrs_point.square, 'EA')
         self.assertEqual(mgrs_point.easting, 0)
         self.assertEqual(mgrs_point.northing, 0)
-        self.assertEqual(mgrs_point.hemisphere, Hemisphere.NORTH)
 
     def test_conversion_of_mgrs_1(self):
-        mgrs_point = points.MGRSPoint(55500, 72800, '33U', 'VP', Hemisphere.NORTH)
+        mgrs_point = points.MGRSPoint(55500, 72800, '33U', 'VP')
         utm_point = converter.convert_MGRS_to_UTM(mgrs_point)
         self.assertEqual(utm_point.zone_number, 33)
         self.assertEqual(int(utm_point.easting), 455500)
@@ -333,7 +321,7 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(str(dms_point.lat_sec)[:5], '24.26')
 
     def test_conversion_of_mgrs_2(self):
-        mgrs_point = points.MGRSPoint(16794, 10831, '37L', 'BM', Hemisphere.SOUTH)
+        mgrs_point = points.MGRSPoint(16794, 10831, '37L', 'BM')
         utm_point = converter.convert_MGRS_to_UTM(mgrs_point)
         self.assertEqual(utm_point.zone_number, 37)
         self.assertEqual(int(utm_point.easting), 216794)
@@ -353,7 +341,7 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(str(dms_point.lat_sec)[:5], '9.702')
 
     def test_conversion_of_mgrs_3(self):
-        mgrs_point = points.MGRSPoint(78917, 92398, '20J', 'NM', Hemisphere.SOUTH)
+        mgrs_point = points.MGRSPoint(78917, 92398, '20J', 'NM')
         utm_point = converter.convert_MGRS_to_UTM(mgrs_point)
         self.assertEqual(utm_point.zone_number, 20)
         self.assertEqual(int(utm_point.easting), 578917)
@@ -373,7 +361,7 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(str(dms_point.lat_sec)[:5], '47.54')
 
     def test_conversion_of_mgrs_4(self):
-        mgrs_point = points.MGRSPoint(80363, 76750, '14S', 'MJ', Hemisphere.NORTH)
+        mgrs_point = points.MGRSPoint(80363, 76750, '14S', 'MJ')
         utm_point = converter.convert_MGRS_to_UTM(mgrs_point)
         self.assertEqual(utm_point.zone_number, 14)
         self.assertEqual(int(utm_point.easting), 480363)
@@ -393,7 +381,7 @@ class ConverterTest(unittest.TestCase):
         self.assertEqual(str(dms_point.lat_sec)[:5], '24.69')
 
     def test_conversion_of_mgrs_5(self):
-        mgrs_point = points.MGRSPoint(28166, 47695, '05Q', 'KB', Hemisphere.NORTH)
+        mgrs_point = points.MGRSPoint(28166, 47695, '05Q', 'KB')
         utm_point = converter.convert_MGRS_to_UTM(mgrs_point)
         self.assertEqual(utm_point.zone_number, 5)
         self.assertEqual(int(utm_point.easting), 228166)
@@ -496,7 +484,7 @@ class ConverterTest(unittest.TestCase):
 
     #test for mgrs -> utm
     def test_MGRS_to_UTM(self):
-        point = points.MGRSPoint(12345, 12345, '33U', 'VP', Hemisphere.NORTH)
+        point = points.MGRSPoint(12345, 12345, '33U', 'VP')
         p_1 = converter.convert_MGRS_to_UTM(point)
         self.assertEqual(p_1.zone_number, 33)
         self.assertEqual(p_1.hemisphere, Hemisphere.NORTH)
@@ -560,12 +548,8 @@ class ConverterTest(unittest.TestCase):
         square = c[3:5]
         easting = c[5:10]
         northing = c[10:]
-        if point.lat_deg > 0:
-            hemisphere = Hemisphere.NORTH
-        else:
-            hemisphere = Hemisphere.SOUTH
 
-        point = points.MGRSPoint(easting, northing, zone, square, hemisphere)
+        point = points.MGRSPoint(easting, northing, zone, square)
         return point
 
 

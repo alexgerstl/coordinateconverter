@@ -169,7 +169,7 @@ class Ensurer:
         if seconds < 0 or seconds >= 60:
             raise exceptions.ParseException('Seconds value of longitude out of range (0...59)')
 
-    def ensure_utm_zone_in_range(self, zone):
+    def ensure_zone_in_range(self, zone):
         if not 1 <= zone <= 60:
             raise exceptions.ParseException('UTM zone value out of range (1...60)')
 
@@ -180,6 +180,14 @@ class Ensurer:
     def ensure_utm_northing_in_range(self, northing):
         if not 0 <= northing <= 10000000:
             raise exceptions.ParseException('northing out of range (must be between 0 m and 10 000 000 m)')
+
+    def ensure_mgrs_easting_in_range(self, easting):
+        if not 0 <= easting < 100000:
+            raise exceptions.ParseException('easting out of range (must be between 0 m and 999 99 m)')
+
+    def ensure_mgrs_northing_in_range(self, northing):
+        if not 0 <= northing < 100000:
+            raise exceptions.ParseException('northing out of range (must be between 0 m and 999 99 m)')
 
     def __is_positive(self, string):
         if string.startswith('-'):
