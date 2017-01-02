@@ -51,8 +51,10 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
 
         self.comboBox_format.setCurrentIndex(0)
         self.hemisphere.setCurrentIndex(1)
-        self.input_fields = [self.lat_deg_input, self.lat_min_input, self.lat_sec_input, self.long_deg_input, self.long_min_input,
-                             self.long_sec_input, self.utm_zone_input, self.mgrs_square_input, self.utm_easting_input, self.utm_northing_input]
+        self.input_fields = [self.lat_deg_input, self.lat_min_input, self.lat_sec_input, self.long_deg_input,
+                             self.long_min_input, self.long_sec_input, self.utm_zone_input, self.utm_easting_input,
+                             self.utm_northing_input, self.mgrs_zone_input, self.mgrs_square_input,
+                             self.mgrs_easting_input, self.mgrs_northing_input]
 
     def reset(self):
         """Resets the graphical user interface."""
@@ -63,6 +65,7 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.comboBox_format.setCurrentIndex(0)
         self.hemisphere.setCurrentIndex(0)
         self.label_input_convert.setText('')
+        self.label_utm_ref.setText('MGRS')
 
     def clear_coordinate_fields(self):
         """Resets the text fields show the converted coordinates."""
@@ -148,4 +151,5 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         for i in reversed(range(self.gridLayout_input.count())):
             self.gridLayout_input.itemAt(i).widget().setParent(None)
         self.clear_input_fields()
+        self.label_utm_ref.setText('MGRS')
 

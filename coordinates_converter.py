@@ -23,7 +23,7 @@
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon
 # Initialize Qt resources from file resources.py
-
+from PyQt4.QtGui import QLabel
 
 import resources
 # Import the code for the dialog
@@ -120,7 +120,6 @@ class CoordinatesConverter:
         self.dlg.mgrs_square_input.textEdited.connect(self.__validate_MGRS)
         self.dlg.mgrs_easting_input.textEdited.connect(self.__validate_MGRS)
         self.dlg.mgrs_northing_input.textEdited.connect(self.__validate_MGRS)
-        #self.dlg.lineEdit_input.textEdited.connect(self.parse)
         self.dlg.comboBox_format.currentIndexChanged.connect(self.__change_format)
         self.dlg.hemisphere.currentIndexChanged.connect(self.__change_hemisphere)
         self.dlg.comboBox_from.currentIndexChanged.connect(self.__show_description_from)
@@ -783,4 +782,29 @@ class CoordinatesConverter:
         self.coordinates = {coordinate_system.value: point}
         self.convert_entered_coordinates(point, coordinate_system)
         self.__update_coordinate_fields()
+        if 'MGRS' in self.coordinates:
+            self.dlg.label_utm_ref.setText(
+                'MGRS (' + self.__define_mgrs_precision(self.coordinates[CoordinateSystemString.MGRS.value]) + ')')
 
+    def __define_mgrs_precision(self, point):
+        if len(str(point.easting)) >= len(str(point.northing)):
+            if len(str(point.easting)) == 1:
+                precision = '10 km'
+            elif len(str(point.easting)) == 2:
+                precision = '1 km'
+            elif len(str(point.easting)) == 3:
+                precision = '100 m'
+            elif len(str(point.easting)) == 4:
+                precision = '10 m'
+            else: precision = '1 m'
+        else:
+            if len(str(point.northing)) == 1:
+                precision = '10 km'
+            elif len(str(point.northing)) == 2:
+                precision = '1 km'
+            elif len(str(point.northing)) == 3:
+                precision = '100 m'
+            elif len(str(point.northing)) == 4:
+                precision = '10 m'
+            else: precision = '1 m'
+        return precision

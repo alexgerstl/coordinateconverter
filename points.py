@@ -10,7 +10,14 @@ class MGRSPoint:
         self.square = square
 
     def to_string(self):
-        return '{} {} {} {}'.format(self.zone, self.square, self.easting, self.northing)
+        easting = self.__format_mgrs_values(self.easting)
+        northing = self.__format_mgrs_values(self.northing)
+        return '{} {} {} {}'.format(self.zone, self.square, easting, northing)
+
+    def __format_mgrs_values(self, value):
+        while len(str(value)) < 5:
+            value = '0' + str(value)
+        return value
 
 
 class UTMPoint:
