@@ -98,7 +98,7 @@ class Ensurer:
     def ensure_it_is_a_valid_mgrs_zone(self, string):
         """Ensures string consists of 2 digits and a letter"""
         trimmed = string.strip()
-        no_space = trimmed.replace(' ', '')
+        no_space = trimmed.replace(' ', '').upper()
         if len(no_space) > 3:
             raise exceptions.ParseException('Eingabe zu lange')
         for i in range(0, len(no_space)):
@@ -117,6 +117,16 @@ class Ensurer:
                     char_int = ord(no_space[i].lower())
                     if char_int < ord('a') or char_int > ord('z'):
                         raise exceptions.ParseException('Ungültiges Zeichen: ' + no_space[i])
+
+                    lat_zone = ord(no_space[2])
+                    zone_temp = int(no_space[:2])
+                    if lat_zone < 67 or lat_zone > 88 or lat_zone == 73 or lat_zone == 79:
+                        raise exceptions.ParseException('Invalid latitude grid-zone: ' + chr(lat_zone) +
+                                                        ' in MGRS-String (accepted values: C-X omitting I and O)')
+                    if lat_zone == ord('X') and (zone_temp == 32 or zone_temp == 34 or zone_temp == 36):
+                        raise exceptions.ParseException(
+                            'Invalid grid zone designation: grid zone ' + str(zone_temp) + ' ' +
+                            chr(lat_zone) + ' does not exist.')
                 else:
                     raise exceptions.ParseException('Zone muss aus zwei Ziffern und einem Buchstaben bestehen.')
         if len(no_space) != 3:
@@ -128,7 +138,7 @@ class Ensurer:
     def ensure_it_is_a_valid_mgrs_square(self, string):
         """Ensures string consists of 2 letters"""
         trimmed = string.strip()
-        no_space = trimmed.replace(' ', '')
+        no_space = trimmed.replace(' ', '').upper()
         if len(no_space) > 2:
             raise exceptions.ParseException('Eingabe zu lange')
         for i in range(0, len(no_space)):
@@ -147,7 +157,6 @@ class Ensurer:
                     char_int = ord(no_space[i].lower())
                     if char_int < ord('a') or char_int > ord('z'):
                         raise exceptions.ParseException('Ungültiges Zeichen: ' + no_space[i])
-
         if len(no_space) != 2:
             raise exceptions.ParseException('Eingabe noch nicht vollzählig')
         return no_space

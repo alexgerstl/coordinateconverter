@@ -270,10 +270,10 @@ class CoordinatesConverter:
                 try:
                     utm_point = converter.degree_to_utm(point)
                     self.coordinates[CoordinateSystemString.UTM.value] = utm_point
+                    mgrs_point = converter.convert_UTM_to_MGRS(utm_point)
+                    self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
                 except Exception, e:
                     self.dlg.label_input_convert.setText(e.message)
-                #mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
-                #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
             if guessed_system == CoordinateSystemString.WGS84_DMS:
                 degree_point = self.__dms_to_degree(point)
                 self.coordinates[CoordinateSystemString.WGS84_Degrees.value] = degree_point
@@ -282,10 +282,10 @@ class CoordinatesConverter:
                 try:
                     utm_point = converter.degree_to_utm(degree_point)
                     self.coordinates[CoordinateSystemString.UTM.value] = utm_point
+                    mgrs_point = converter.convert_UTM_to_MGRS(utm_point)
+                    self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
                 except Exception, e:
                     self.dlg.label_input_convert.setText(e.message)
-                #mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
-                #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
             if guessed_system == CoordinateSystemString.WGS84_CommaMinutes:
                 degree_point = self.__commaminutes_to_degree(point)
                 self.coordinates[CoordinateSystemString.WGS84_Degrees.value] = degree_point
@@ -294,20 +294,19 @@ class CoordinatesConverter:
                 try:
                     utm_point = converter.degree_to_utm(degree_point)
                     self.coordinates[CoordinateSystemString.UTM.value] = utm_point
+                    mgrs_point = converter.convert_UTM_to_MGRS(utm_point)
+                    self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
                 except Exception, e:
                     self.dlg.label_input_convert.setText(e.message)
-                #mgrs_point = self.converter.convert_UTM_to_MGRS(utm_point)
-                #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
         elif isinstance(point, points.MGRSPoint):
-            pass
-            # utm_point = self.converter.convert_MGRS_to_UTM(point)
-            # self.coordinates[CoordinateSystemString.UTM.value] = utm_point
-            # degree_point = self.converter.convert_UTM_to_degree(utm_point)
-            # self.coordinates[CoordinateSystemString.WGS84_Degrees.value] = degree_point
-            # dms_point = self.__degree_to_dms(degree_point)
-            # self.coordinates[CoordinateSystemString.WGS84_DMS.value] = dms_point
-            # comma_point = self.__degree_to_commaminutes(degree_point)
-            # self.coordinates[CoordinateSystemString.WGS84_CommaMinutes.value] = comma_point
+            utm_point = converter.convert_MGRS_to_UTM(point)
+            self.coordinates[CoordinateSystemString.UTM.value] = utm_point
+            degree_point = converter.utm_to_degree(utm_point)
+            self.coordinates[CoordinateSystemString.WGS84_Degrees.value] = degree_point
+            dms_point = self.__degree_to_dms(degree_point)
+            self.coordinates[CoordinateSystemString.WGS84_DMS.value] = dms_point
+            comma_point = self.__degree_to_commaminutes(degree_point)
+            self.coordinates[CoordinateSystemString.WGS84_CommaMinutes.value] = comma_point
         elif isinstance(point, points.UTMPoint):
             try:
                 degree_point = converter.utm_to_degree(point)
@@ -316,10 +315,10 @@ class CoordinatesConverter:
                 self.coordinates[CoordinateSystemString.WGS84_DMS.value] = dms_point
                 comma_point = self.__degree_to_commaminutes(degree_point)
                 self.coordinates[CoordinateSystemString.WGS84_CommaMinutes.value] = comma_point
+                mgrs_point = converter.convert_UTM_to_MGRS(point)
+                self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
             except Exception, e:
                 self.dlg.label_input_convert.setText(e.message)
-            #mgrs_point = self.converter.convert_UTM_to_MGRS(point)
-            #self.coordinates[CoordinateSystemString.MGRS.value] = mgrs_point
 
     # def parse_epsg(self):
     #     try:
@@ -727,16 +726,33 @@ class CoordinatesConverter:
             self.ensurer.ensure_zone_in_range(int(zone_corrected[:2]))
             self.mgrs_zone = zone_corrected
             point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone, self.mgrs_square)
-            self.__calculate_based_on_new_values(point, CoordinateSystemString.MGRS)
+            if len(str(self.mgrs_square)) == 2:
+                self.__calculate_based_on_new_values(point, CoordinateSystemString.MGRS)
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
     def __parse_mgrs_square(self):
         try:
             square_corrected = self.ensurer.ensure_it_is_a_valid_mgrs_square(self.dlg.mgrs_square_input.text())
+
+            zone_fields = ['STUVWXYZ', 'ABCDEFGH', 'JKLMNPQR']
+            zone_fields_lat = 'ABCDEFGHJKLMNPQRSTUV'
+            zone_temp = int(self.mgrs_zone[:2])
+            square = square_corrected
+            squares_x = square[0] in zone_fields[zone_temp % 3]
+            squares_y = square[1] in zone_fields_lat
+
+            if squares_x is False:
+                raise exceptions.ParseException('Invalid easting letter for 100x100km grid square: ' + square[0] +
+                                                ' (value has to be one of the letters: ' +
+                                                zone_fields[zone_temp % 3] + ')')
+            if squares_y is False:
+                raise exceptions.ParseException('Invalid northing letter for 100x100km grid square: ' + square[1] +
+                                                ' (value has to be one of the letters: ' + zone_fields_lat + ')')
             self.mgrs_square = square_corrected
             point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone, self.mgrs_square)
-            self.__calculate_based_on_new_values(point, CoordinateSystemString.MGRS)
+            if len(str(self.mgrs_zone)) == 3:
+                self.__calculate_based_on_new_values(point, CoordinateSystemString.MGRS)
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
@@ -746,7 +762,8 @@ class CoordinatesConverter:
             self.ensurer.ensure_mgrs_easting_in_range(int(easting_corrected))
             self.mgrs_easting = easting_corrected
             point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone, self.mgrs_square)
-            self.__calculate_based_on_new_values(point, CoordinateSystemString.MGRS)
+            if len(str(self.mgrs_square)) == 2 and len(str(self.mgrs_zone)) == 3:
+                self.__calculate_based_on_new_values(point, CoordinateSystemString.MGRS)
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 
@@ -756,7 +773,8 @@ class CoordinatesConverter:
             self.ensurer.ensure_mgrs_northing_in_range(int(northing_corrected))
             self.mgrs_northing = northing_corrected
             point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone, self.mgrs_square)
-            self.__calculate_based_on_new_values(point, CoordinateSystemString.MGRS)
+            if len(str(self.mgrs_square)) == 2 and len(str(self.mgrs_zone)) == 3:
+                self.__calculate_based_on_new_values(point, CoordinateSystemString.MGRS)
         except exceptions.ParseException, e:
             self.dlg.label_input_convert.setText(e.message)
 

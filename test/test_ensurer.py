@@ -54,6 +54,23 @@ class EnsurerTest(unittest.TestCase):
         except exceptions.ParseException, e:
             self.assertTrue('Zone muss aus zwei Ziffern und einem Buchstaben bestehen.' in e.message)
 
+    def test_ensure_mgrs_zone_invalid7(self):
+        try:
+            string = '33I'
+            e = ensurer.Ensurer()
+            erg = e.ensure_it_is_a_valid_mgrs_zone(string)
+        except exceptions.ParseException, e:
+            self.assertTrue('Invalid latitude grid-zone: I in MGRS-String (accepted values: C-X omitting I and O)'
+                            in e.message)
+
+    def test_ensure_mgrs_zone_invalid8(self):
+        try:
+            string = '32X'
+            e = ensurer.Ensurer()
+            erg = e.ensure_it_is_a_valid_mgrs_zone(string)
+        except exceptions.ParseException, e:
+            self.assertTrue('Invalid grid zone designation: grid zone 32 X does not exist.' in e.message)
+
     def test_ensure_mgrs_zone_valid(self):
         string = '33U'
         e = ensurer.Ensurer()
