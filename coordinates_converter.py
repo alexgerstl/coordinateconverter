@@ -124,6 +124,7 @@ class CoordinatesConverter:
         self.dlg.hemisphere.currentIndexChanged.connect(self.__change_hemisphere)
         self.dlg.comboBox_from.currentIndexChanged.connect(self.__show_description_from)
         self.dlg.comboBox_to.currentIndexChanged.connect(self.__show_description_to)
+        self.dlg.changeLanguageButton.clicked.connect(lambda: self.__button_clicked())
 
         #self.dlg.lineEdit_input_epsg.textEdited.connect(self.parse_epsg)
 
@@ -808,3 +809,7 @@ class CoordinatesConverter:
                 precision = '10 m'
             else: precision = '1 m'
         return precision
+
+    def __button_clicked(self):
+        settings = self.iface.projectMenu()
+        settings.show()

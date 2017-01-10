@@ -101,7 +101,7 @@ def degree_to_utm(point):
     if latitude < 0:
         northing += 10000000
 
-    if latitude > 0:
+    if latitude >= 0:
         hemisphere = Hemisphere.NORTH
     else:
         hemisphere = Hemisphere.SOUTH
@@ -196,9 +196,9 @@ def utm_to_degree(point):
     longitude = (d - d3 / 6 * (1 + 2 * p_tan2 + c) +
                  d5 / 120 * (5 - 2 * c + 28 * p_tan2 - 3 * c2 + 8 * E_P2 + 24 * p_tan4)) / p_cos
 
-    point = points.WGSPoint(Decimal(math.degrees(longitude) + zone_number_to_central_longitude(zone_number)), 0, 0,
-                            Decimal(math.degrees(latitude)), 0, 0)
-    return point
+    calc_point = points.WGSPoint(Decimal(math.degrees(longitude) + zone_number_to_central_longitude(zone_number)), 0, 0,
+                                 Decimal(math.degrees(latitude)), 0, 0)
+    return calc_point
 
 
 def convert_degree_to_DMS(degrees):
