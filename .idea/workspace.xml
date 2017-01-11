@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96c61666-61f9-4421-9e45-a397fe89da13" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/converter1.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/data/epsg_codes.txt" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/coordinates_converter_dialog_de_2.ui" afterPath="$PROJECT_DIR$/coordinates_converter_dialog.ui" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/converter.py" afterPath="$PROJECT_DIR$/converter.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coordinates_converter.py" afterPath="$PROJECT_DIR$/coordinates_converter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/test_converter.py" afterPath="$PROJECT_DIR$/test/test_converter.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coordinates_converter_dialog.py" afterPath="$PROJECT_DIR$/coordinates_converter_dialog.py" />
     </list>
     <ignored path="CoordinatesConverter.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,7 +31,7 @@
       <file leaf-file-name="ensurer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ensurer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2354">
+            <state relative-caret-position="2068">
               <caret line="109" column="24" lean-forward="false" selection-start-line="109" selection-start-column="24" selection-end-line="109" selection-end-column="24" />
               <folding>
                 <element signature="e#24#34#0" expanded="true" />
@@ -47,35 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="converter1.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/converter1.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="23" />
-              <folding>
-                <element signature="e#24#54#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test_converter.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test/test_converter.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12166">
-              <caret line="553" column="0" lean-forward="true" selection-start-line="553" selection-start-column="0" selection-end-line="553" selection-end-column="0" />
-              <folding>
-                <element signature="e#24#39#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="coordinates_converter.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="coordinates_converter.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2896">
-              <caret line="813" column="37" lean-forward="false" selection-start-line="813" selection-start-column="37" selection-end-line="813" selection-end-column="37" />
+            <state relative-caret-position="-11090">
+              <caret line="321" column="63" lean-forward="false" selection-start-line="321" selection-start-column="63" selection-end-line="321" selection-end-column="63" />
               <folding>
                 <element signature="e#1144#1219#0" expanded="true" />
               </folding>
@@ -86,7 +65,7 @@
       <file leaf-file-name="coordinate_parser.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coordinate_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3476">
+            <state relative-caret-position="-1648">
               <caret line="158" column="69" lean-forward="false" selection-start-line="144" selection-start-column="12" selection-end-line="158" selection-end-column="69" />
               <folding />
             </state>
@@ -96,7 +75,7 @@
       <file leaf-file-name="converter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/converter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="484">
+            <state relative-caret-position="2266">
               <caret line="103" column="18" lean-forward="false" selection-start-line="103" selection-start-column="18" selection-end-line="103" selection-end-column="18" />
               <folding>
                 <element signature="e#24#37#0" expanded="true" />
@@ -108,10 +87,10 @@
       <file leaf-file-name="coordinates_converter_dialog.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coordinates_converter_dialog.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3234">
-              <caret line="153" column="42" lean-forward="false" selection-start-line="153" selection-start-column="42" selection-end-line="153" selection-end-column="42" />
+            <state relative-caret-position="1848">
+              <caret line="84" column="24" lean-forward="false" selection-start-line="84" selection-start-column="24" selection-end-line="84" selection-end-column="24" />
               <folding>
-                <element signature="e#255#264#0" expanded="true" />
+                <element signature="e#250#259#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -132,6 +111,8 @@
       <find>index</find>
       <find>showm</find>
       <find>parser</find>
+      <find>epsg</find>
+      <find>line</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -159,10 +140,10 @@
         <option value="$PROJECT_DIR$/test/test_ensurer.py" />
         <option value="$PROJECT_DIR$/ensurer.py" />
         <option value="$PROJECT_DIR$/points.py" />
-        <option value="$PROJECT_DIR$/coordinates_converter_dialog.py" />
-        <option value="$PROJECT_DIR$/coordinates_converter.py" />
         <option value="$PROJECT_DIR$/converter.py" />
         <option value="$PROJECT_DIR$/test/test_converter.py" />
+        <option value="$PROJECT_DIR$/coordinates_converter_dialog.py" />
+        <option value="$PROJECT_DIR$/coordinates_converter.py" />
       </list>
     </option>
   </component>
@@ -206,6 +187,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -221,7 +203,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -229,11 +210,11 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Geocoder" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Alex\.qgis2\python\plugins\CoordinatesConverter" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Alex\.qgis2\python\plugins\CoordinatesConverter\data" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Alex\.qgis2\python\plugins\CoordinatesConverter" />
     </key>
   </component>
   <component name="RunManager" selected="Python tests.Unittest ConverterTest.test_conversion_of_utm_99">
@@ -553,21 +534,21 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18385416" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33260155" sideWeight="0.503125" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30954996" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27222833" sideWeight="0.496875" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30954996" sideWeight="0.49791667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27222833" sideWeight="0.496875" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -634,7 +615,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#255#264#0" expanded="true" />
+            <element signature="e#250#259#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -650,9 +631,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#24#54#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -676,7 +655,7 @@
         <state relative-caret-position="660">
           <caret line="32" column="24" lean-forward="false" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
           <folding>
-            <element signature="e#255#264#0" expanded="true" />
+            <element signature="e#250#259#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -692,9 +671,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#24#54#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -718,7 +695,7 @@
         <state relative-caret-position="660">
           <caret line="32" column="24" lean-forward="false" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
           <folding>
-            <element signature="e#255#264#0" expanded="true" />
+            <element signature="e#250#259#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -753,13 +730,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/epsg_codes.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-134519">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/epsg_codes.txt" />
     <entry file="file://$PROJECT_DIR$/pylintrc">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -847,16 +818,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/mgrs_1.3.4.egg/mgrs/core.py" />
-    <entry file="file://$PROJECT_DIR$/converter1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="23" />
-          <folding>
-            <element signature="e#24#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test_ensurer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="350">
@@ -864,21 +825,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coordinate_parser.py">
+    <entry file="file://C:/Python27/Lib/decimal.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3476">
-          <caret line="158" column="69" lean-forward="false" selection-start-line="144" selection-start-column="12" selection-end-line="158" selection-end-column="69" />
-          <folding />
+        <state relative-caret-position="323">
+          <caret line="1589" column="0" lean-forward="false" selection-start-line="1589" selection-start-column="0" selection-end-line="1589" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ensurer.py">
+    <entry file="file://$PROJECT_DIR$/test/test_converter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2354">
-          <caret line="109" column="24" lean-forward="false" selection-start-line="109" selection-start-column="24" selection-end-line="109" selection-end-column="24" />
-          <folding>
-            <element signature="e#24#34#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="12166">
+          <caret line="553" column="0" lean-forward="true" selection-start-line="553" selection-start-column="0" selection-end-line="553" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -890,36 +847,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/converter1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coordinate_parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1648">
+          <caret line="158" column="69" lean-forward="false" selection-start-line="144" selection-start-column="12" selection-end-line="158" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/coordinates_converter_dialog.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3234">
-          <caret line="153" column="42" lean-forward="false" selection-start-line="153" selection-start-column="42" selection-end-line="153" selection-end-column="42" />
+        <state relative-caret-position="1848">
+          <caret line="84" column="24" lean-forward="false" selection-start-line="84" selection-start-column="24" selection-end-line="84" selection-end-column="24" />
           <folding>
-            <element signature="e#255#264#0" expanded="true" />
+            <element signature="e#250#259#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Python27/Lib/decimal.py">
+    <entry file="file://$PROJECT_DIR$/ensurer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="1589" column="0" lean-forward="false" selection-start-line="1589" selection-start-column="0" selection-end-line="1589" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2896">
-          <caret line="813" column="37" lean-forward="false" selection-start-line="813" selection-start-column="37" selection-end-line="813" selection-end-column="37" />
+        <state relative-caret-position="2068">
+          <caret line="109" column="24" lean-forward="false" selection-start-line="109" selection-start-column="24" selection-end-line="109" selection-end-column="24" />
           <folding>
-            <element signature="e#1144#1219#0" expanded="true" />
+            <element signature="e#24#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/converter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
+        <state relative-caret-position="2266">
           <caret line="103" column="18" lean-forward="false" selection-start-line="103" selection-start-column="18" selection-end-line="103" selection-end-column="18" />
           <folding>
             <element signature="e#24#37#0" expanded="true" />
@@ -927,12 +893,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test_converter.py">
+    <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12166">
-          <caret line="553" column="0" lean-forward="true" selection-start-line="553" selection-start-column="0" selection-end-line="553" selection-end-column="0" />
+        <state relative-caret-position="-11090">
+          <caret line="321" column="63" lean-forward="false" selection-start-line="321" selection-start-column="63" selection-end-line="321" selection-end-column="63" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#1144#1219#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -5,6 +5,11 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="enum" />
+          <option value="coordinates_converter.qgis" />
+          <option value="coordinates_converter.QgsGenericProjectionSelector" />
+          <option value="coordinates_converter.QgsCoordinateReferenceSystem" />
+          <option value="coordinates_converter.QgsPoint" />
+          <option value="coordinates_converter.QgsCoordinateTransform" />
         </list>
       </option>
     </inspection_tool>

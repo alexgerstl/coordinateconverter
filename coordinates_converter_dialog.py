@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'coordinates_converter_dialog_de_2.ui'
+# Form implementation generated from reading ui file 'coordinates_converter_dialog.ui'
 #
 # Created: Tue Aug 23 09:45:05 2016
 #      by: PyQt4 UI code generator 4.10.2
@@ -15,7 +15,7 @@ from PyQt4.QtGui import QComboBox
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QLineEdit
 
-FORM_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'coordinates_converter_dialog_de_2.ui'))
+FORM_CLASS, _ = uic.loadUiType(os.path.join(os.path.dirname(__file__), 'coordinates_converter_dialog.ui'))
 
 
 class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
@@ -79,8 +79,14 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
 
     def clear_epsg_fields(self):
         """Resets the input field and the text field showing the result for transforming values based on EPSG codes."""
-        self.lineEdit_input_epsg.clear()
-        self.lineEdit_epsg_result.clear()
+        self.lineEdit_autid_from.clear()
+        self.textEdit_from.clear()
+        self.lineEdit_autid_to.clear()
+        self.textEdit_to.clear()
+        self.lineEdit_input_to_x.clear()
+        self.lineEdit_input_to_y.clear()
+        self.lineEdit_input_from_x.clear()
+        self.lineEdit_input_from_y.clear()
 
     def create_degrees_input(self):
         """Creates the template for entering coordinates in the geographic coordinate system - DEGREES."""

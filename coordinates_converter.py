@@ -22,6 +22,8 @@
 """
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt4.QtGui import QAction, QIcon
+from qgis.core import *
+from qgis.gui import *
 # Initialize Qt resources from file resources.py
 from PyQt4.QtGui import QLabel
 
@@ -79,7 +81,8 @@ class CoordinatesConverter:
 
         self.ensurer = Ensurer()
         self.coordinates = {}
-        self.epsg_code_description = {}
+        self.proj_from = None
+        self.proj_to = None
 
         # For combobox signals
         self.selected_format = 0
@@ -102,10 +105,6 @@ class CoordinatesConverter:
         self.mgrs_easting = 0
         self.mgrs_northing = 0
 
-        # TODO: might become different
-        self.__load_epsg_codes()
-        self.__load_epsg_codes_to_boxes()
-
         # Event connectors
         self.dlg.long_deg_input.textEdited.connect(self.__validate_WGS)
         self.dlg.long_min_input.textEdited.connect(self.__validate_WGS)
@@ -122,11 +121,13 @@ class CoordinatesConverter:
         self.dlg.mgrs_northing_input.textEdited.connect(self.__validate_MGRS)
         self.dlg.comboBox_format.currentIndexChanged.connect(self.__change_format)
         self.dlg.hemisphere.currentIndexChanged.connect(self.__change_hemisphere)
-        self.dlg.comboBox_from.currentIndexChanged.connect(self.__show_description_from)
-        self.dlg.comboBox_to.currentIndexChanged.connect(self.__show_description_to)
-        self.dlg.changeLanguageButton.clicked.connect(lambda: self.__button_clicked())
+        self.dlg.pushButton_select_to.clicked.connect(lambda: self.__button_from_clicked())
+        self.dlg.pushButton_select_from.clicked.connect(lambda: self.__button_to_clicked())
+        self.dlg.pushButton_convert_to.clicked.connect(lambda: self.__transform())
+        self.dlg.pushButton_convert_from.clicked.connect(lambda: self.__transform_reverse())
+        #self.dlg.changeLanguageButton.clicked.connect(lambda: self.__button_clicked())
 
-        #self.dlg.lineEdit_input_epsg.textEdited.connect(self.parse_epsg)
+
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -320,24 +321,6 @@ class CoordinatesConverter:
             except Exception, e:
                 self.dlg.label_input_convert.setText(e.message)
 
-    # def parse_epsg(self):
-    #     try:
-    #         parser = Parser()
-    #         point = parser.parse(self.dlg.lineEdit_input_epsg.text())
-    #         self.dlg.statusBar.showMessage('Valid ' + str(parser.guessed_system.value))
-    #         if not isinstance(point, points.WGSPoint) and not parser.guessed_system == CoordinateSystemString.WGS84_Degrees:
-    #             self.dlg.statusBar.showMessage('Degree format necessary')
-    #         else:
-    #             x, y = Converter.convert_based_on_epsg(point, str(self.dlg.comboBox_from.currentText()),
-    #                                                    str(self.dlg.comboBox_to.currentText()))
-    #             self.dlg.lineEdit_epsg_result.setText(str(x) + ' ' + str(y))
-    #     except exceptions.ParseException, e:
-    #         self.dlg.statusBar.showMessage(e.message)
-    #     except exceptions.ConversionException, c:
-    #         self.dlg.statusBar.showMessage(c.message)
-    #     except RuntimeError:
-    #         self.dlg.statusBar.showMessage('Conversion not possible')
-
     def __update_coordinate_fields(self):
         """Updates text in text fields based on existing point in dictionary self.coordinates."""
         for field in self.dlg.coordinate_fields:
@@ -393,31 +376,6 @@ class CoordinatesConverter:
         long_deg, long_min = converter.convert_dms_to_decimal_minutes(point.long_deg, point.long_min, point.long_sec)
         lat_deg, lat_min = converter.convert_dms_to_decimal_minutes(point.lat_deg, point.lat_min, point.lat_sec)
         return points.WGSPoint(long_deg, long_min, 0, lat_deg, lat_min, 0)
-
-    def __load_epsg_codes(self):
-        """Loads EPSG code from file in data directory to a dictionary."""
-        file_path = self.plugin_dir + '/data/epsg_codes.txt'
-        f = open(file_path)
-        _dict = {}
-        for line in f:
-            code, description = line.split('\t')
-            _dict[code] = description
-        self.epsg_code_description = collections.OrderedDict(sorted(_dict.items()))
-
-    def __load_epsg_codes_to_boxes(self):
-        """Loads EPSG code from the dictionary to the comboboxes."""
-        keys = self.epsg_code_description.keys()
-        for key in keys:
-            self.dlg.comboBox_from.addItem(key)
-            self.dlg.comboBox_to.addItem(key)
-
-    def __show_description_from(self, i):
-        """Shows description of the selected EPSG code as tooltip."""
-        self.dlg.comboBox_from.setToolTip(self.epsg_code_description.get(self.dlg.comboBox_from.itemText(i)))
-
-    def __show_description_to(self, i):
-        """Shows description of the selected EPSG code as tooltip."""
-        self.dlg.comboBox_to.setToolTip(self.epsg_code_description.get(self.dlg.comboBox_to.itemText(i)))
 
     def __change_format(self, i):
         """Event triggered method which creates the selected coordinate system template in the GUI."""
@@ -810,6 +768,92 @@ class CoordinatesConverter:
             else: precision = '1 m'
         return precision
 
-    def __button_clicked(self):
-        settings = self.iface.projectMenu()
-        settings.show()
+    def __button_from_clicked(self):
+        # lookup in api
+        selector = QgsGenericProjectionSelector()
+        parent = self.dlg.pos()
+        selector.move(parent)
+        authId = None
+        desc = None
+        if selector.exec_():
+            authId = selector.selectedAuthId()
+            proj = QgsCoordinateReferenceSystem()
+            proj.createFromSrsId(selector.selectedCrsId())
+            self.proj_from = proj
+            desc = proj.description()
+
+        if authId is not None and desc is not None:
+            self.dlg.lineEdit_autid_to.setText(authId)
+            self.dlg.textEdit_to.setText(desc)
+
+    def __button_to_clicked(self):
+        # lookup in api
+        selector = QgsGenericProjectionSelector()
+        parent = self.dlg.pos()
+        selector.move(parent)
+        authId = None
+        desc = None
+        if selector.exec_():
+            authId = selector.selectedAuthId()
+            proj = QgsCoordinateReferenceSystem()
+            proj.createFromSrsId(selector.selectedCrsId())
+            self.proj_to = proj
+            desc = proj.description()
+
+        if authId is not None and desc is not None:
+            self.dlg.lineEdit_autid_from.setText(authId)
+            self.dlg.textEdit_from.setText(desc)
+
+    def __transform(self):
+        if self.proj_from is not None:
+            if self.proj_to is not None:
+                _to = QgsCoordinateReferenceSystem(self.proj_to)
+                _from = QgsCoordinateReferenceSystem(self.proj_from)
+                transform = QgsCoordinateTransform(_from, _to)
+                if self.dlg.lineEdit_input_to_x.text() != "":
+                    if self.dlg.lineEdit_input_to_y.text() != "":
+                        x = float(self.dlg.lineEdit_input_to_x.text())
+                        y = float(self.dlg.lineEdit_input_to_y.text())
+                        point = QgsPoint(x, y)
+                        try:
+                            result = transform.transform(point)
+                            self.dlg.lineEdit_input_from_x.setText(str(result.x()))
+                            self.dlg.lineEdit_input_from_y.setText(str(result.y()))
+                        except Exception, e:
+                            self.dlg.statusBar.showMessage("Ein Fehler ist aufgetreten. Eingegebene Daten prüfen.")
+                    else:
+                        self.dlg.statusBar.showMessage("Kein Y-Wert eingegeben")
+                else:
+                    self.dlg.statusBar.showMessage("Kein X-Wert eingegeben")
+            else:
+                self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
+        else:
+            self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
+
+
+
+    def __transform_reverse(self):
+        if self.proj_from is not None:
+            if self.proj_to is not None:
+                _to = QgsCoordinateReferenceSystem(self.proj_to)
+                _from = QgsCoordinateReferenceSystem(self.proj_from)
+                transform = QgsCoordinateTransform(_to, _from)
+                if self.dlg.lineEdit_input_from_x.text() != "":
+                    if self.dlg.lineEdit_input_from_y.text() != "":
+                        x = float(self.dlg.lineEdit_input_from_x.text())
+                        y = float(self.dlg.lineEdit_input_from_y.text())
+                        point = QgsPoint(x, y)
+                        try:
+                            result = transform.transform(point)
+                            self.dlg.lineEdit_input_to_x.setText(str(result.x()))
+                            self.dlg.lineEdit_input_to_y.setText(str(result.y()))
+                        except Exception, e:
+                            self.dlg.statusBar.showMessage("Ein Fehler ist aufgetreten. Eingegebene Daten prüfen.")
+                    else:
+                        self.dlg.statusBar.showMessage("Kein Y-Wert eingegeben")
+                else:
+                    self.dlg.statusBar.showMessage("Kein X-Wert eingegeben")
+            else:
+                self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
+        else:
+            self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
