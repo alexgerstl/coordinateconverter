@@ -35,9 +35,7 @@ import converter
 import os.path
 import points
 import exceptions
-import collections
-
-from ensurer import Ensurer
+import ensurer
 
 
 class CoordinatesConverter:
@@ -79,7 +77,6 @@ class CoordinatesConverter:
         self.toolbar = self.iface.addToolBar(u'CoordinatesConverter')
         self.toolbar.setObjectName(u'CoordinatesConverter')
 
-        self.ensurer = Ensurer()
         self.coordinates = {}
         self.proj_from = None
         self.proj_to = None
@@ -446,8 +443,8 @@ class CoordinatesConverter:
     """
     def __parse_lat_deg_value(self):
             try:
-                lat_deg_corrected = self.ensurer.ensure_it_is_a_number(self.dlg.lat_deg_input.text())
-                self.ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
+                lat_deg_corrected = ensurer.ensure_it_is_a_number(self.dlg.lat_deg_input.text())
+                ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
                 self.lat_deg = lat_deg_corrected
                 point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                         self.lat_sec)
@@ -461,8 +458,8 @@ class CoordinatesConverter:
     """
     def __parse_long_deg_value(self):
             try:
-                long_deg_corrected = self.ensurer.ensure_it_is_a_number(self.dlg.long_deg_input.text())
-                self.ensurer.ensure_longitude_in_range(float(long_deg_corrected))
+                long_deg_corrected = ensurer.ensure_it_is_a_number(self.dlg.long_deg_input.text())
+                ensurer.ensure_longitude_in_range(float(long_deg_corrected))
                 self.long_deg = float(long_deg_corrected)
                 point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                         self.lat_sec)
@@ -476,8 +473,8 @@ class CoordinatesConverter:
     """
     def __parse_long_deg_comma_value(self):
         try:
-            long_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.long_deg_input.text())
-            self.ensurer.ensure_longitude_in_range(float(long_deg_corrected))
+            long_deg_corrected = ensurer.ensure_it_is_an_integer(self.dlg.long_deg_input.text())
+            ensurer.ensure_longitude_in_range(float(long_deg_corrected))
             self.long_deg = long_deg_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -491,8 +488,8 @@ class CoordinatesConverter:
     """
     def __parse_long_min_comma_value(self):
         try:
-            long_min_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.long_min_input.text())
-            self.ensurer.ensure_minutes_in_range(float(long_min_corrected))
+            long_min_corrected = ensurer.ensure_it_is_a_positive_number(self.dlg.long_min_input.text())
+            ensurer.ensure_minutes_in_range(float(long_min_corrected))
             self.long_min = long_min_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -506,8 +503,8 @@ class CoordinatesConverter:
     """
     def __parse_lat_deg_comma_value(self):
         try:
-            lat_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.lat_deg_input.text())
-            self.ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
+            lat_deg_corrected = ensurer.ensure_it_is_an_integer(self.dlg.lat_deg_input.text())
+            ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
             self.lat_deg = lat_deg_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -521,8 +518,8 @@ class CoordinatesConverter:
     """
     def __parse_lat_min_comma_value(self):
         try:
-            lat_min_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.lat_min_input.text())
-            self.ensurer.ensure_minutes_in_range(float(lat_min_corrected))
+            lat_min_corrected = ensurer.ensure_it_is_a_positive_number(self.dlg.lat_min_input.text())
+            ensurer.ensure_minutes_in_range(float(lat_min_corrected))
             self.lat_min = lat_min_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -536,8 +533,8 @@ class CoordinatesConverter:
     """
     def __parse_long_deg_dms_value(self):
         try:
-            long_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.long_deg_input.text())
-            self.ensurer.ensure_longitude_in_range(float(long_deg_corrected))
+            long_deg_corrected = ensurer.ensure_it_is_an_integer(self.dlg.long_deg_input.text())
+            ensurer.ensure_longitude_in_range(float(long_deg_corrected))
             self.long_deg = long_deg_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -551,8 +548,8 @@ class CoordinatesConverter:
     """
     def __parse_long_min_dms_value(self):
         try:
-            long_min_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.long_min_input.text())
-            self.ensurer.ensure_minutes_in_range(float(long_min_corrected))
+            long_min_corrected = ensurer.ensure_it_is_a_positive_integer(self.dlg.long_min_input.text())
+            ensurer.ensure_minutes_in_range(float(long_min_corrected))
             self.long_min = long_min_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -566,8 +563,8 @@ class CoordinatesConverter:
     """
     def __parse_long_sec_dms_value(self):
         try:
-            long_sec_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.long_sec_input.text())
-            self.ensurer.ensure_seconds_in_range(float(long_sec_corrected))
+            long_sec_corrected = ensurer.ensure_it_is_a_positive_number(self.dlg.long_sec_input.text())
+            ensurer.ensure_seconds_in_range(float(long_sec_corrected))
             self.long_sec = long_sec_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -581,8 +578,8 @@ class CoordinatesConverter:
     """
     def __parse_lat_deg_dms_value(self):
         try:
-            lat_deg_corrected = self.ensurer.ensure_it_is_an_integer(self.dlg.lat_deg_input.text())
-            self.ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
+            lat_deg_corrected = ensurer.ensure_it_is_an_integer(self.dlg.lat_deg_input.text())
+            ensurer.ensure_latitude_in_range(float(lat_deg_corrected))
             self.lat_deg = lat_deg_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -596,8 +593,8 @@ class CoordinatesConverter:
     """
     def __parse_lat_min_dms_value(self):
         try:
-            lat_min_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.lat_min_input.text())
-            self.ensurer.ensure_minutes_in_range(float(lat_min_corrected))
+            lat_min_corrected = ensurer.ensure_it_is_a_positive_integer(self.dlg.lat_min_input.text())
+            ensurer.ensure_minutes_in_range(float(lat_min_corrected))
             self.lat_min = lat_min_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -611,8 +608,8 @@ class CoordinatesConverter:
     """
     def __parse_lat_sec_dms_value(self):
         try:
-            lat_sec_corrected = self.ensurer.ensure_it_is_a_positive_number(self.dlg.lat_sec_input.text())
-            self.ensurer.ensure_seconds_in_range(float(lat_sec_corrected))
+            lat_sec_corrected = ensurer.ensure_it_is_a_positive_number(self.dlg.lat_sec_input.text())
+            ensurer.ensure_seconds_in_range(float(lat_sec_corrected))
             self.lat_sec = lat_sec_corrected
             point = points.WGSPoint(self.long_deg, self.long_min, self.long_sec, self.lat_deg, self.lat_min,
                                     self.lat_sec)
@@ -626,8 +623,8 @@ class CoordinatesConverter:
     """
     def __parse_utm_zone(self):
         try:
-            zone_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_zone_input.text())
-            self.ensurer.ensure_zone_in_range(int(zone_corrected))
+            zone_corrected = ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_zone_input.text())
+            ensurer.ensure_zone_in_range(int(zone_corrected))
             self.utm_zone_number = zone_corrected
             point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
                                     self.utm_zone_letter, self.hemisphere)
@@ -650,8 +647,8 @@ class CoordinatesConverter:
     """
     def __parse_utm_easting(self):
         try:
-            easting_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_easting_input.text())
-            self.ensurer.ensure_utm_easting_in_range(int(easting_corrected))
+            easting_corrected = ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_easting_input.text())
+            ensurer.ensure_utm_easting_in_range(int(easting_corrected))
             self.utm_easting = easting_corrected
             point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
                                     self.utm_zone_letter, self.hemisphere)
@@ -665,8 +662,8 @@ class CoordinatesConverter:
     """
     def __parse_utm_northing(self):
         try:
-            northing_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_northing_input.text())
-            self.ensurer.ensure_utm_northing_in_range(int(northing_corrected))
+            northing_corrected = ensurer.ensure_it_is_a_positive_integer(self.dlg.utm_northing_input.text())
+            ensurer.ensure_utm_northing_in_range(int(northing_corrected))
             self.utm_northing = northing_corrected
             point = points.UTMPoint(self.utm_easting, self.utm_northing, self.utm_zone_number,
                                     self.utm_zone_letter, self.hemisphere)
@@ -680,8 +677,8 @@ class CoordinatesConverter:
     """
     def __parse_mgrs_zone(self):
         try:
-            zone_corrected = self.ensurer.ensure_it_is_a_valid_mgrs_zone(self.dlg.mgrs_zone_input.text())
-            self.ensurer.ensure_zone_in_range(int(zone_corrected[:2]))
+            zone_corrected = ensurer.ensure_it_is_a_valid_mgrs_zone(self.dlg.mgrs_zone_input.text())
+            ensurer.ensure_zone_in_range(int(zone_corrected[:2]))
             self.mgrs_zone = zone_corrected
             point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone, self.mgrs_square)
             if len(str(self.mgrs_square)) == 2:
@@ -691,7 +688,7 @@ class CoordinatesConverter:
 
     def __parse_mgrs_square(self):
         try:
-            square_corrected = self.ensurer.ensure_it_is_a_valid_mgrs_square(self.dlg.mgrs_square_input.text())
+            square_corrected = ensurer.ensure_it_is_a_valid_mgrs_square(self.dlg.mgrs_square_input.text())
 
             zone_fields = ['STUVWXYZ', 'ABCDEFGH', 'JKLMNPQR']
             zone_fields_lat = 'ABCDEFGHJKLMNPQRSTUV'
@@ -716,8 +713,8 @@ class CoordinatesConverter:
 
     def __parse_mgrs_easting(self):
         try:
-            easting_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.mgrs_easting_input.text())
-            self.ensurer.ensure_mgrs_easting_in_range(int(easting_corrected))
+            easting_corrected = ensurer.ensure_it_is_a_positive_integer(self.dlg.mgrs_easting_input.text())
+            ensurer.ensure_mgrs_easting_in_range(int(easting_corrected))
             self.mgrs_easting = easting_corrected
             point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone, self.mgrs_square)
             if len(str(self.mgrs_square)) == 2 and len(str(self.mgrs_zone)) == 3:
@@ -727,8 +724,8 @@ class CoordinatesConverter:
 
     def __parse_mgrs_northing(self):
         try:
-            northing_corrected = self.ensurer.ensure_it_is_a_positive_integer(self.dlg.mgrs_northing_input.text())
-            self.ensurer.ensure_mgrs_northing_in_range(int(northing_corrected))
+            northing_corrected = ensurer.ensure_it_is_a_positive_integer(self.dlg.mgrs_northing_input.text())
+            ensurer.ensure_mgrs_northing_in_range(int(northing_corrected))
             self.mgrs_northing = northing_corrected
             point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone, self.mgrs_square)
             if len(str(self.mgrs_square)) == 2 and len(str(self.mgrs_zone)) == 3:
@@ -805,6 +802,7 @@ class CoordinatesConverter:
             self.dlg.textEdit_from.setText(desc)
 
     def __transform(self):
+        self.dlg.statusBar.showMessage("")
         if self.proj_from is not None:
             if self.proj_to is not None:
                 _to = QgsCoordinateReferenceSystem(self.proj_to)
@@ -812,15 +810,18 @@ class CoordinatesConverter:
                 transform = QgsCoordinateTransform(_from, _to)
                 if self.dlg.lineEdit_input_to_x.text() != "":
                     if self.dlg.lineEdit_input_to_y.text() != "":
-                        x = float(self.dlg.lineEdit_input_to_x.text())
-                        y = float(self.dlg.lineEdit_input_to_y.text())
-                        point = QgsPoint(x, y)
-                        try:
-                            result = transform.transform(point)
-                            self.dlg.lineEdit_input_from_x.setText(str(result.x()))
-                            self.dlg.lineEdit_input_from_y.setText(str(result.y()))
-                        except Exception, e:
-                            self.dlg.statusBar.showMessage("Ein Fehler ist aufgetreten. Eingegebene Daten prüfen.")
+                        try :
+                            x = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_to_x.text()))
+                            y = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_to_y.text()))
+                            point = QgsPoint(x, y)
+                            try:
+                                result = transform.transform(point)
+                                self.dlg.lineEdit_input_from_x.setText(str(result.x()))
+                                self.dlg.lineEdit_input_from_y.setText(str(result.y()))
+                            except Exception:
+                                self.dlg.statusBar.showMessage("Ein Fehler ist aufgetreten. Eingegebene Daten prüfen.")
+                        except exceptions.ParseException, e:
+                            self.dlg.statusBar.showMessage(e.message)
                     else:
                         self.dlg.statusBar.showMessage("Kein Y-Wert eingegeben")
                 else:
@@ -830,9 +831,8 @@ class CoordinatesConverter:
         else:
             self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
 
-
-
     def __transform_reverse(self):
+        self.dlg.statusBar.showMessage("")
         if self.proj_from is not None:
             if self.proj_to is not None:
                 _to = QgsCoordinateReferenceSystem(self.proj_to)
@@ -840,15 +840,18 @@ class CoordinatesConverter:
                 transform = QgsCoordinateTransform(_to, _from)
                 if self.dlg.lineEdit_input_from_x.text() != "":
                     if self.dlg.lineEdit_input_from_y.text() != "":
-                        x = float(self.dlg.lineEdit_input_from_x.text())
-                        y = float(self.dlg.lineEdit_input_from_y.text())
-                        point = QgsPoint(x, y)
                         try:
-                            result = transform.transform(point)
-                            self.dlg.lineEdit_input_to_x.setText(str(result.x()))
-                            self.dlg.lineEdit_input_to_y.setText(str(result.y()))
-                        except Exception, e:
-                            self.dlg.statusBar.showMessage("Ein Fehler ist aufgetreten. Eingegebene Daten prüfen.")
+                            x = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_from_x.text()))
+                            y = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_from_y.text()))
+                            point = QgsPoint(x, y)
+                            try:
+                                result = transform.transform(point)
+                                self.dlg.lineEdit_input_to_x.setText(str(result.x()))
+                                self.dlg.lineEdit_input_to_y.setText(str(result.y()))
+                            except Exception:
+                                self.dlg.statusBar.showMessage("Ein Fehler ist aufgetreten. Eingegebene Daten prüfen.")
+                        except exceptions.ParseException, e:
+                            self.dlg.statusBar.showMessage(e.message)
                     else:
                         self.dlg.statusBar.showMessage("Kein Y-Wert eingegeben")
                 else:
