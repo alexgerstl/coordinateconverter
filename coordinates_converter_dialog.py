@@ -158,7 +158,6 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         for i in reversed(range(self.gridLayout_input.count())):
             self.gridLayout_input.itemAt(i).widget().setParent(None)
         self.clear_input_fields()
-        self.label_utm_ref.setText('MGRS')
 
     def change_to_english(self):
         self.groupBox_coord.setTitle("convert coordinates")
@@ -183,6 +182,8 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.pushButton_select_from.setText("choose EPSG code")
         self.zone_label.setText("zone")
         self.square_label.setText("100km square")
+        self.comboBox_format.clear()
+        self.comboBox_format.addItems(["Degrees", "Degrees, Comma minutes", "Degrees, Minutes, Seconds", "UTM", "MGRS"])
 
     def change_to_german(self):
         self.groupBox_coord.setTitle("Koordinaten umrechnen")
@@ -207,3 +208,5 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.pushButton_select_from.setText("EPSG auswählen".decode('UTF-8'))
         self.zone_label.setText("Zone")
         self.square_label.setText("100km Quadrat")
+        self.comboBox_format.clear()
+        self.comboBox_format.addItems(["Dezimalgrad", "Grad, Kommaminuten", "Grad, Minuten, Sekunden", "UTM", "MGRS"])

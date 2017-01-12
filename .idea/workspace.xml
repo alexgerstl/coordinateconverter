@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96c61666-61f9-4421-9e45-a397fe89da13" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/icon.png" afterPath="$PROJECT_DIR$/icon.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coordinates_converter.py" afterPath="$PROJECT_DIR$/coordinates_converter.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coordinates_converter_dialog.py" afterPath="$PROJECT_DIR$/coordinates_converter_dialog.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coordinates_converter_dialog.ui" afterPath="$PROJECT_DIR$/coordinates_converter_dialog.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ensurer.py" afterPath="$PROJECT_DIR$/ensurer.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources.py" afterPath="$PROJECT_DIR$/resources.py" />
     </list>
     <ignored path="CoordinatesConverter.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,11 +46,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="coordinates_converter.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="coordinates_converter.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1868">
-              <caret line="913" column="77" lean-forward="false" selection-start-line="913" selection-start-column="77" selection-end-line="913" selection-end-column="77" />
+            <state relative-caret-position="1824">
+              <caret line="884" column="95" lean-forward="false" selection-start-line="884" selection-start-column="95" selection-end-line="884" selection-end-column="95" />
               <folding>
                 <element signature="e#1144#1219#0" expanded="true" />
               </folding>
@@ -84,11 +80,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="coordinates_converter_dialog.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="coordinates_converter_dialog.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/coordinates_converter_dialog.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4444">
-              <caret line="208" column="50" lean-forward="false" selection-start-line="208" selection-start-column="50" selection-end-line="208" selection-end-column="50" />
+            <state relative-caret-position="790">
+              <caret line="211" column="100" lean-forward="false" selection-start-line="211" selection-start-column="100" selection-end-line="211" selection-end-column="100" />
               <folding>
                 <element signature="e#250#259#0" expanded="true" />
               </folding>
@@ -144,8 +140,8 @@
         <option value="$PROJECT_DIR$/test/test_converter.py" />
         <option value="$PROJECT_DIR$/test/test_ensurer.py" />
         <option value="$PROJECT_DIR$/ensurer.py" />
-        <option value="$PROJECT_DIR$/coordinates_converter_dialog.py" />
         <option value="$PROJECT_DIR$/coordinates_converter.py" />
+        <option value="$PROJECT_DIR$/coordinates_converter_dialog.py" />
       </list>
     </option>
   </component>
@@ -864,22 +860,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coordinates_converter_dialog.py">
+    <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4444">
-          <caret line="208" column="50" lean-forward="false" selection-start-line="208" selection-start-column="50" selection-end-line="208" selection-end-column="50" />
+        <state relative-caret-position="1824">
+          <caret line="884" column="95" lean-forward="false" selection-start-line="884" selection-start-column="95" selection-end-line="884" selection-end-column="95" />
           <folding>
-            <element signature="e#250#259#0" expanded="true" />
+            <element signature="e#1144#1219#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coordinates_converter.py">
+    <entry file="file://$PROJECT_DIR$/coordinates_converter_dialog.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1868">
-          <caret line="913" column="77" lean-forward="false" selection-start-line="913" selection-start-column="77" selection-end-line="913" selection-end-column="77" />
+        <state relative-caret-position="790">
+          <caret line="211" column="100" lean-forward="false" selection-start-line="211" selection-start-column="100" selection-end-line="211" selection-end-column="100" />
           <folding>
-            <element signature="e#1144#1219#0" expanded="true" />
+            <element signature="e#250#259#0" expanded="true" />
           </folding>
         </state>
       </provider>

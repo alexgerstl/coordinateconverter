@@ -121,8 +121,8 @@ class CoordinatesConverter:
         self.dlg.hemisphere.currentIndexChanged.connect(self.__change_hemisphere)
         self.dlg.pushButton_select_to.clicked.connect(lambda: self.__button_from_clicked())
         self.dlg.pushButton_select_from.clicked.connect(lambda: self.__button_to_clicked())
-        self.dlg.pushButton_convert_to.clicked.connect(lambda: self.__transform())
-        self.dlg.pushButton_convert_from.clicked.connect(lambda: self.__transform_reverse())
+        self.dlg.pushButton_convert_to.clicked.connect(lambda: self.__set_transform_direction())
+        self.dlg.pushButton_convert_from.clicked.connect(lambda: self.__set_transform_direction_reverse())
         self.dlg.changeLanguageButton.clicked.connect(lambda: self.__change_language())
 
         # bilingual error messages
@@ -823,95 +823,13 @@ class CoordinatesConverter:
             self.dlg.lineEdit_autid_from.setText(authId)
             self.dlg.textEdit_from.setText(desc)
 
-    def __transform(self):
-        self.dlg.statusBar.clearMessage()
-        if self.proj_from is not None:
-            if self.proj_to is not None:
-                _to = QgsCoordinateReferenceSystem(self.proj_to)
-                _from = QgsCoordinateReferenceSystem(self.proj_from)
-                transform = QgsCoordinateTransform(_from, _to)
-                if self.dlg.lineEdit_input_to_x.text() != "":
-                    if self.dlg.lineEdit_input_to_y.text() != "":
-                        try:
-                            x = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_to_x.text()))
-                            y = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_to_y.text()))
-                            point = QgsPoint(x, y)
-                            try:
-                                result = transform.transform(point)
-                                self.dlg.lineEdit_input_from_x.setText(str(result.x()))
-                                self.dlg.lineEdit_input_from_y.setText(str(result.y()))
-                            except Exception:
-                                if self.german:
-                                    self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_DE)
-                                else:
-                                    self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_EN)
-                        except exceptions.ParseException, e:
-                            self.dlg.statusBar.showMessage(e.message)
-                    else:
-                        if self.german:
-                            self.dlg.statusBar.showMessage(self.NO_Y_VALUE_DE)
-                        else:
-                            self.dlg.statusBar.showMessage(self.NO_Y_VALUE_EN)
-                else:
-                    if self.german:
-                        self.dlg.statusBar.showMessage(self.NO_X_VALUE_DE)
-                    else:
-                        self.dlg.statusBar.showMessage(self.NO_X_VALUE_EN)
-            else:
-                if self.german:
-                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
-                else:
-                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
-        else:
-            if self.german:
-                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
-            else:
-                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
+    def __set_transform_direction(self):
+        reverse = False
+        self.__transform_epsg(reverse)
 
-    def __transform_reverse(self):
-        self.dlg.statusBar.showMessage("")
-        if self.proj_from is not None:
-            if self.proj_to is not None:
-                _to = QgsCoordinateReferenceSystem(self.proj_to)
-                _from = QgsCoordinateReferenceSystem(self.proj_from)
-                transform = QgsCoordinateTransform(_to, _from)
-                if self.dlg.lineEdit_input_from_x.text() != "":
-                    if self.dlg.lineEdit_input_from_y.text() != "":
-                        try:
-                            x = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_from_x.text()))
-                            y = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_from_y.text()))
-                            point = QgsPoint(x, y)
-                            try:
-                                result = transform.transform(point)
-                                self.dlg.lineEdit_input_to_x.setText(str(result.x()))
-                                self.dlg.lineEdit_input_to_y.setText(str(result.y()))
-                            except Exception:
-                                if self.german:
-                                    self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_DE)
-                                else:
-                                    self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_EN)
-                        except exceptions.ParseException, e:
-                            self.dlg.statusBar.showMessage(e.message)
-                    else:
-                        if self.german:
-                            self.dlg.statusBar.showMessage(self.NO_Y_VALUE_DE)
-                        else:
-                            self.dlg.statusBar.showMessage(self.NO_Y_VALUE_EN)
-                else:
-                    if self.german:
-                        self.dlg.statusBar.showMessage(self.NO_X_VALUE_DE)
-                    else:
-                        self.dlg.statusBar.showMessage(self.NO_X_VALUE_EN)
-            else:
-                if self.german:
-                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
-                else:
-                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
-        else:
-            if self.german:
-                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
-            else:
-                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
+    def __set_transform_direction_reverse(self):
+        reverse = True
+        self.__transform_epsg(reverse)
 
     def __change_language(self):
         if self.german:
@@ -920,3 +838,77 @@ class CoordinatesConverter:
         else:
             self.german = True
             self.dlg.change_to_german()
+
+    def __transform_epsg(self, reverse):
+        self.dlg.statusBar.clearMessage()
+        if self.proj_from is not None:
+            if self.proj_to is not None:
+                _to = QgsCoordinateReferenceSystem(self.proj_to)
+                _from = QgsCoordinateReferenceSystem(self.proj_from)
+                transform = QgsCoordinateTransform(_from, _to)
+                if not reverse:
+                    if self.dlg.lineEdit_input_to_x.text() != "":
+                        if self.dlg.lineEdit_input_to_y.text() != "":
+                            try:
+                                x = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_to_x.text()))
+                                y = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_to_y.text()))
+                                point = QgsPoint(x, y)
+                                try:
+                                    result = transform.transform(point)
+                                    self.dlg.lineEdit_input_from_x.setText(str(result.x()))
+                                    self.dlg.lineEdit_input_from_y.setText(str(result.y()))
+                                except Exception:
+                                    if self.german:
+                                        self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_DE)
+                                    else:
+                                        self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_EN)
+                            except exceptions.ParseException, e:
+                                self.dlg.statusBar.showMessage(e.message)
+                        else:
+                            if self.german:
+                                self.dlg.statusBar.showMessage(self.NO_Y_VALUE_DE)
+                            else:
+                                self.dlg.statusBar.showMessage(self.NO_Y_VALUE_EN)
+                    else:
+                        if self.german:
+                            self.dlg.statusBar.showMessage(self.NO_X_VALUE_DE)
+                        else:
+                            self.dlg.statusBar.showMessage(self.NO_X_VALUE_EN)
+                else:
+                    if self.dlg.lineEdit_input_from_x.text() != "":
+                        if self.dlg.lineEdit_input_from_y.text() != "":
+                            try:
+                                x = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_from_x.text()))
+                                y = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_from_y.text()))
+                                point = QgsPoint(x, y)
+                                try:
+                                    result = transform.transform(point, QgsCoordinateTransform.ReverseTransform)
+                                    self.dlg.lineEdit_input_to_x.setText(str(result.x()))
+                                    self.dlg.lineEdit_input_to_y.setText(str(result.y()))
+                                except Exception:
+                                    if self.german:
+                                        self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_DE)
+                                    else:
+                                        self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_EN)
+                            except exceptions.ParseException, e:
+                                self.dlg.statusBar.showMessage(e.message)
+                        else:
+                            if self.german:
+                                self.dlg.statusBar.showMessage(self.NO_Y_VALUE_DE)
+                            else:
+                                self.dlg.statusBar.showMessage(self.NO_Y_VALUE_EN)
+                    else:
+                        if self.german:
+                            self.dlg.statusBar.showMessage(self.NO_X_VALUE_DE)
+                        else:
+                            self.dlg.statusBar.showMessage(self.NO_X_VALUE_EN)
+            else:
+                if self.german:
+                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
+                else:
+                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
+        else:
+            if self.german:
+                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
+            else:
+                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)

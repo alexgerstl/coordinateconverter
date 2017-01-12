@@ -10,6 +10,7 @@
           <option value="coordinates_converter.QgsCoordinateReferenceSystem" />
           <option value="coordinates_converter.QgsPoint" />
           <option value="coordinates_converter.QgsCoordinateTransform" />
+          <option value="coordinates_converter.ReverseTransform" />
         </list>
       </option>
     </inspection_tool>
