@@ -136,14 +136,14 @@
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QLabel" name="label_wgs_degrees">
+            <widget class="QLabel" name="label_wgs_comma">
              <property name="text">
-              <string>WGS84 (Grad, Minuten, Kommaminuten)</string>
+              <string>WGS84 (Grad, Kommaminuten)</string>
              </property>
             </widget>
            </item>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_wgs_dms">
+            <widget class="QLabel" name="label_wgs_degrees">
              <property name="text">
               <string>WGS84 (Dezimalgrad)</string>
              </property>
@@ -166,7 +166,7 @@
             </widget>
            </item>
            <item row="2" column="0">
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="label_wgs_dms">
              <property name="text">
               <string>WGS84 (Grad, Minuten, Sekunden)</string>
              </property>

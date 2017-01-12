@@ -80,6 +80,7 @@ class CoordinatesConverter:
         self.coordinates = {}
         self.proj_from = None
         self.proj_to = None
+        self.german = True
 
         # For combobox signals
         self.selected_format = 0
@@ -122,7 +123,25 @@ class CoordinatesConverter:
         self.dlg.pushButton_select_from.clicked.connect(lambda: self.__button_to_clicked())
         self.dlg.pushButton_convert_to.clicked.connect(lambda: self.__transform())
         self.dlg.pushButton_convert_from.clicked.connect(lambda: self.__transform_reverse())
-        #self.dlg.changeLanguageButton.clicked.connect(lambda: self.__button_clicked())
+        self.dlg.changeLanguageButton.clicked.connect(lambda: self.__change_language())
+
+        # bilingual error messages
+        self.INVALID_SQUARE_EASTING_DE = "Ung" + u'\xFC' + "ltiger Buchstabe f" + u'\xFC' +\
+                                         "r Ostwert des 100km Quadrates: {0} (Buchstabe muss einer der folgenden sein: {1})"
+        self.INVALID_SQUARE_EASTING_EN = "Invalid easting letter for 100x100km grid square: {0} " \
+                                         "(value has to be one of the letters: {1})"
+        self.INVALID_SQUARE_NORTHING_DE = "Ung" + u'\xFC' + "ltiger Buchstabe f" + u'\xFC' + \
+                                          "r Nordwert des 100km Quadrates: {0} (Buchstabe muss einer der folgenden sein: {1})"
+        self.INVALID_SQUARE_NORTHING_EN = "Invalid northing letter for 100x100km grid square: {0} " \
+                                          "(value has to be one of the letters: {1})"
+        self.AN_ERROR_OCCURRED_DE = "Ein Fehler ist aufgetreten. Bitte eingegebene Daten prüfen"
+        self.AN_ERROR_OCCURRED_EN = "An error occurred - please check entered values"
+        self.EPSG_CODE_NOT_DEFINED_DE = "EPSG-Code noch nicht festgelegt."
+        self.EPSG_CODE_NOT_DEFINED_EN = "EPSG code not defined yet"
+        self.NO_X_VALUE_DE = "Kein X-Wert eingegeben"
+        self.NO_X_VALUE_EN = "no value X entered"
+        self.NO_Y_VALUE_DE = "Kein Y-Wert eingegeben"
+        self.NO_Y_VALUE_EN = "no value Y entered"
 
 
 
@@ -698,12 +717,16 @@ class CoordinatesConverter:
             squares_y = square[1] in zone_fields_lat
 
             if squares_x is False:
-                raise exceptions.ParseException('Invalid easting letter for 100x100km grid square: ' + square[0] +
-                                                ' (value has to be one of the letters: ' +
-                                                zone_fields[zone_temp % 3] + ')')
+                if self.german:
+                    raise exceptions.ParseException(self.INVALID_SQUARE_EASTING_DE.format(square[0], zone_fields[zone_temp % 3]))
+                else:
+                    raise exceptions.ParseException(self.INVALID_SQUARE_EASTING_EN.format(square[0], zone_fields[zone_temp % 3]))
+
             if squares_y is False:
-                raise exceptions.ParseException('Invalid northing letter for 100x100km grid square: ' + square[1] +
-                                                ' (value has to be one of the letters: ' + zone_fields_lat + ')')
+                if self.german:
+                    raise exceptions.ParseException(self.INVALID_SQUARE_NORTHING_DE.format(square[0], zone_fields_lat))
+                else:
+                    raise exceptions.ParseException(self.INVALID_SQUARE_NORTHING_EN.format(square[0], zone_fields_lat))
             self.mgrs_square = square_corrected
             point = points.MGRSPoint(self.mgrs_easting, self.mgrs_northing, self.mgrs_zone, self.mgrs_square)
             if len(str(self.mgrs_zone)) == 3:
@@ -784,7 +807,6 @@ class CoordinatesConverter:
             self.dlg.textEdit_to.setText(desc)
 
     def __button_to_clicked(self):
-        # lookup in api
         selector = QgsGenericProjectionSelector()
         parent = self.dlg.pos()
         selector.move(parent)
@@ -802,7 +824,7 @@ class CoordinatesConverter:
             self.dlg.textEdit_from.setText(desc)
 
     def __transform(self):
-        self.dlg.statusBar.showMessage("")
+        self.dlg.statusBar.clearMessage()
         if self.proj_from is not None:
             if self.proj_to is not None:
                 _to = QgsCoordinateReferenceSystem(self.proj_to)
@@ -810,7 +832,7 @@ class CoordinatesConverter:
                 transform = QgsCoordinateTransform(_from, _to)
                 if self.dlg.lineEdit_input_to_x.text() != "":
                     if self.dlg.lineEdit_input_to_y.text() != "":
-                        try :
+                        try:
                             x = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_to_x.text()))
                             y = float(ensurer.ensure_it_is_a_number(self.dlg.lineEdit_input_to_y.text()))
                             point = QgsPoint(x, y)
@@ -819,17 +841,32 @@ class CoordinatesConverter:
                                 self.dlg.lineEdit_input_from_x.setText(str(result.x()))
                                 self.dlg.lineEdit_input_from_y.setText(str(result.y()))
                             except Exception:
-                                self.dlg.statusBar.showMessage("Ein Fehler ist aufgetreten. Eingegebene Daten prüfen.")
+                                if self.german:
+                                    self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_DE)
+                                else:
+                                    self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_EN)
                         except exceptions.ParseException, e:
                             self.dlg.statusBar.showMessage(e.message)
                     else:
-                        self.dlg.statusBar.showMessage("Kein Y-Wert eingegeben")
+                        if self.german:
+                            self.dlg.statusBar.showMessage(self.NO_Y_VALUE_DE)
+                        else:
+                            self.dlg.statusBar.showMessage(self.NO_Y_VALUE_EN)
                 else:
-                    self.dlg.statusBar.showMessage("Kein X-Wert eingegeben")
+                    if self.german:
+                        self.dlg.statusBar.showMessage(self.NO_X_VALUE_DE)
+                    else:
+                        self.dlg.statusBar.showMessage(self.NO_X_VALUE_EN)
             else:
-                self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
+                if self.german:
+                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
+                else:
+                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
         else:
-            self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
+            if self.german:
+                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
+            else:
+                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
 
     def __transform_reverse(self):
         self.dlg.statusBar.showMessage("")
@@ -849,14 +886,37 @@ class CoordinatesConverter:
                                 self.dlg.lineEdit_input_to_x.setText(str(result.x()))
                                 self.dlg.lineEdit_input_to_y.setText(str(result.y()))
                             except Exception:
-                                self.dlg.statusBar.showMessage("Ein Fehler ist aufgetreten. Eingegebene Daten prüfen.")
+                                if self.german:
+                                    self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_DE)
+                                else:
+                                    self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_EN)
                         except exceptions.ParseException, e:
                             self.dlg.statusBar.showMessage(e.message)
                     else:
-                        self.dlg.statusBar.showMessage("Kein Y-Wert eingegeben")
+                        if self.german:
+                            self.dlg.statusBar.showMessage(self.NO_Y_VALUE_DE)
+                        else:
+                            self.dlg.statusBar.showMessage(self.NO_Y_VALUE_EN)
                 else:
-                    self.dlg.statusBar.showMessage("Kein X-Wert eingegeben")
+                    if self.german:
+                        self.dlg.statusBar.showMessage(self.NO_X_VALUE_DE)
+                    else:
+                        self.dlg.statusBar.showMessage(self.NO_X_VALUE_EN)
             else:
-                self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
+                if self.german:
+                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
+                else:
+                    self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
         else:
-            self.dlg.statusBar.showMessage("EPSG-Code nicht festgelegt")
+            if self.german:
+                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_DE)
+            else:
+                self.dlg.statusBar.showMessage(self.EPSG_CODE_NOT_DEFINED_EN)
+
+    def __change_language(self):
+        if self.german:
+            self.german = False
+            self.dlg.change_to_english()
+        else:
+            self.german = True
+            self.dlg.change_to_german()

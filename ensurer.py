@@ -4,8 +4,7 @@ import exceptions
 from os.path import expanduser
 home = expanduser("~")
 enum_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\enum34-1.1.6-py2.7.egg'
-
-sys.path.insert(0,enum_path)
+sys.path.insert(0, enum_path)
 import enum
 
 
@@ -24,7 +23,44 @@ class Hemisphere(enum.Enum):
 
 white_list_1 = ['-', ' ', '.', ',']
 white_list_2 = [' ', '.', ',']
-
+INVALID_SYMBOL_ERROR_DE = "ung" + u'\xFC' + "ltiges Symbol".decode('UTF-8')
+INVALID_SYMBOL_ERROR_EN = "invalid symbol"
+VALUE_HAS_TO_BE_INTEGER_DE = "Wert muss ganzzahlig sein"
+VALUE_HAS_TO_BE_INTEGER_EN = "Value has to be an integer"
+INPUT_TO_LONG_DE = "Eingabe ist zu lange"
+INPUT_TO_LONG_EN = "input is too long"
+ZONE_HAS_TO_START_WITH_NUMBER_DE = "Zone muss mit einer Zahl beginnen"
+ZONE_HAS_TO_START_WITH_NUMBER_EN = "zone has to start with a number"
+ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_DE = "Zone muss aus zwei Ziffern bestehen"
+ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_EN = "first two numbers of zone has to be numbers"
+SQUARE_HAS_TO_START_WITH_DE = "Gitterquadrat muss mit Buchstaben beginnen"
+SQUARE_HAS_TO_START_WITH_EN = "square has to start with a letter"
+SQUARE_HAS_TO_BE_TWO_NUMBERS_DE = "Gitterquadrat muss aus zwei Buchstaben bestehen"
+SQUARE_HAS_TO_BE__TWO_NUMBERS_EN = "square has to be two letters"
+INPUT_NOT_COMPLETE_DE = "Eingabe noch nicht vollst" + u'\xE4' +"ndig"
+INPUT_NOT_COMPLETE_EN = "input not completed"
+INVALID_LAT_GRID_ZONE_DE = "Ung" + u'\xFC' + "ltige MGRS-Zone: {0} (g" + u'\xFC' + "ltige Werte: C-X außer I und O)".decode('UTF-8')
+INVALID_LAT_GRID_ZONE_EN = "Invalid MGRS zone: {0} (accepted values: C-X omitting I and O)"
+INVALID_MGRS_SQUARE_LETTRES_DE = "Ung" + u'\xFC' + "ltige Zone-Gitterquadrat-Kombination. Zone: '{0}' ung" + u'\xFC' + "ltig: '{1}'"
+INVALID_MGRS_SQUARE_LETTRES_EN = "Invalid grid zone designation: grid zone '{0}' with '{1}' does not exist."
+LONGITUDE_OUT_OF_RANGE_DE = "Wer f" + u'\xFC' + "r L" + u'\xE4' +"ngengrad au" + u'\xDF' + "erhalb des Wertebereiches (-180...+180)"
+LONGITUDE_OUT_OF_RANGE_EN = "Degree value of longitude out of range (-180...+180)"
+LATITUDE_OUT_OF_RANGE_DE = "Wer f" + u'\xFC' + "r Breitengrad au" + u'\xDF' + "erhalb Wertebereich (-90...+90)"
+LATITUDE_OUT_OF_RANGE_EN = "Degree value of latitude out of range (-90...+90)"
+MINUTES_OUT_OF_RANGE_DE = "Gradminuten au" + u'\xDF' + "erhalb des Wertebereiches (0...59)"
+MINUTES_OUT_OF_RANGE_EN = "Minutes value out of range (0...59)"
+SECONDS_OUT_OF_RANGE_DE = "Gradsekunden au" + u'\xDF' + "erhalb des Wertebereiches (0...59)"
+SECONDS_OUT_OF_RANGE_EN = "Seconds value out of range (0...59)"
+ZONE_OUT_OF_RANGE_DE = "Zone au" + u'\xDF' + "erhalb des Wertebereiches (0...60)"
+ZONE_OUT_OF_RANGE_EN = "zone out of range (0...60)"
+UTM_EASTING_OUT_OF_RANGE_DE = "Ostwert au" + u'\xDF' + "erhalb des Wertebereiches (100 000 m ... 999 999 m)"
+UTM_EASTING_OUT_OF_RANGE_EN = "easting out of range (100 000 m ... 999 999 m)"
+UTM_NORTHING_OUT_OF_RANGE_DE = "Nordwert au" + u'\xDF' + "erhalb des Wertebereiches (0 m ... 10 000 000 m)"
+UTM_NORTHING_OUT_OF_RANGE_EN = "northing out of range (0 m ... 10 000 000 m)"
+MGRS_EASTING_OUT_OF_RANGE_DE = "Ostwert au" + u'\xDF' + "erhalb des Wertebereiches (0 m ... 99 999 m)"
+MGRS_EASTING_OUT_OF_RANGE_EN = "easting out of range (0 m ... 99 999 m)"
+MGRS_NORTHING_OUT_OF_RANGE_DE = "Nordwert au" + u'\xDF' + "erhalb des Wertebereiches (0 m ... 99 999 m)"
+MGRS_NORTHING_OUT_OF_RANGE_EN = "northing out of range (0 m ... 99 999 m)"
 
 def ensure_it_is_a_number(string):
     """Ensures string can be parsed to a positive or negative number."""
@@ -38,7 +74,7 @@ def ensure_it_is_a_number(string):
         replaced = no_space
     illegal_char_index = __index_of_first_illegal_char_number_only(replaced, 1)
     if illegal_char_index != -1:
-        raise exceptions.ParseException('Invalid Symbol \'' + replaced[illegal_char_index] + '\'')
+        raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + replaced[illegal_char_index] + "'")
 
     if len(replaced) > 10:
         replaced = replaced[:11]
