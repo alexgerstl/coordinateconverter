@@ -33,10 +33,12 @@ ZONE_HAS_TO_START_WITH_NUMBER_DE = "Zone muss mit einer Zahl beginnen"
 ZONE_HAS_TO_START_WITH_NUMBER_EN = "zone has to start with a number"
 ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_DE = "Zone muss aus zwei Ziffern bestehen"
 ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_EN = "first two numbers of zone has to be numbers"
+ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_AND_A_LETTER_DE = "Zone muss aus zwei Ziffern und einem Buchstaben bestehen"
+ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_AND_A_LETTER_EN = "zone has to contain two numbers and a letter"
 SQUARE_HAS_TO_START_WITH_DE = "Gitterquadrat muss mit Buchstaben beginnen"
 SQUARE_HAS_TO_START_WITH_EN = "square has to start with a letter"
-SQUARE_HAS_TO_BE_TWO_NUMBERS_DE = "Gitterquadrat muss aus zwei Buchstaben bestehen"
-SQUARE_HAS_TO_BE__TWO_NUMBERS_EN = "square has to be two letters"
+SQUARE_HAS_TO_BE_TWO_LETTERS_DE = "Gitterquadrat muss aus zwei Buchstaben bestehen"
+SQUARE_HAS_TO_BE_TWO_LETTERS_EN = "square has to be two letters"
 INPUT_NOT_COMPLETE_DE = "Eingabe noch nicht vollst" + u'\xE4' +"ndig"
 INPUT_NOT_COMPLETE_EN = "input not completed"
 INVALID_LAT_GRID_ZONE_DE = "Ung" + u'\xFC' + "ltige MGRS-Zone: {0} (g" + u'\xFC' + "ltige Werte: C-X außer I und O)".decode('UTF-8')
@@ -62,7 +64,8 @@ MGRS_EASTING_OUT_OF_RANGE_EN = "easting out of range (0 m ... 99 999 m)"
 MGRS_NORTHING_OUT_OF_RANGE_DE = "Nordwert au" + u'\xDF' + "erhalb des Wertebereiches (0 m ... 99 999 m)"
 MGRS_NORTHING_OUT_OF_RANGE_EN = "northing out of range (0 m ... 99 999 m)"
 
-def ensure_it_is_a_number(string):
+
+def ensure_it_is_a_number(string, german):
     """Ensures string can be parsed to a positive or negative number."""
     trimmed = string.strip()
     if len(trimmed) == 0:
@@ -74,7 +77,10 @@ def ensure_it_is_a_number(string):
         replaced = no_space
     illegal_char_index = __index_of_first_illegal_char_number_only(replaced, 1)
     if illegal_char_index != -1:
-        raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + replaced[illegal_char_index] + "'")
+        if german:
+            raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + replaced[illegal_char_index] + "'")
+        else:
+            raise exceptions.ParseException(INVALID_SYMBOL_ERROR_EN + " '" + replaced[illegal_char_index] + "'")
 
     if len(replaced) > 10:
         replaced = replaced[:11]
@@ -84,7 +90,7 @@ def ensure_it_is_a_number(string):
     return float(replaced)
 
 
-def ensure_it_is_a_positive_number(string):
+def ensure_it_is_a_positive_number(string, german):
     """Ensures string can be parsed to a positive number."""
     trimmed = string.strip()
     if len(trimmed) == 0:
@@ -96,13 +102,16 @@ def ensure_it_is_a_positive_number(string):
         replaced = no_space
     illegal_char_index = __index_of_first_illegal_char_number_only(replaced, 2)
     if illegal_char_index != -1:
-        raise exceptions.ParseException('Invalid Symbol \'' + replaced[illegal_char_index] + '\'')
+        if german:
+            raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + replaced[illegal_char_index] + "'")
+        else:
+            raise exceptions.ParseException(INVALID_SYMBOL_ERROR_EN + " '" + replaced[illegal_char_index] + "'")
     if len(replaced) > 10:
         replaced = replaced[:11]
     return float(replaced)
 
 
-def ensure_it_is_an_integer(string):
+def ensure_it_is_an_integer(string, german):
     """Ensures string can be parsed to a positive or negative integer."""
     trimmed = string.strip()
     if len(trimmed) == 0:
@@ -112,7 +121,10 @@ def ensure_it_is_an_integer(string):
         raise exceptions.ParseException('Wert muss ganzzahlig sein')
     illegal_char_index = __index_of_first_illegal_char_number_only(no_space, 1)
     if illegal_char_index != -1:
-        raise exceptions.ParseException('Invalid Symbol \'' + no_space[illegal_char_index] + '\'')
+        if german:
+            raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + no_space[illegal_char_index] + "'")
+        else:
+            raise exceptions.ParseException(INVALID_SYMBOL_ERROR_EN + " '" + no_space[illegal_char_index] + "'")
 
     if not __is_positive(no_space):
         final = no_space.replace('-', '0')
@@ -120,129 +132,198 @@ def ensure_it_is_an_integer(string):
     return int(no_space)
 
 
-def ensure_it_is_a_positive_integer(string):
+def ensure_it_is_a_positive_integer(string, german):
     """Ensures string can be parsed to a positive integer."""
     trimmed = string.strip()
     if len(trimmed) == 0:
         trimmed = '0'
     no_space = trimmed.replace(' ', '')
     if ',' in no_space or '.' in no_space:
-        raise exceptions.ParseException('Wert muss ganzzahlig sein')
+        if german:
+            raise exceptions.ParseException(VALUE_HAS_TO_BE_INTEGER_DE)
+        else:
+            raise exceptions.ParseException(VALUE_HAS_TO_BE_INTEGER_EN)
     illegal_char_index = __index_of_first_illegal_char_number_only(no_space, 2)
     if illegal_char_index != -1:
-        raise exceptions.ParseException('Invalid Symbol \'' + no_space[illegal_char_index] + '\'')
+        if german:
+            raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + no_space[illegal_char_index] + "'")
+        else:
+            raise exceptions.ParseException(INVALID_SYMBOL_ERROR_EN + " '" + no_space[illegal_char_index] + "'")
     return int(no_space)
 
 
-def ensure_it_is_a_valid_mgrs_zone(string):
+def ensure_it_is_a_valid_mgrs_zone(string, german):
     """Ensures string consists of 2 digits and a letter"""
     trimmed = string.strip()
     no_space = trimmed.replace(' ', '').upper()
     if len(no_space) > 3:
-        raise exceptions.ParseException('Eingabe zu lange')
+        if german:
+            raise exceptions.ParseException(INPUT_TO_LONG_DE)
+        else:
+            raise exceptions.ParseException(INPUT_TO_LONG_EN)
     for i in range(0, len(no_space)):
         if i == 0:
             if no_space[i].isdigit():
                 continue
             else:
-                raise exceptions.ParseException('Zone muss mit Zahl beginnen.')
+                if german:
+                    raise exceptions.ParseException(ZONE_HAS_TO_START_WITH_NUMBER_DE)
+                else:
+                    raise exceptions.ParseException(ZONE_HAS_TO_START_WITH_NUMBER_EN)
         elif i == 1:
             if no_space[i].isdigit():
                 continue
             else:
-                raise exceptions.ParseException('Zone muss aus zwei Ziffern bestehen.')
+                if german:
+                    raise exceptions.ParseException(ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_DE)
+                else:
+                    raise exceptions.ParseException(ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_EN)
         else:
             if no_space[i].isalpha():
                 char_int = ord(no_space[i].lower())
                 if char_int < ord('a') or char_int > ord('z'):
-                    raise exceptions.ParseException('Ungültiges Zeichen: ' + no_space[i])
+                    if german:
+                        raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + no_space[i] + "'")
+                    else:
+                        raise exceptions.ParseException(INVALID_SYMBOL_ERROR_EN + " '" + no_space[i] + "'")
 
                 lat_zone = ord(no_space[2])
                 zone_temp = int(no_space[:2])
                 if lat_zone < 67 or lat_zone > 88 or lat_zone == 73 or lat_zone == 79:
-                    raise exceptions.ParseException('Invalid latitude grid-zone: ' + chr(lat_zone) +
-                                                    ' in MGRS-String (accepted values: C-X omitting I and O)')
+                    if german:
+                        raise exceptions.ParseException(INVALID_LAT_GRID_ZONE_DE.format(chr(lat_zone)))
+                    else:
+                        raise exceptions.ParseException(INVALID_LAT_GRID_ZONE_EN.format(chr(lat_zone)))
                 if lat_zone == ord('X') and (zone_temp == 32 or zone_temp == 34 or zone_temp == 36):
-                    raise exceptions.ParseException(
-                        'Invalid grid zone designation: grid zone ' + str(zone_temp) + ' ' +
-                        chr(lat_zone) + ' does not exist.')
+                    if german:
+                        raise exceptions.ParseException(INVALID_MGRS_SQUARE_LETTRES_DE.format(str(zone_temp), chr(lat_zone)))
+                    else:
+                        raise exceptions.ParseException(INVALID_MGRS_SQUARE_LETTRES_EN.format(str(zone_temp), chr(lat_zone)))
             else:
-                raise exceptions.ParseException('Zone muss aus zwei Ziffern und einem Buchstaben bestehen.')
+                if german:
+                    raise exceptions.ParseException(ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_AND_A_LETTER_DE)
+                else:
+                    raise exceptions.ParseException(ZONE_HAS_TO_CONTAIN_TWO_NUMBERS_AND_A_LETTER_EN)
     if len(no_space) != 3:
-        raise exceptions.ParseException('Eingabe noch nicht vollzählig')
+        if german:
+            raise exceptions.ParseException(INPUT_NOT_COMPLETE_DE)
+        else:
+            raise exceptions.ParseException(INPUT_NOT_COMPLETE_EN)
     return no_space
 
 
-def ensure_it_is_a_valid_mgrs_square(string):
+def ensure_it_is_a_valid_mgrs_square(string, german):
     """Ensures string consists of 2 letters"""
     trimmed = string.strip()
     no_space = trimmed.replace(' ', '').upper()
     if len(no_space) > 2:
-        raise exceptions.ParseException('Eingabe zu lange')
+        if german:
+            raise exceptions.ParseException(INPUT_TO_LONG_DE)
+        else:
+            raise exceptions.ParseException(INPUT_TO_LONG_EN)
     for i in range(0, len(no_space)):
         if i == 0:
             if no_space[i].isalpha():
                 continue
             else:
-                raise exceptions.ParseException('Gitterquadrat muss mit Buchstaben beginnen.')
+                if german:
+                    raise exceptions.ParseException(SQUARE_HAS_TO_START_WITH_DE)
+                else:
+                    raise exceptions.ParseException(SQUARE_HAS_TO_START_WITH_EN)
         elif i == 1:
             if no_space[i].isalpha():
                 continue
             else:
-                raise exceptions.ParseException('Gitterquadrat muss aus zwei Buchstaben bestehen.')
+                if german:
+                    raise exceptions.ParseException(SQUARE_HAS_TO_BE_TWO_LETTERS_DE)
+                else:
+                    raise exceptions.ParseException(SQUARE_HAS_TO_BE_TWO_LETTERS_EN)
         else:
             if no_space[i].isalpha() or no_space[i].isdigit():
                 char_int = ord(no_space[i].lower())
                 if char_int < ord('a') or char_int > ord('z'):
-                    raise exceptions.ParseException('Ungültiges Zeichen: ' + no_space[i])
+                    if german:
+                        raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + no_space[i])
+                    else:
+                        raise exceptions.ParseException(INVALID_SYMBOL_ERROR_EN + no_space[i])
     if len(no_space) != 2:
-        raise exceptions.ParseException('Eingabe noch nicht vollzählig')
+        if german:
+            raise exceptions.ParseException(INPUT_NOT_COMPLETE_DE)
+        else:
+            raise exceptions.ParseException(INPUT_NOT_COMPLETE_EN)
     return no_space
 
 
-def ensure_longitude_in_range(longitude):
+def ensure_longitude_in_range(longitude, german):
     if longitude < -180 or longitude > 180:
-        raise exceptions.ParseException('Degree value of longitude out of range (-180...+180)')
+        if german:
+            raise exceptions.ParseException(LONGITUDE_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(LONGITUDE_OUT_OF_RANGE_EN)
 
 
-def ensure_latitude_in_range(latitude):
+def ensure_latitude_in_range(latitude, german):
     if latitude < -90 or latitude > 90:
-        raise exceptions.ParseException('Degree value of latitude out of range (-90...+90)')
+        if german:
+            raise exceptions.ParseException(LATITUDE_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(LATITUDE_OUT_OF_RANGE_EN)
 
 
-def ensure_minutes_in_range(minutes):
+def ensure_minutes_in_range(minutes, german):
     if minutes < 0 or minutes >= 60:
-        raise exceptions.ParseException('Minutes value of longitude out of range (0...59)')
+        if german:
+            raise exceptions.ParseException(MINUTES_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(MINUTES_OUT_OF_RANGE_EN)
 
 
-def ensure_seconds_in_range(seconds):
+def ensure_seconds_in_range(seconds, german):
     if seconds < 0 or seconds >= 60:
-        raise exceptions.ParseException('Seconds value of longitude out of range (0...59)')
+        if german:
+            raise exceptions.ParseException(SECONDS_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(SECONDS_OUT_OF_RANGE_EN)
 
 
-def ensure_zone_in_range(zone):
+def ensure_zone_in_range(zone, german):
     if not 1 <= zone <= 60:
-        raise exceptions.ParseException('UTM zone value out of range (1...60)')
+        if german:
+            raise exceptions.ParseException(ZONE_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(ZONE_OUT_OF_RANGE_EN)
 
 
-def ensure_utm_easting_in_range(easting):
+def ensure_utm_easting_in_range(easting, german):
     if not 100000 <= easting < 1000000:
-        raise exceptions.ParseException('easting out of range (must be between 100 000 m and 999 999 m)')
+        if german:
+            raise exceptions.ParseException(UTM_EASTING_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(UTM_EASTING_OUT_OF_RANGE_EN)
 
 
-def ensure_utm_northing_in_range(northing):
+def ensure_utm_northing_in_range(northing, german):
     if not 0 <= northing <= 10000000:
-        raise exceptions.ParseException('northing out of range (must be between 0 m and 10 000 000 m)')
+        if german:
+            raise exceptions.ParseException(UTM_NORTHING_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(UTM_NORTHING_OUT_OF_RANGE_EN)
 
 
-def ensure_mgrs_easting_in_range(easting):
+def ensure_mgrs_easting_in_range(easting, german):
     if not 0 <= easting < 100000:
-        raise exceptions.ParseException('easting out of range (must be between 0 m and 999 99 m)')
+        if german:
+            raise exceptions.ParseException(MGRS_EASTING_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(MGRS_EASTING_OUT_OF_RANGE_EN)
 
 
-def ensure_mgrs_northing_in_range(northing):
+def ensure_mgrs_northing_in_range(northing, german):
     if not 0 <= northing < 100000:
-        raise exceptions.ParseException('northing out of range (must be between 0 m and 999 99 m)')
+        if german:
+            raise exceptions.ParseException(MGRS_NORTHING_OUT_OF_RANGE_DE)
+        else:
+            raise exceptions.ParseException(MGRS_NORTHING_OUT_OF_RANGE_EN)
 
 
 def __is_positive(string):

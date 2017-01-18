@@ -51,10 +51,10 @@ def degree_to_utm(point):
     latitude = point.lat_deg
     force_zone_number = None
 
-    if not -80.0 <= latitude <= 84.0:
-        raise exceptions.ParseException('latitude out of range (must be between 80 deg S and 84 deg N)')
-    if not -180.0 <= longitude <= 180.0:
-        raise exceptions.ParseException('longitude out of range (must be between 180 deg W and 180 deg E)')
+    # if not -80.0 <= latitude <= 84.0:
+    #     raise exceptions.ParseException('latitude out of range (must be between 80 deg S and 84 deg N)')
+    # if not -180.0 <= longitude <= 180.0:
+    #     raise exceptions.ParseException('longitude out of range (must be between 180 deg W and 180 deg E)')
 
     lat_rad = math.radians(latitude)
     lat_sin = math.sin(lat_rad)
@@ -134,18 +134,18 @@ def utm_to_degree(point):
     elif zone_letter and northern is not None:
         raise exceptions.ConversionException('set either zone_letter or northern, but not both')
 
-    if not 100000 <= easting < 1000000:
-        raise exceptions.ParseException('easting out of range (must be between 100.000 m and 999.999 m)')
-    if not 0 <= northing <= 10000000:
-        raise exceptions.ParseException('northing out of range (must be between 0 m and 10.000.000 m)')
-    if not 1 <= zone_number <= 60:
-        raise exceptions.ParseException('zone number out of range (must be between 1 and 60)')
-
-    if zone_letter:
-        zone_letter = zone_letter.upper()
-
-        if not 'C' <= zone_letter <= 'X' or zone_letter in ['I', 'O']:
-            raise exceptions.ParseException('zone letter out of range (must be between C and X)')
+    # if not 100000 <= easting < 1000000:
+    #     raise exceptions.ParseException('easting out of range (must be between 100.000 m and 999.999 m)')
+    # if not 0 <= northing <= 10000000:
+    #     raise exceptions.ParseException('northing out of range (must be between 0 m and 10.000.000 m)')
+    # if not 1 <= zone_number <= 60:
+    #     raise exceptions.ParseException('zone number out of range (must be between 1 and 60)')
+    #
+    # if zone_letter:
+    #     zone_letter = zone_letter.upper()
+    #
+    #     if not 'C' <= zone_letter <= 'X' or zone_letter in ['I', 'O']:
+    #         raise exceptions.ParseException('zone letter out of range (must be between C and X)')
 
         northern = (zone_letter >= 'N')
 

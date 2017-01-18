@@ -11,6 +11,7 @@
           <option value="coordinates_converter.QgsPoint" />
           <option value="coordinates_converter.QgsCoordinateTransform" />
           <option value="coordinates_converter.ReverseTransform" />
+          <option value="coordinates_converter.QgsCsException" />
         </list>
       </option>
     </inspection_tool>
