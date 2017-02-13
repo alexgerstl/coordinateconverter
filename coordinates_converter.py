@@ -25,8 +25,6 @@ from PyQt4.QtGui import QAction, QIcon
 from qgis.core import *
 from qgis.gui import *
 # Initialize Qt resources from file resources.py
-from PyQt4.QtGui import QLabel
-
 import resources
 # Import the code for the dialog
 from coordinates_converter_dialog import CoordinatesConverterDialog
@@ -124,6 +122,10 @@ class CoordinatesConverter:
         self.dlg.pushButton_convert_to.clicked.connect(lambda: self.__set_transform_direction())
         self.dlg.pushButton_convert_from.clicked.connect(lambda: self.__set_transform_direction_reverse())
         self.dlg.changeLanguageButton.clicked.connect(lambda: self.__change_language())
+        self.dlg.lineEdit_input_to_x.textEdited.connect(lambda: self.dlg.lineEdit_input_to_x.setStyleSheet('color:black'))
+        self.dlg.lineEdit_input_to_y.textEdited.connect(lambda: self.dlg.lineEdit_input_to_y.setStyleSheet('color:black'))
+        self.dlg.lineEdit_input_from_x.textEdited.connect(lambda: self.dlg.lineEdit_input_from_x.setStyleSheet('color:black'))
+        self.dlg.lineEdit_input_from_y.textEdited.connect(lambda: self.dlg.lineEdit_input_from_y.setStyleSheet('color:black'))
 
         # bilingual error messages
         self.INVALID_SQUARE_EASTING_DE = "Ung" + u'\xFC' + "ltiger Buchstabe f" + u'\xFC' +\
@@ -142,8 +144,6 @@ class CoordinatesConverter:
         self.NO_X_VALUE_EN = "no value X entered"
         self.NO_Y_VALUE_DE = "Kein Y-Wert eingegeben"
         self.NO_Y_VALUE_EN = "no value Y entered"
-
-
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -256,6 +256,8 @@ class CoordinatesConverter:
     def run(self):
         """Run method that performs all the real work"""
         # show the dialog
+        self.proj_from = None
+        self.proj_to = None
         self.dlg.reset()
         self.__change_format(0)
         self.dlg.show()
@@ -856,8 +858,18 @@ class CoordinatesConverter:
                                 point = QgsPoint(x, y)
                                 try:
                                     result = transform.transform(point)
-                                    self.dlg.lineEdit_input_from_x.setText(str(result.x()))
-                                    self.dlg.lineEdit_input_from_y.setText(str(result.y()))
+                                    if "inf" in str(result.x()) or "inf" in str(result.y()):
+                                        if self.german is True:
+                                            self.dlg.lineEdit_input_from_x.setText("undefiniert")
+                                            self.dlg.lineEdit_input_from_y.setText("undefiniert")
+                                        else:
+                                            self.dlg.lineEdit_input_from_x.setText("undefinied")
+                                            self.dlg.lineEdit_input_from_y.setText("undefinied")
+                                        self.dlg.lineEdit_input_from_x.setStyleSheet('color:red')
+                                        self.dlg.lineEdit_input_from_y.setStyleSheet('color:red')
+                                    else:
+                                        self.dlg.lineEdit_input_from_x.setText(str(result.x()))
+                                        self.dlg.lineEdit_input_from_y.setText(str(result.y()))
                                 except QgsCsException:
                                     if self.german:
                                         self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_DE)
@@ -884,8 +896,18 @@ class CoordinatesConverter:
                                 point = QgsPoint(x, y)
                                 try:
                                     result = transform.transform(point, QgsCoordinateTransform.ReverseTransform)
-                                    self.dlg.lineEdit_input_to_x.setText(str(result.x()))
-                                    self.dlg.lineEdit_input_to_y.setText(str(result.y()))
+                                    if "inf" in str(result.x()) or "inf" in str(result.y()):
+                                        if self.german is True:
+                                            self.dlg.lineEdit_input_to_x.setText("undefiniert")
+                                            self.dlg.lineEdit_input_to_y.setText("undefiniert")
+                                        else:
+                                            self.dlg.lineEdit_input_to_x.setText("undefinied")
+                                            self.dlg.lineEdit_input_to_y.setText("undefinied")
+                                        self.dlg.lineEdit_input_to_x.setStyleSheet('color:red')
+                                        self.dlg.lineEdit_input_to_y.setStyleSheet('color:red')
+                                    else:
+                                        self.dlg.lineEdit_input_to_x.setText(str(result.x()))
+                                        self.dlg.lineEdit_input_to_y.setText(str(result.y()))
                                 except QgsCsException:
                                     if self.german:
                                         self.dlg.statusBar.showMessage(self.AN_ERROR_OCCURRED_DE)

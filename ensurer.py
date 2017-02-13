@@ -21,8 +21,7 @@ class Hemisphere(enum.Enum):
     SOUTH = 'S'
 
 
-white_list_1 = ['-', ' ', '.', ',']
-white_list_2 = [' ', '.', ',']
+white_list = ['-', ',', '.']
 INVALID_SYMBOL_ERROR_DE = "ung" + u'\xFC' + "ltiges Symbol".decode('UTF-8')
 INVALID_SYMBOL_ERROR_EN = "invalid symbol"
 VALUE_HAS_TO_BE_INTEGER_DE = "Wert muss ganzzahlig sein"
@@ -45,9 +44,9 @@ INVALID_LAT_GRID_ZONE_DE = "Ung" + u'\xFC' + "ltige MGRS-Zone: {0} (g" + u'\xFC'
 INVALID_LAT_GRID_ZONE_EN = "Invalid MGRS zone: {0} (accepted values: C-X omitting I and O)"
 INVALID_MGRS_SQUARE_LETTRES_DE = "Ung" + u'\xFC' + "ltige Zone-Gitterquadrat-Kombination. Zone: '{0}' ung" + u'\xFC' + "ltig: '{1}'"
 INVALID_MGRS_SQUARE_LETTRES_EN = "Invalid grid zone designation: grid zone '{0}' with '{1}' does not exist."
-LONGITUDE_OUT_OF_RANGE_DE = "Wer f" + u'\xFC' + "r L" + u'\xE4' +"ngengrad au" + u'\xDF' + "erhalb des Wertebereiches (-180...+180)"
+LONGITUDE_OUT_OF_RANGE_DE = "Wert f" + u'\xFC' + "r L" + u'\xE4' +"ngengrad au" + u'\xDF' + "erhalb des Wertebereiches (-180...+180)"
 LONGITUDE_OUT_OF_RANGE_EN = "Degree value of longitude out of range (-180...+180)"
-LATITUDE_OUT_OF_RANGE_DE = "Wer f" + u'\xFC' + "r Breitengrad au" + u'\xDF' + "erhalb Wertebereich (-90...+90)"
+LATITUDE_OUT_OF_RANGE_DE = "Wert f" + u'\xFC' + "r Breitengrad au" + u'\xDF' + "erhalb Wertebereich (-90...+90)"
 LATITUDE_OUT_OF_RANGE_EN = "Degree value of latitude out of range (-90...+90)"
 MINUTES_OUT_OF_RANGE_DE = "Gradminuten au" + u'\xDF' + "erhalb des Wertebereiches (0...59)"
 MINUTES_OUT_OF_RANGE_EN = "Minutes value out of range (0...59)"
@@ -75,7 +74,7 @@ def ensure_it_is_a_number(string, german):
         replaced = no_space.replace(',', '.')
     else:
         replaced = no_space
-    illegal_char_index = __index_of_first_illegal_char_number_only(replaced, 1)
+    illegal_char_index = __index_of_first_illegal_char_number_only(replaced)
     if illegal_char_index != -1:
         if german:
             raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + replaced[illegal_char_index] + "'")
@@ -85,7 +84,7 @@ def ensure_it_is_a_number(string, german):
     if len(replaced) > 10:
         replaced = replaced[:11]
     if not __is_positive(replaced):
-        final = replaced.replace('-', '0')
+        final = replaced.replace('-', '0', 1)
         return float(final) * -1
     return float(replaced)
 
@@ -100,7 +99,7 @@ def ensure_it_is_a_positive_number(string, german):
         replaced = no_space.replace(',', '.')
     else:
         replaced = no_space
-    illegal_char_index = __index_of_first_illegal_char_number_only(replaced, 2)
+    illegal_char_index = __index_of_first_illegal_char_positive_number_only(replaced)
     if illegal_char_index != -1:
         if german:
             raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + replaced[illegal_char_index] + "'")
@@ -118,8 +117,11 @@ def ensure_it_is_an_integer(string, german):
         trimmed = '0'
     no_space = trimmed.replace(' ', '')
     if ',' in no_space or '.' in no_space:
-        raise exceptions.ParseException('Wert muss ganzzahlig sein')
-    illegal_char_index = __index_of_first_illegal_char_number_only(no_space, 1)
+        if german:
+            raise exceptions.ParseException(VALUE_HAS_TO_BE_INTEGER_DE)
+        else:
+            raise exceptions.ParseException(VALUE_HAS_TO_BE_INTEGER_EN)
+    illegal_char_index = __index_of_first_illegal_char_number_only(no_space)
     if illegal_char_index != -1:
         if german:
             raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + no_space[illegal_char_index] + "'")
@@ -127,7 +129,7 @@ def ensure_it_is_an_integer(string, german):
             raise exceptions.ParseException(INVALID_SYMBOL_ERROR_EN + " '" + no_space[illegal_char_index] + "'")
 
     if not __is_positive(no_space):
-        final = no_space.replace('-', '0')
+        final = no_space.replace('-', '0', 1)
         return int(final) * -1
     return int(no_space)
 
@@ -143,7 +145,7 @@ def ensure_it_is_a_positive_integer(string, german):
             raise exceptions.ParseException(VALUE_HAS_TO_BE_INTEGER_DE)
         else:
             raise exceptions.ParseException(VALUE_HAS_TO_BE_INTEGER_EN)
-    illegal_char_index = __index_of_first_illegal_char_number_only(no_space, 2)
+    illegal_char_index = __index_of_first_illegal_char_positive_number_only(no_space)
     if illegal_char_index != -1:
         if german:
             raise exceptions.ParseException(INVALID_SYMBOL_ERROR_DE + " '" + no_space[illegal_char_index] + "'")
@@ -332,13 +334,36 @@ def __is_positive(string):
     return True
 
 
-def __index_of_first_illegal_char_number_only(string, list_number):
+def __index_of_first_illegal_char_number_only(string):
     is_ok = True
-    if list_number == 1:
-        _list = white_list_1
-    else:
-        _list = white_list_2
 
+    for i in range(0, len(string)):
+        if string[i].isdigit():
+            # all good
+            continue
+        elif string[i].isalpha():
+            char_int = ord(string[i].lower())
+            if char_int < ord('a') or char_int > ord('z'):
+                return i
+            return i
+        else:
+            if string.startswith('-'):
+                if string.count('-') > 1:
+                    is_ok = False
+                    i = string.rfind('-')
+            in_white_list = False
+            if string[i] in white_list:
+                in_white_list = True
+                continue
+            is_ok = in_white_list
+
+    if not is_ok:
+        return i
+    return -1
+
+
+def __index_of_first_illegal_char_positive_number_only(string):
+    is_ok = True
     for i in range(0, len(string)):
         if string[i].isdigit():
             # all good
@@ -351,7 +376,7 @@ def __index_of_first_illegal_char_number_only(string, list_number):
         else:
             # no digit, no letter
             in_white_list = False
-            if string[i] in _list:
+            if string[i] in white_list:
                 in_white_list = True
                 continue
             is_ok = in_white_list

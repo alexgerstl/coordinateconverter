@@ -2,7 +2,6 @@
 import points
 import math
 from ensurer import Hemisphere
-import exceptions
 from decimal import Decimal
 
 K0 = 0.9996
@@ -121,19 +120,19 @@ def utm_to_degree(point):
     easting = int(point.easting)
     northing = int(point.northing)
     zone_number = int(point.zone_number)
-    zone_letter = None
+    # zone_letter = None
 
     if point.hemisphere == Hemisphere.NORTH:
         northern = True
     else:
         northern = False
 
-    if not zone_letter and northern is None:
-        raise exceptions.ConversionException('either zone_letter or northern needs to be set')
-
-    elif zone_letter and northern is not None:
-        raise exceptions.ConversionException('set either zone_letter or northern, but not both')
-
+    # if not zone_letter and northern is None:
+    #     raise exceptions.ConversionException('either zone_letter or northern needs to be set')
+    #
+    # elif zone_letter and northern is not None:
+    #     raise exceptions.ConversionException('set either zone_letter or northern, but not both')
+    #
     # if not 100000 <= easting < 1000000:
     #     raise exceptions.ParseException('easting out of range (must be between 100.000 m and 999.999 m)')
     # if not 0 <= northing <= 10000000:
@@ -146,8 +145,8 @@ def utm_to_degree(point):
     #
     #     if not 'C' <= zone_letter <= 'X' or zone_letter in ['I', 'O']:
     #         raise exceptions.ParseException('zone letter out of range (must be between C and X)')
-
-        northern = (zone_letter >= 'N')
+    #
+    #     northern = (zone_letter >= 'N')
 
     x = easting - 500000
     y = northing

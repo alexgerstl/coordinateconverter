@@ -1,15 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from decimal import Decimal
-from os.path import expanduser
 import mgrs
-
-home = expanduser("~")
-python_path = home + '\.qgis2\python\plugins\CoordinatesConverter\lib\pyproj-1.9.5.1.egg'
-import sys
-sys.path.insert(0,python_path)
-import pyproj
-
 import points
 import converter
 from ensurer import Hemisphere, CoordinateSystemString

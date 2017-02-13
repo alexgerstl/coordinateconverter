@@ -10,28 +10,28 @@ class EnsurerTest(unittest.TestCase):
     def test_ensure_mgrs_zone_invalid1(self):
         try:
             string = ''
-            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Eingabe noch nicht vollzählig' in e.message)
 
     def test_ensure_mgrs_zone_invalid2(self):
         try:
             string = '3'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Eingabe noch nicht vollzählig' in e.message)
 
     def test_ensure_mgrs_zone_invalid3(self):
         try:
             string = 'a'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Zone muss mit Zahl beginnen.' in e.message)
 
     def test_ensure_mgrs_zone_invalid4(self):
         try:
             string = '33'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Eingabe noch nicht vollzählig' in e.message)
 
@@ -45,14 +45,14 @@ class EnsurerTest(unittest.TestCase):
     def test_ensure_mgrs_zone_invalid6(self):
         try:
             string = '33!'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Zone muss aus zwei Ziffern und einem Buchstaben bestehen.' in e.message)
 
     def test_ensure_mgrs_zone_invalid7(self):
         try:
             string = '33I'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Invalid latitude grid-zone: I in MGRS-String (accepted values: C-X omitting I and O)'
                             in e.message)
@@ -60,44 +60,44 @@ class EnsurerTest(unittest.TestCase):
     def test_ensure_mgrs_zone_invalid8(self):
         try:
             string = '32X'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Invalid grid zone designation: grid zone 32 X does not exist.' in e.message)
 
     def test_ensure_mgrs_zone_valid(self):
         string = '33U'
-        erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string)
+        erg = ensurer.ensure_it_is_a_valid_mgrs_zone(string, True)
         self.assertEqual(erg, '33U')
 
     def test_ensure_mgrs_square_invalid(self):
         try:
             string = '3'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_square(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_square(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Gitterquadrat muss mit Buchstaben beginnen.' in e.message)
 
     def test_ensure_mgrs_square_invalid2(self):
         try:
             string = 'X'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_square(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_square(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Eingabe noch nicht vollzählig' in e.message)
 
     def test_ensure_mgrs_square_invalid3(self):
         try:
             string = 'X1'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_square(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_square(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Gitterquadrat muss aus zwei Buchstaben bestehen.' in e.message)
 
     def test_ensure_mgrs_square_invalid4(self):
         try:
             string = 'UVP'
-            erg = ensurer.ensure_it_is_a_valid_mgrs_square(string)
+            erg = ensurer.ensure_it_is_a_valid_mgrs_square(string, True)
         except exceptions.ParseException, e:
             self.assertTrue('Eingabe zu lange' in e.message)
 
     def test_ensure_mgrs_square_valid(self):
         string = 'UV'
-        erg = ensurer.ensure_it_is_a_valid_mgrs_square(string)
+        erg = ensurer.ensure_it_is_a_valid_mgrs_square(string, True)
         self.assertEqual(erg, 'UV')

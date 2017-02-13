@@ -67,14 +67,17 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.comboBox_format.setCurrentIndex(0)
         self.hemisphere.setCurrentIndex(0)
         self.label_input_convert.setText('')
+        self.label_utm_ref.setText('MGRS')
 
     def clear_coordinate_fields(self):
         """Resets the text fields show the converted coordinates."""
+        self.label_utm_ref.setText('MGRS')
         for field in self.coordinate_fields:
             field.clear()
 
     def clear_input_fields(self):
         """Resets the value input fields for the different coordinate systems."""
+        self.label_utm_ref.setText('MGRS')
         for field in self.input_fields:
             field.clear()
 
@@ -143,7 +146,6 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         """Creates the template for entering coordinates in the military grid reference coordinate system - MGRS."""
         self.mgrs_zone_input.setFixedWidth(40)
         self.mgrs_square_input.setFixedWidth(30)
-
         self.gridLayout_input.addWidget(self.mgrs_zone_input, 0, 0)
         self.gridLayout_input.addWidget(self.zone_label, 0, 1)
         self.gridLayout_input.addWidget(self.mgrs_square_input, 0, 2)
@@ -170,14 +172,15 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.label_wgs_degrees.setText("WGS84 (degrees)")
         self.label_wgs_comma.setText("WGS84 (degrees, comma minutes)")
         self.label_wgs_dms.setText("WGS84 (degrees, minutes, seconds)")
+        self.label_utm_ref.setText('MGRS')
         self.label_epsg_to.setText("Authority ID")
         self.label_epsg_from.setText("Authority ID")
         self.label_system_to.setText("Coordinate Reference System")
         self.label_system_from.setText("Coordinate Reference System")
-        self.label_input_to_x.setText("X")
-        self.label_input_to_y.setText("Y")
-        self.label_input_from_x.setText("X")
-        self.label_input_from_y.setText("Y")
+        self.label_input_to_x.setText("easting (X)")
+        self.label_input_to_y.setText("northing (Y)")
+        self.label_input_from_x.setText("easting (X)")
+        self.label_input_from_y.setText("northing (Y)")
         self.pushButton_select_to.setText("choose EPSG code")
         self.pushButton_select_from.setText("choose EPSG code")
         self.zone_label.setText("zone")
@@ -196,14 +199,15 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.label_wgs_degrees.setText("WGS84 (Dezimalgrad)")
         self.label_wgs_comma.setText("WGS84 (Grad, Kommaminuten)")
         self.label_wgs_dms.setText("WGS84 (Grad, Minuten, Sekunden)")
+        self.label_utm_ref.setText('MGRS')
         self.label_epsg_to.setText("AutoritätsID".decode('UTF-8'))
         self.label_epsg_from.setText("AutoritätsID".decode('UTF-8'))
         self.label_system_to.setText("Koordinatensystem")
         self.label_system_from.setText("Koordinatensystem")
-        self.label_input_to_x.setText("RW(X)")
-        self.label_input_to_y.setText("HW(Y)")
-        self.label_input_from_x.setText("RW(X)")
-        self.label_input_from_y.setText("HW(Y)")
+        self.label_input_to_x.setText("Rechtswert (X)")
+        self.label_input_to_y.setText("Hochwert (Y)")
+        self.label_input_from_x.setText("Rechtswert (X)")
+        self.label_input_from_y.setText("Hochwert (Y)")
         self.pushButton_select_to.setText("EPSG auswählen".decode('UTF-8'))
         self.pushButton_select_from.setText("EPSG auswählen".decode('UTF-8'))
         self.zone_label.setText("Zone")
