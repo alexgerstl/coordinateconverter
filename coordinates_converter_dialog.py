@@ -161,7 +161,7 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
             self.gridLayout_input.itemAt(i).widget().setParent(None)
         self.clear_input_fields()
 
-    def change_to_english(self):
+    def change_to_english(self, _format):
         self.groupBox_coord.setTitle("convert coordinates")
         self.groupBox_input.setTitle("input")
         self.groupBox_result.setTitle("result")
@@ -187,8 +187,9 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.square_label.setText("100km square")
         self.comboBox_format.clear()
         self.comboBox_format.addItems(["Degrees", "Degrees, Comma minutes", "Degrees, Minutes, Seconds", "UTM", "MGRS"])
+        self.comboBox_format.setCurrentIndex(_format)
 
-    def change_to_german(self):
+    def change_to_german(self, _format):
         self.groupBox_coord.setTitle("Koordinaten umrechnen")
         self.groupBox_input.setTitle("Eingabe")
         self.groupBox_result.setTitle("Ergebnis")
@@ -214,3 +215,4 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.square_label.setText("100km Quadrat")
         self.comboBox_format.clear()
         self.comboBox_format.addItems(["Dezimalgrad", "Grad, Kommaminuten", "Grad, Minuten, Sekunden", "UTM", "MGRS"])
+        self.comboBox_format.setCurrentIndex(_format)

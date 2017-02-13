@@ -837,10 +837,12 @@ class CoordinatesConverter:
     def __change_language(self):
         if self.german:
             self.german = False
-            self.dlg.change_to_english()
+            self.dlg.change_to_english(self.selected_format)
+            self.__update_coordinate_fields()
         else:
             self.german = True
-            self.dlg.change_to_german()
+            self.dlg.change_to_german(self.selected_format)
+            self.__update_coordinate_fields()
 
     def __transform_epsg(self, reverse):
         self.dlg.statusBar.clearMessage()
