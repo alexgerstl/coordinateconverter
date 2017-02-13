@@ -74,7 +74,8 @@ class EnsurerTest(unittest.TestCase):
             string = '3'
             erg = ensurer.ensure_it_is_a_valid_mgrs_square(string, True)
         except exceptions.ParseException, e:
-            self.assertTrue(ensurer.SQUARE_HAS_TO_BE_TWO_LETTERS_DE in e.message)
+            print e.message
+            self.assertTrue(ensurer.SQUARE_HAS_TO_START_WITH_DE in e.message)
 
     def test_ensure_mgrs_square_invalid2(self):
         try:
