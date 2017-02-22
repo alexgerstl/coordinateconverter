@@ -21,7 +21,9 @@
  ***************************************************************************/
 """
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
+from PyQt4.QtCore import QUrl
 from PyQt4.QtGui import QAction, QIcon
+from PyQt4.QtGui import QDesktopServices
 from qgis.core import *
 from qgis.gui import *
 # Initialize Qt resources from file resources.py
@@ -126,6 +128,7 @@ class CoordinatesConverter:
         self.dlg.lineEdit_input_to_y.textEdited.connect(lambda: self.dlg.lineEdit_input_to_y.setStyleSheet('color:black'))
         self.dlg.lineEdit_input_from_x.textEdited.connect(lambda: self.dlg.lineEdit_input_from_x.setStyleSheet('color:black'))
         self.dlg.lineEdit_input_from_y.textEdited.connect(lambda: self.dlg.lineEdit_input_from_y.setStyleSheet('color:black'))
+        self.dlg.pushButton_help.clicked.connect(self.__show_help)
 
         # bilingual error messages
         self.INVALID_SQUARE_EASTING_DE = "Ung" + u'\xFC' + "ltiger Buchstabe f" + u'\xFC' +\
@@ -835,14 +838,17 @@ class CoordinatesConverter:
         self.__transform_epsg(reverse)
 
     def __change_language(self):
+        self.dlg.clear_epsg_fields()
         if self.german:
             self.german = False
-            self.dlg.change_to_english(self.selected_format)
-            self.__update_coordinate_fields()
+            self.dlg.change_to_english()
         else:
             self.german = True
-            self.dlg.change_to_german(self.selected_format)
-            self.__update_coordinate_fields()
+            self.dlg.change_to_german()
+
+    def __show_help(self):
+        help_file = 'file:///%s/help/help.html' % os.path.dirname(__file__)
+        QDesktopServices.openUrl(QUrl(help_file))
 
     def __transform_epsg(self, reverse):
         self.dlg.statusBar.clearMessage()

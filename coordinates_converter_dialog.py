@@ -161,7 +161,7 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
             self.gridLayout_input.itemAt(i).widget().setParent(None)
         self.clear_input_fields()
 
-    def change_to_english(self, _format):
+    def change_to_english(self):
         self.groupBox_coord.setTitle("convert coordinates")
         self.groupBox_input.setTitle("input")
         self.groupBox_result.setTitle("result")
@@ -187,15 +187,15 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.square_label.setText("100km square")
         self.comboBox_format.clear()
         self.comboBox_format.addItems(["Degrees", "Degrees, Comma minutes", "Degrees, Minutes, Seconds", "UTM", "MGRS"])
-        self.comboBox_format.setCurrentIndex(_format)
+        self.pushButton_help.setText("Help")
 
-    def change_to_german(self, _format):
+    def change_to_german(self):
         self.groupBox_coord.setTitle("Koordinaten umrechnen")
         self.groupBox_input.setTitle("Eingabe")
         self.groupBox_result.setTitle("Ergebnis")
         self.groupBox_epsg.setTitle("anhand EPSG-Code konvertieren")
-        self.groupBox_to.setTitle("nach")
-        self.groupBox_from.setTitle("von")
+        self.groupBox_to.setTitle("von")
+        self.groupBox_from.setTitle("nach")
         self.label_format_description.setText("Koordinatensystem wählen".decode('UTF-8'))
         self.label_wgs_degrees.setText("WGS84 (Dezimalgrad)")
         self.label_wgs_comma.setText("WGS84 (Grad, Kommaminuten)")
@@ -215,4 +215,4 @@ class CoordinatesConverterDialog(QtGui.QDialog, FORM_CLASS):
         self.square_label.setText("100km Quadrat")
         self.comboBox_format.clear()
         self.comboBox_format.addItems(["Dezimalgrad", "Grad, Kommaminuten", "Grad, Minuten, Sekunden", "UTM", "MGRS"])
-        self.comboBox_format.setCurrentIndex(_format)
+        self.pushButton_help.setText("Hilfe")
